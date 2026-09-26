@@ -24,6 +24,8 @@ services:
         sync: false
       - key: DISCORD_GUILD_ID
         sync: false
+      - key: DISCORD_REDIRECT_URI
+        sync: false
       - key: TELEGRAM_ADMIN_IDS
         sync: false
       - key: WEB_SECRET_KEY
@@ -32,3 +34,5 @@ services:
         sync: false
       - key: WEB_HOST
         value: "0.0.0.0"
+      - key: WEB_PORT
+        value: "10000"
