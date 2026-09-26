@@ -39,12 +39,24 @@ WEB_HOST = os.getenv("WEB_HOST", "127.0.0.1")
 WEB_PORT = int(os.getenv("WEB_PORT", "8000"))
 WEB_SECRET_KEY = os.getenv("WEB_SECRET_KEY", "change-me-in-production")
 
+# ===== Публичный URL сайта (для OAuth-редиректов и абсолютных ссылок) =====
+# На Render: SITE_URL=https://nightmare-cluster.onrender.com
+# Локально: http://localhost:8000
+SITE_URL = os.getenv(
+    "SITE_URL",
+    f"http://{WEB_HOST}:{WEB_PORT}",
+).rstrip("/")
+
 # ===== Discord OAuth2 =====
 DISCORD_CLIENT_ID = os.getenv("DISCORD_CLIENT_ID", "")
 DISCORD_CLIENT_SECRET = os.getenv("DISCORD_CLIENT_SECRET", "")
+
+# redirect_uri ВСЕГДА из SITE_URL, а не из WEB_HOST/WEB_PORT.
+# WEB_HOST/WEB_PORT — внутренний bind uvicorn, снаружи они не видны.
+# Discord сверяет redirect_uri со списком в Developer Portal → OAuth2 → Redirects.
 DISCORD_REDIRECT_URI = os.getenv(
     "DISCORD_REDIRECT_URI",
-    f"http://{WEB_HOST}:{WEB_PORT}/auth/callback",
+    f"{SITE_URL}/auth/callback",
 )
 
 # ===== Discord Bot Token (для получения ников и аватаров) =====
