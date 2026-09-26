@@ -10,6 +10,8 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: "3.13"
+      - key: PYTHONUNBUFFERED
+        value: "1"
       - key: TELEGRAM_BOT_TOKEN
         sync: false
       - key: TELEGRAM_BOT_USERNAME
@@ -30,4 +32,3 @@ services:
         sync: false
       - key: WEB_HOST
         value: "0.0.0.0"
-      # ENABLE_* не задаём — по умолчанию всё 1
