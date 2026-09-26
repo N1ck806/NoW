@@ -1,0 +1,279 @@
+{% extends "base.html" %}
+
+{% block title %}{{ user_name }} • Nightmare{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="/static/profile.css">
+<link rel="stylesheet" href="/static/role-badge.css">
+{% endblock %}
+
+{% block content %}
+<div class="profile-page tier-{{ tier }}"
+     data-tier="{{ tier }}"
+     data-user-id="{{ user_id }}"
+     data-is-admin="{{ '1' if user.is_admin else '0' }}"
+     data-is-coder="{{ '1' if user.is_coder else '0' }}"
+     data-is-moderator="{{ '1' if user.is_moderator else '0' }}"
+     data-role="{{ user.role or 'guest' }}">
+
+    {# ============ СЛОЙ SVG-ЭФФЕКТОВ (фон) ============ #}
+    <div class="svg-fx-layer" id="svgFxLayer"></div>
+
+    <a href="/" class="back-link">← Назад</a>
+
+    {# ============ ШАПКА ПРОФИЛЯ ============ #}
+    <div class="profile-header">
+
+        {# ===== АВАТАРКА ===== #}
+        <div class="profile-avatar-wrap" id="profileAvatar" title="Кликни по аватарке...">
+
+            <div class="avatar-aura"></div>
+
+            {% if avatar_url %}
+                <img src="{{ avatar_url }}" alt="avatar" class="avatar-img">
+            {% else %}
+                <div class="avatar-placeholder">👤</div>
+            {% endif %}
+
+            {# ===== SVG-БЕЙДЖ ОСНОВНОЙ РОЛИ (большой, снизу) ===== #}
+            {% if user.role %}
+                <img src="/static/img/svg/roles/{{ user.role }}.svg"
+                     class="avatar-role-badge avatar-role-{{ user.role }}"
+                     alt="{{ user.role }}"
+                     title="
+                        {%- if user.role == 'guest' -%}Гость
+                        {%- elif user.role == 'ghost' -%}Призрак
+                        {%- endif -%}">
+            {% endif %}
+
+            {# ===== КОРОНА (если админ) ===== #}
+            {% if user.is_admin %}
+                <img src="/static/img/svg/roles/admin-crown.svg"
+                     class="admin-crown"
+                     alt="Admin"
+                     title="Администратор">
+            {% endif %}
+
+            {# ===== СИСТЕМНЫЕ SVG-БЕЙДЖИ (справа сверху) ===== #}
+            <div class="avatar-system-badges">
+                {% if user.is_moderator %}
+                    <img src="/static/img/svg/roles/moderator.svg"
+                         class="avatar-system-badge"
+                         alt="Moderator"
+                         title="Модератор">
+                {% endif %}
+                {% if user.is_coder %}
+                    <img src="/static/img/svg/roles/coder.svg"
+                         class="avatar-system-badge"
+                         alt="Coder"
+                         title="Coder">
+                {% endif %}
+                {% if user.is_admin %}
+                    <img src="/static/img/svg/roles/admin.svg"
+                         class="avatar-system-badge"
+                         alt="Admin"
+                         title="Администратор">
+                {% endif %}
+            </div>
+        </div>
+
+        {# ===== ИНФО ===== #}
+        <div class="profile-info">
+            {% if tier >= 4 %}
+                <h1 class="glitch-name" data-text="{{ user_name }}">{{ user_name }}</h1>
+            {% else %}
+                <h1>{{ user_name }}</h1>
+            {% endif %}
+
+            {% if discord_user and discord_user.username %}
+                <p class="profile-username">@{{ discord_user.username }}</p>
+            {% endif %}
+
+            <p class="profile-id">ID: {{ user.user_id }}</p>
+
+            {# ===== SVG-БЕЙДЖИ РОЛЕЙ ПОД НИКОМ ===== #}
+            <div class="profile-role-badges">
+
+                {# --- ОСНОВНАЯ РОЛЬ --- #}
+                {% if user.role %}
+                    <img src="/static/img/svg/roles/{{ user.role }}.svg"
+                         class="profile-role-svg"
+                         alt="{{ user.role }}"
+                         title="
+                            {%- if user.role == 'guest' -%}Гость
+                            {%- elif user.role == 'ghost' -%}Призрак
+                            {%- endif -%}">
+                {% endif %}
+
+                {# --- СИСТЕМНЫЕ РОЛИ --- #}
+                {% if user.is_moderator %}
+                    <img src="/static/img/svg/roles/moderator.svg"
+                         class="profile-role-svg"
+                         alt="Moderator"
+                         title="Модератор">
+                {% endif %}
+
+                {% if user.is_coder %}
+                    <img src="/static/img/svg/roles/coder.svg"
+                         class="profile-role-svg"
+                         alt="Coder"
+                         title="Coder">
+                {% endif %}
+
+                {% if user.is_admin %}
+                    <img src="/static/img/svg/roles/admin.svg"
+                         class="profile-role-svg"
+                         alt="Admin"
+                         title="Администратор">
+                {% endif %}
+            </div>
+
+            {# ===== ТИР ===== #}
+            <div class="tier-badge" style="color: {{ tier_info.color }};">
+                <span class="tier-icon">{{ tier_info.icon }}</span>
+                <span>{{ tier_info.name }}</span>
+            </div>
+
+            {# ===== ДЕЙСТВИЯ ===== #}
+            <div class="profile-actions">
+                {% if current_user and current_user.guild_user_id == user_id %}
+                    <a href="/dashboard" class="btn-profile">📊 Мой кабинет</a>
+                    <a href="/settings" class="btn-profile">⚙️ Настройки</a>
+                {% endif %}
+                <button class="btn-profile" id="btnSummon" title="Призвать тьму из-под земли">
+                    💀 Призвать тьму
+                </button>
+                <button class="btn-profile" id="btnGlitch" title="Вызвать глитч-эффект">
+                    ⚡ Глитч
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {# ============ СТАТИСТИКА ============ #}
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">📈</div>
+            <div class="stat-value">{{ user.level }}</div>
+            <div class="stat-label">Уровень</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">💰</div>
+            <div class="stat-value">{{ "{:,}".format(user.balance).replace(",", " ") }}</div>
+            <div class="stat-label">Баланс</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">💬</div>
+            <div class="stat-value">{{ "{:,}".format(user.messages).replace(",", " ") }}</div>
+            <div class="stat-label">Сообщений</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🎙️</div>
+            <div class="stat-value">{{ user.voice_minutes }}</div>
+            <div class="stat-label">Минут в войсе</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-value">{{ user.reputation }}</div>
+            <div class="stat-label">Репутация</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🎮</div>
+            <div class="stat-value">{{ game_stats.total }}</div>
+            <div class="stat-label">Игр</div>
+        </div>
+    </div>
+
+    {# ============ ДОСТИЖЕНИЯ + ПРЕДУПРЕЖДЕНИЯ ============ #}
+    <div class="grid-2">
+        <div class="card">
+            <h2 class="card-title">🏅 Достижения ({{ achievements|length }})</h2>
+            {% if achievements %}
+            <ul class="list">
+                {% for a in achievements[:10] %}
+                <li>
+                    <strong>{{ a.achievement }}</strong>
+                    <span class="muted">{{ a.unlocked_at[:10] }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="muted">Пока нет достижений 🌑</p>
+            {% endif %}
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">⚠️ Предупреждения ({{ warnings|length }})</h2>
+            {% if warnings %}
+            <ul class="list">
+                {% for w in warnings[:10] %}
+                {% set mod = mod_users.get(w.moderator_id) %}
+                <li>
+                    <strong>#{{ w.id }}</strong> — {{ w.reason }}
+                    <span class="muted">
+                        {% if mod %}
+                            <a href="/profile/{{ w.moderator_id }}">{{ mod.display_name }}</a>
+                        {% else %}
+                            ID {{ w.moderator_id }}
+                        {% endif %}
+                        • {{ w.created_at[:10] }}
+                    </span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="muted">Чист перед законом 🌑</p>
+            {% endif %}
+        </div>
+    </div>
+
+    {# ============ ТРАНЗАКЦИИ ============ #}
+    <div class="card">
+        <h2 class="card-title">💸 Последние транзакции</h2>
+        {% if transactions %}
+        <table class="table">
+            <thead>
+                <tr><th>От</th><th>Кому</th><th>Сумма</th><th>Тип</th><th>Дата</th></tr>
+            </thead>
+            <tbody>
+                {% for t in transactions %}
+                {% set from_u = tx_users.get(t.from_id) if t.from_id else None %}
+                {% set to_u = tx_users.get(t.to_id) if t.to_id else None %}
+                <tr>
+                    <td>
+                        {% if from_u %}
+                            <a href="/profile/{{ t.from_id }}" class="user-link">
+                                <img src="{{ from_u.avatar_url }}" class="user-avatar" alt="">
+                                <span>{{ from_u.display_name }}</span>
+                            </a>
+                        {% elif t.from_id %}ID {{ t.from_id }}{% else %}—{% endif %}
+                    </td>
+                    <td>
+                        {% if to_u %}
+                            <a href="/profile/{{ t.to_id }}" class="user-link">
+                                <img src="{{ to_u.avatar_url }}" class="user-avatar" alt="">
+                                <span>{{ to_u.display_name }}</span>
+                            </a>
+                        {% elif t.to_id %}ID {{ t.to_id }}{% else %}—{% endif %}
+                    </td>
+                    <td class="value-cell">{{ "{:,}".format(t.amount).replace(",", " ") }} 💰</td>
+                    <td class="muted">{{ t.type }}</td>
+                    <td class="muted">{{ t.created_at[:16].replace("T", " ") }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="muted">Транзакций нет 🌑</p>
+        {% endif %}
+    </div>
+
+</div>
+
+{# ============ СЛОЙ ДЛЯ ВСПЛЫВАЮЩИХ SVG-ЭФФЕКТОВ ============ #}
+<div id="horrorLayer" class="horror-layer"></div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/profile.js"></script>
+{% endblock %}

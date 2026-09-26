@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Транзакции • Nightmare{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="/static/transactions.css">
+{% endblock %}
+
+{% block content %}
+
+{# ============================================================
+   ШАПКА
+   ============================================================ #}
+<div class="tx-hero">
+    <div class="tx-hero-bg"></div>
+
+    <div class="tx-hero-content">
+        <div class="tx-hero-info">
+            <div class="tx-hero-icon">💸</div>
+            <div>
+                <h1 class="tx-hero-title">Последние транзакции</h1>
+                <p class="tx-hero-subtitle">
+                    История переводов, покупок и начислений клана
+                </p>
+            </div>
+        </div>
+
+        <div class="tx-hero-stats">
+            <div class="tx-hero-stat">
+                <div class="tx-hero-stat-label">Записей</div>
+                <div class="tx-hero-stat-value">{{ transactions|length }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# ============================================================
+   МАКРОС
+   ============================================================ #}
+{% macro user_cell(uid) %}
+    {% if not uid %}
+        <span class="tx-system">—</span>
+    {% else %}
+        {% set u = users.get(uid) %}
+        <a href="/profile/{{ uid }}" class="tx-user">
+            {% if u %}
+                <img src="{{ u.avatar_url }}" class="tx-user-avatar" alt="">
+                <span class="tx-user-name">{{ u.display_name }}</span>
+            {% else %}
+                <span class="tx-user-avatar tx-user-avatar-placeholder">👤</span>
+                <span class="tx-user-name">ID {{ uid }}</span>
+            {% endif %}
+        </a>
+    {% endif %}
+{% endmacro %}
+
+{# ============================================================
+   ТАБЛИЦА ТРАНЗАКЦИЙ
+   ============================================================ #}
+{% if transactions %}
+<div class="tx-card">
+    <div class="tx-table-wrap">
+        <table class="tx-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>От</th>
+                    <th></th>
+                    <th>Кому</th>
+                    <th>Сумма</th>
+                    <th>Тип</th>
+                    <th>Дата</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in transactions %}
+                <tr>
+                    <td class="tx-id">#{{ t.id }}</td>
+
+                    <td class="tx-user-cell">{{ user_cell(t.from_id) }}</td>
+
+                    <td class="tx-arrow-cell">
+                        {% if t.from_id and t.to_id %}
+                            <span class="tx-arrow">→</span>
+                        {% else %}
+                            <span class="tx-arrow tx-arrow-system">✦</span>
+                        {% endif %}
+                    </td>
+
+                    <td class="tx-user-cell">{{ user_cell(t.to_id) }}</td>
+
+                    <td class="tx-amount">
+                        {{ "{:,}".format(t.amount).replace(",", " ") }}
+                        <span class="tx-amount-unit">💰</span>
+                    </td>
+
+                    <td class="tx-type-cell">
+                        {% set type_ = t.type or 'unknown' %}
+                        {% if type_ == 'transfer' %}
+                            <span class="tx-badge tx-badge-transfer">📤 Перевод</span>
+                        {% elif type_ == 'shop' %}
+                            <span class="tx-badge tx-badge-shop">🛒 Покупка</span>
+                        {% elif type_ == 'admin_add' %}
+                            <span class="tx-badge tx-badge-admin">👑 Начисление</span>
+                        {% elif type_ == 'admin_remove' %}
+                            <span class="tx-badge tx-badge-admin">👑 Списание</span>
+                        {% elif type_ == 'lottery_ticket' %}
+                            <span class="tx-badge tx-badge-lottery">🎰 Лотерея</span>
+                        {% elif type_ == 'daily' %}
+                            <span class="tx-badge tx-badge-daily">📅 Daily</span>
+                        {% else %}
+                            <span class="tx-badge tx-badge-other">{{ type_ }}</span>
+                        {% endif %}
+                    </td>
+
+                    <td class="tx-date">
+                        {{ t.created_at[:16].replace("T", " ") if t.created_at else "—" }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% else %}
+
+<div class="tx-empty">
+    <div class="tx-empty-icon">💸</div>
+    <div class="tx-empty-title">Транзакций пока нет</div>
+    <div class="tx-empty-desc">
+        Как только участники начнут переводить монеты или что-то покупать —
+        история появится здесь.
+    </div>
+</div>
+
+{% endif %}
+
+{% endblock %}

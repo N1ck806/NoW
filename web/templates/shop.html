@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block title %}Магазин • Nightmare{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="/static/shop.css">
+{% endblock %}
+
+{% block content %}
+
+{# ============================================================
+   ШАПКА МАГАЗИНА
+   ============================================================ #}
+<div class="shop-hero">
+    <div class="shop-hero-bg"></div>
+
+    <div class="shop-hero-content">
+        <div class="shop-hero-info">
+            <div class="shop-hero-icon">🛒</div>
+            <div>
+                <h1 class="shop-hero-title">Магазин клана</h1>
+                <p class="shop-hero-subtitle">
+                    Трать заработанные монеты — покупай роли, товары и привилегии
+                </p>
+            </div>
+        </div>
+
+        <div class="shop-hero-balance">
+            <div class="shop-hero-balance-label">Твой баланс</div>
+            <div class="shop-hero-balance-value">
+                {{ currency_emoji }} {{ "{:,}".format(balance).replace(",", " ") }}
+            </div>
+        </div>
+    </div>
+</div>
+
+{# ============================================================
+   СООБЩЕНИЯ
+   ============================================================ #}
+{% if request.query_params.get('bought') %}
+<div class="shop-flash shop-flash-ok">
+    <span class="shop-flash-icon">✅</span>
+    Покупка успешна: <strong>{{ request.query_params.get('bought') }}</strong>
+</div>
+{% endif %}
+
+{% set err = request.query_params.get('error') %}
+{% if err == 'not_enough' %}
+<div class="shop-flash shop-flash-error">
+    <span class="shop-flash-icon">❌</span>
+    Недостаточно монет для покупки
+</div>
+{% elif err == 'no_stock' %}
+<div class="shop-flash shop-flash-error">
+    <span class="shop-flash-icon">❌</span>
+    Товар закончился
+</div>
+{% elif err == 'not_found' %}
+<div class="shop-flash shop-flash-error">
+    <span class="shop-flash-icon">❌</span>
+    Товар не найден
+</div>
+{% elif err == 'no_discord' %}
+<div class="shop-flash shop-flash-error">
+    <span class="shop-flash-icon">❌</span>
+    Привяжи Discord, чтобы покупать товары
+</div>
+{% endif %}
+
+{# ============================================================
+   СЕТКА ТОВАРОВ
+   ============================================================ #}
+{% if items %}
+<div class="shop-grid">
+    {% for item in items %}
+    <div class="shop-card {% if item.stock == 0 %}shop-card-out{% endif %}">
+
+        {# ===== Картинка ===== #}
+        <div class="shop-card-image">
+            {% if item.image_url %}
+                <img src="{{ item.image_url }}"
+                     alt="{{ item.name }}"
+                     loading="lazy">
+            {% else %}
+                <span class="shop-card-image-emoji">{{ item.icon or '📦' }}</span>
+            {% endif %}
+
+            {# Бейдж склада поверх картинки #}
+            {% if item.stock == 0 %}
+                <span class="shop-card-badge shop-card-badge-out">Нет в наличии</span>
+            {% elif item.stock != -1 and item.stock <= 3 %}
+                <span class="shop-card-badge shop-card-badge-low">
+                    Осталось {{ item.stock }}
+                </span>
+            {% endif %}
+        </div>
+
+        {# ===== Контент ===== #}
+        <div class="shop-card-body">
+            <h3 class="shop-card-title">{{ item.name }}</h3>
+            <p class="shop-card-desc">{{ item.description or 'Без описания' }}</p>
+
+            {# Склад #}
+            <div class="shop-card-stock">
+                {% if item.stock == -1 %}
+                    <span class="shop-stock-infinite">📦 ∞ в наличии</span>
+                {% elif item.stock == 0 %}
+                    <span class="shop-stock-empty">📦 Нет в наличии</span>
+                {% elif item.stock <= 3 %}
+                    <span class="shop-stock-low">📦 Осталось {{ item.stock }}</span>
+                {% else %}
+                    <span class="shop-stock-ok">📦 Осталось {{ item.stock }}</span>
+                {% endif %}
+            </div>
+        </div>
+
+        {# ===== Футер ===== #}
+        <div class="shop-card-footer">
+
+            <div class="shop-card-price">
+                <span class="shop-card-price-value">
+                    {{ currency_emoji }} {{ "{:,}".format(item.price).replace(",", " ") }}
+                </span>
+                {% if balance >= item.price and item.stock != 0 %}
+                    <span class="shop-card-price-hint">хватит</span>
+                {% endif %}
+            </div>
+
+            <div class="shop-card-action">
+                {% if item.stock == 0 %}
+                    <span class="shop-btn shop-btn-disabled">Продано</span>
+
+                {% elif balance < item.price %}
+                    <span class="shop-btn shop-btn-expensive" title="Недостаточно монет">
+                        Не хватает
+                    </span>
+
+                {% elif not user.guild_user_id %}
+                    <a href="/auth/discord?mode=link" class="shop-btn shop-btn-secondary">
+                        Привязать Discord
+                    </a>
+
+                {% else %}
+                    <form method="post" action="/shop/buy/{{ item.id }}">
+                        <button type="submit" class="shop-btn shop-btn-primary">
+                            Купить
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% else %}
+<div class="shop-empty">
+    <div class="shop-empty-icon">🛒</div>
+    <div class="shop-empty-title">Магазин пока пуст</div>
+    <div class="shop-empty-desc">Заглядывай позже — админ скоро добавит товары.</div>
+</div>
+{% endif %}
+
+{# ============================================================
+   МОИ ПОКУПКИ
+   ============================================================ #}
+{% if my_items %}
+<h2 class="section-title">🎒 Мои покупки ({{ my_items|length }})</h2>
+<div class="shop-purchases">
+    {% for it in my_items %}
+    <div class="shop-purchase">
+        <div class="shop-purchase-icon">🎁</div>
+        <div class="shop-purchase-body">
+            <div class="shop-purchase-name">
+                {{ it.item_name or it.item_id }}
+            </div>
+            <div class="shop-purchase-meta">
+                куплено {{ it.purchased_at[:10].replace("-", ".") }}
+                {% if it.price %} • {{ currency_emoji }} {{ "{:,}".format(it.price).replace(",", " ") }}{% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% endblock %}

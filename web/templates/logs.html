@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Логи • Nightmare{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="/static/logs.css">
+{% endblock %}
+
+{% block content %}
+
+{# ============================================================
+   ШАПКА
+   ============================================================ #}
+<div class="logs-hero">
+    <div class="logs-hero-bg"></div>
+
+    <div class="logs-hero-content">
+        <div class="logs-hero-info">
+            <div class="logs-hero-icon">📜</div>
+            <div>
+                <h1 class="logs-hero-title">Логи модерации</h1>
+                <p class="logs-hero-subtitle">
+                    История предупреждений участников клана
+                </p>
+            </div>
+        </div>
+
+        <div class="logs-hero-stats">
+            <div class="logs-hero-stat">
+                <div class="logs-hero-stat-label">Всего</div>
+                <div class="logs-hero-stat-value">{{ warnings|length }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# ============================================================
+   МАКРОС
+   ============================================================ #}
+{% macro user_cell(uid) %}
+    {% if not uid %}
+        <span class="logs-system">—</span>
+    {% else %}
+        {% set u = users.get(uid) %}
+        <a href="/profile/{{ uid }}" class="logs-user">
+            {% if u %}
+                <img src="{{ u.avatar_url }}" class="logs-user-avatar" alt="">
+                <span class="logs-user-name">{{ u.display_name }}</span>
+            {% else %}
+                <span class="logs-user-avatar logs-user-avatar-placeholder">👤</span>
+                <span class="logs-user-name">ID {{ uid }}</span>
+            {% endif %}
+        </a>
+    {% endif %}
+{% endmacro %}
+
+{# ============================================================
+   ТАБЛИЦА ПРЕДУПРЕЖДЕНИЙ
+   ============================================================ #}
+{% if warnings %}
+<div class="logs-card">
+    <div class="logs-table-wrap">
+        <table class="logs-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Участник</th>
+                    <th></th>
+                    <th>Модератор</th>
+                    <th>Причина</th>
+                    <th>Дата</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for w in warnings %}
+                <tr>
+                    <td class="logs-id">#{{ w.id }}</td>
+
+                    <td class="logs-user-cell">{{ user_cell(w.user_id) }}</td>
+
+                    <td class="logs-arrow-cell">
+                        <span class="logs-arrow">←</span>
+                    </td>
+
+                    <td class="logs-user-cell">{{ user_cell(w.moderator_id) }}</td>
+
+                    <td class="logs-reason-cell">
+                        <span class="logs-reason">{{ w.reason or '—' }}</span>
+                    </td>
+
+                    <td class="logs-date">
+                        {{ w.created_at[:16].replace("T", " ") if w.created_at else "—" }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% else %}
+
+<div class="logs-empty">
+    <div class="logs-empty-icon">🕊️</div>
+    <div class="logs-empty-title">Предупреждений нет</div>
+    <div class="logs-empty-desc">
+        В клане царит порядок. Как только появятся предупреждения —
+        они отобразятся здесь.
+    </div>
+</div>
+
+{% endif %}
+
+{% endblock %}

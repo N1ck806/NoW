@@ -1,0 +1,156 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Логи • Админка{% endblock %}
+
+{% block admin_title %}📋 Логи{% endblock %}
+{% block admin_subtitle %}Последние 100 записей по каждому разделу{% endblock %}
+
+{% block admin_content %}
+
+{# ============ ВНУТРЕННИЕ ТАБЫ ============ #}
+<div class="admin-subtabs">
+    <a href="/admin/logs?tab=warnings"
+       class="admin-subtab {% if logs_tab == 'warnings' %}active{% endif %}">
+        ⚠️ Предупреждения ({{ warnings|length }})
+    </a>
+    <a href="/admin/logs?tab=transactions"
+       class="admin-subtab {% if logs_tab == 'transactions' %}active{% endif %}">
+        💸 Транзакции ({{ transactions|length }})
+    </a>
+</div>
+
+{# ============================================================ #}
+{# ВКЛАДКА: ПРЕДУПРЕЖДЕНИЯ                                       #}
+{# ============================================================ #}
+{% if logs_tab == 'warnings' %}
+
+    {% if warnings %}
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Участник</th>
+                    <th>Модератор</th>
+                    <th>Причина</th>
+                    <th>Дата</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for w in warnings %}
+                <tr>
+                    <td class="admin-mono">#{{ w.id }}</td>
+                    <td class="admin-mono">
+                        <a href="/profile/{{ w.user_id }}"
+                           class="admin-link"
+                           target="_blank">
+                            {{ w.user_id }}
+                        </a>
+                    </td>
+                    <td class="admin-mono">
+                        <a href="/profile/{{ w.moderator_id }}"
+                           class="admin-link"
+                           target="_blank">
+                            {{ w.moderator_id }}
+                        </a>
+                    </td>
+                    <td class="admin-desc-cell">{{ w.reason or '—' }}</td>
+                    <td class="admin-muted admin-nowrap">
+                        {{ w.created_at[:16].replace("T", " ") if w.created_at else "—" }}
+                    </td>
+                    <td>
+                        <form method="post"
+                              action="/admin/logs/warnings/{{ w.id }}/delete"
+                              onsubmit="return confirm('Удалить предупреждение #{{ w.id }}?');"
+                              style="display:inline">
+                            <button type="submit"
+                                    class="admin-btn admin-btn-sm admin-btn-danger">
+                                🗑
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="admin-empty">
+        <div class="admin-empty-icon">⚠️</div>
+        <div class="admin-empty-text">Предупреждений нет</div>
+    </div>
+    {% endif %}
+
+{% endif %}
+
+{# ============================================================ #}
+{# ВКЛАДКА: ТРАНЗАКЦИИ                                           #}
+{# ============================================================ #}
+{% if logs_tab == 'transactions' %}
+
+    {% if transactions %}
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>От</th>
+                    <th>Кому</th>
+                    <th>Сумма</th>
+                    <th>Тип</th>
+                    <th>Причина</th>
+                    <th>Дата</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in transactions %}
+                <tr>
+                    <td class="admin-mono">#{{ t.id }}</td>
+                    <td class="admin-mono">
+                        {% if t.from_id %}
+                            <a href="/profile/{{ t.from_id }}"
+                               class="admin-link"
+                               target="_blank">
+                                {{ t.from_id }}
+                            </a>
+                        {% else %}
+                            <span class="admin-muted">—</span>
+                        {% endif %}
+                    </td>
+                    <td class="admin-mono">
+                        {% if t.to_id %}
+                            <a href="/profile/{{ t.to_id }}"
+                               class="admin-link"
+                               target="_blank">
+                                {{ t.to_id }}
+                            </a>
+                        {% else %}
+                            <span class="admin-muted">—</span>
+                        {% endif %}
+                    </td>
+                    <td class="admin-balance">
+                        {{ currency_emoji }} {{ "{:,}".format(t.amount).replace(",", " ") }}
+                    </td>
+                    <td>
+                        <span class="admin-badge admin-badge-type">{{ t.type }}</span>
+                    </td>
+                    <td class="admin-desc-cell admin-muted">{{ t.reason or '—' }}</td>
+                    <td class="admin-muted admin-nowrap">
+                        {{ t.created_at[:16].replace("T", " ") if t.created_at else "—" }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="admin-empty">
+        <div class="admin-empty-icon">💸</div>
+        <div class="admin-empty-text">Транзакций нет</div>
+    </div>
+    {% endif %}
+
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 600 400"
+     width="600"
+     height="400"
+     preserveAspectRatio="xMidYMid meet">
+
+  <!-- ==============================================================
+       NIGHTMARE • NOISE
+       Эффект помех: горизонтальные полосы, RGB-сдвиг, вспышки,
+       глитч-артефакты. Похоже на сломанный ТВ / VHS.
+       Прозрачный фон (черный только там, где помехи).
+       ============================================================== -->
+
+  <defs>
+
+    <!-- ============ ФИЛЬТРЫ ============ -->
+
+    <!-- TV-шум -->
+    <filter id="tvNoise" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="1">
+        <animate attributeName="seed" values="1;2;3;4;5;4;3;2;1" dur="0.2s" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.35"/>
+      </feComponentTransfer>
+    </filter>
+
+    <!-- RGB-сдвиг (хроматическая аберрация) -->
+    <filter id="rgbShift" x="-10%" y="-10%" width="120%" height="120%">
+      <feOffset in="SourceGraphic" dx="2" dy="0" result="red-shift"/>
+      <feOffset in="SourceGraphic" dx="-2" dy="0" result="blue-shift"/>
+      <feColorMatrix in="red-shift" type="matrix"
+                     values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="red-only"/>
+      <feColorMatrix in="blue-shift" type="matrix"
+                     values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="blue-only"/>
+      <feBlend in="red-only" in2="blue-only" mode="screen" result="shifted"/>
+      <feBlend in="shifted" in2="SourceGraphic" mode="screen"/>
+    </filter>
+
+    <!-- Сильное свечение -->
+    <filter id="glowStrong" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="b1"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b2"/>
+      <feMerge>
+        <feMergeNode in="b2"/>
+        <feMergeNode in="b1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="glowSoft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4"/>
+    </filter>
+
+    <filter id="glowBig" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="12"/>
+    </filter>
+
+  </defs>
+
+
+  <!-- ============================================================
+       1. БАЗОВЫЙ СЛОЙ ШУМА (по всему экрану)
+       ============================================================ -->
+  <rect x="0" y="0" width="600" height="400"
+        fill="url(#tvNoise)" filter="url(#tvNoise)" opacity="0.4"/>
+
+
+  <!-- ============================================================
+       2. ЧЁРНЫЕ/БЕЛЫЕ ПОЛОСЫ (быстро мелькают)
+       ============================================================ -->
+
+  <!-- Чёрные полосы -->
+  <g fill="#000000" opacity="0.7">
+    <rect x="0" y="0" width="600" height="2">
+      <animate attributeName="y" values="-10;400;-10" dur="0.8s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.9;0" dur="0.8s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="0" y="0" width="600" height="3">
+      <animate attributeName="y" values="400;-10;400" dur="1.1s" begin="0.3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.8;0" dur="1.1s" begin="0.3s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="0" y="0" width="600" height="1.5">
+      <animate attributeName="y" values="-10;400;-10" dur="0.6s" begin="0.15s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;0" dur="0.6s" begin="0.15s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="0" y="0" width="600" height="4">
+      <animate attributeName="y" values="-10;400" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.6;0" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+
+  <!-- Белые полосы -->
+  <g fill="#ffffff" opacity="0.8">
+    <rect x="0" y="0" width="600" height="2">
+      <animate attributeName="y" values="-10;400;-10" dur="0.9s" begin="0.2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.9;0" dur="0.9s" begin="0.2s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="0" y="0" width="600" height="1">
+      <animate attributeName="y" values="400;-10" dur="1.3s" begin="0.7s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.7;0" dur="1.3s" begin="0.7s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="0" y="0" width="600" height="2.5">
+      <animate attributeName="y" values="-10;400" dur="0.7s" begin="0.45s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;0" dur="0.7s" begin="0.45s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+
+
+  <!-- ============================================================
+       3. ЦВЕТНЫЕ ПОЛОСЫ (красный/синий RGB-глитч)
+       ============================================================ -->
+
+  <!-- Красные -->
+  <g fill="#ff0033" filter="url(#glowStrong)">
+    <rect x="0" y="0" width="600" height="3" opacity="0.7">
+      <animate attributeName="y" values="-10;400;-10" dur="1.5s" begin="0s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.8;0" dur="1.5s" begin="0s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="0" y="0" width="600" height="2" opacity="0.6">
+      <animate attributeName="y" values="400;-10" dur="2s" begin="0.9s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.9;0" dur="2s" begin="0.9s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+
+  <!-- Синие -->
+  <g fill="#00e5ff" filter="url(#glowStrong)">
+    <rect x="0" y="0" width="600" height="2.5" opacity="0.65">
+      <animate attributeName="y" values="-10;400" dur="1.7s" begin="0.4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.7;0" dur="1.7s" begin="0.4s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="0" y="0" width="600" height="2" opacity="0.55">
+      <animate attributeName="y" values="400;-10;-10" dur="2.2s" begin="1.3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.9;0" dur="2.2s" begin="1.3s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+
+
+  <!-- ============================================================
+       4. ШИРОКИЕ «СКАНИРУЮЩИЕ» ПОЛОСЫ (медленные, как на VHS)
+       ============================================================ -->
+
+  <!-- Тёмная полоса, проходит сверху вниз -->
+  <rect x="0" y="0" width="600" height="40"
+        fill="#000000" opacity="0.4" filter="url(#glowSoft)">
+    <animate attributeName="y" values="-40;400" dur="3s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- Красная полоса, проходит снизу вверх -->
+  <rect x="0" y="0" width="600" height="25"
+        fill="#ff0033" opacity="0.3" filter="url(#glowSoft)">
+    <animate attributeName="y" values="400;-25" dur="4s" begin="1s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- Белая тонкая полоса (быстрая) -->
+  <rect x="0" y="0" width="600" height="8"
+        fill="#ffffff" opacity="0.5" filter="url(#glowStrong)">
+    <animate attributeName="y" values="-8;400" dur="1.8s" begin="0.5s" repeatCount="indefinite"/>
+  </rect>
+
+
+  <!-- ============================================================
+       5. БЛОКИ-АРТЕФАКТЫ (прямоугольные «выпадения»)
+       ============================================================ -->
+
+  <g filter="url(#rgbShift)">
+    <!-- Блок 1 (слева сверху) -->
+    <rect x="50" y="80" width="120" height="30" fill="#ff0033" opacity="0">
+      <animate attributeName="opacity"
+               values="0;0;0;0.7;0.7;0;0;0;0;0"
+               dur="3s" repeatCount="indefinite"/>
+    </rect>
+
+    <!-- Блок 2 (центр) -->
+    <rect x="250" y="150" width="100" height="20" fill="#00e5ff" opacity="0">
+      <animate attributeName="opacity"
+               values="0;0.6;0.6;0;0;0;0;0"
+               dur="4s" begin="1s" repeatCount="indefinite"/>
+    </rect>
+
+    <!-- Блок 3 (справа) -->
+    <rect x="420" y="200" width="150" height="40" fill="#ff0033" opacity="0">
+      <animate attributeName="opacity"
+               values="0;0;0.7;0.7;0;0;0"
+               dur="3.5s" begin="0.5s" repeatCount="indefinite"/>
+    </rect>
+
+    <!-- Блок 4 (слева снизу) -->
+    <rect x="80" y="300" width="180" height="25" fill="#ffffff" opacity="0">
+      <animate attributeName="opacity"
+               values="0;0;0;0;0.8;0.8;0;0"
+               dur="4.5s" begin="2s" repeatCount="indefinite"/>
+    </rect>
+
+    <!-- Блок 5 (центр снизу) -->
+    <rect x="280" y="340" width="130" height="30" fill="#ff0033" opacity="0">
+      <animate attributeName="opacity"
+               values="0;0.75;0.75;0;0;0;0;0;0"
+               dur="5s" begin="1.5s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+
+
+  <!-- ============================================================
+       6. РАЗРЫВЫ-СДВИГИ (части экрана сдвигаются)
+       ============================================================ -->
+
+  <g filter="url(#rgbShift)">
+    <!-- Полоса-разрыв сверху -->
+    <rect x="0" y="60" width="600" height="15" fill="#000000" opacity="0">
+      <animate attributeName="opacity"
+               values="0;0;0;0.5;0.5;0;0;0"
+               dur="3s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform"
+                        type="translate"
+                        values="0 0; 20 0; 0 0; -15 0; 0 0"
+                        dur="3s" repeatCount="indefinite"/>
+    </rect>
+
+    <rect x="0" y="180" width="600" height="20" fill="#000000" opacity="0">
+      <animate attributeName="opacity"
+               values="0;0.6;0.6;0;0;0;0;0"
+               dur="4s" begin="0.8s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform"
+                        type="translate"
+                        values="0 0; -25 0; 0 0; 15 0; 0 0"
+                        dur="4s" begin="0.8s" repeatCount="indefinite"/>
+    </rect>
+
+    <rect x="0" y="290" width="600" height="12" fill="#000000" opacity="0">
+      <animate attributeName="opacity"
+               values="0;0;0.55;0.55;0;0;0"
+               dur="3.5s" begin="1.5s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform"
+                        type="translate"
+                        values="0 0; 30 0; 0 0; -20 0; 0 0"
+                        dur="3.5s" begin="1.5s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+
+
+  <!-- ============================================================
+       7. ВСПЫШКИ (кратковременные яркие вспышки)
+       ============================================================ -->
+
+  <!-- Красная вспышка -->
+  <rect x="0" y="0" width="600" height="400" fill="#ff0033" opacity="0" filter="url(#glowBig)">
+    <animate attributeName="opacity"
+             values="0;0;0;0;0;0.25;0;0;0;0;0;0;0.15;0;0"
+             dur="6s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- Белая вспышка -->
+  <rect x="0" y="0" width="600" height="400" fill="#ffffff" opacity="0">
+    <animate attributeName="opacity"
+             values="0;0;0;0.15;0;0;0;0;0;0;0.1;0;0;0;0"
+             dur="7s" begin="1s" repeatCount="indefinite"/>
+  </rect>
+
+
+  <!-- ============================================================
+       8. ГОРИЗОНТАЛЬНЫЕ «ПОМЕХИ» (мелкие дрожащие линии)
+       ============================================================ -->
+
+  <g stroke="#ffffff" stroke-width="0.5" opacity="0.4">
+    <line x1="0" y1="50" x2="600" y2="50">
+      <animate attributeName="opacity" values="0;0.6;0;0;0.4;0" dur="1.5s" repeatCount="indefinite"/>
+    </line>
+    <line x1="0" y1="120" x2="600" y2="120">
+      <animate attributeName="opacity" values="0;0;0.5;0;0;0.7;0" dur="2s" begin="0.3s" repeatCount="indefinite"/>
+    </line>
+    <line x1="0" y1="200" x2="600" y2="200">
+      <animate attributeName="opacity" values="0;0.4;0;0.6;0" dur="1.8s" begin="0.6s" repeatCount="indefinite"/>
+    </line>
+    <line x1="0" y1="280" x2="600" y2="280">
+      <animate attributeName="opacity" values="0;0;0.5;0;0;0.4;0" dur="2.2s" begin="1.2s" repeatCount="indefinite"/>
+    </line>
+    <line x1="0" y1="350" x2="600" y2="350">
+      <animate attributeName="opacity" values="0;0.5;0;0;0.3;0" dur="1.6s" begin="0.9s" repeatCount="indefinite"/>
+    </line>
+  </g>
+
+  <!-- Красные мелкие линии -->
+  <g stroke="#ff0033" stroke-width="0.7" opacity="0.5" filter="url(#glowStrong)">
+    <line x1="0" y1="90" x2="600" y2="90">
+      <animate attributeName="opacity" values="0;0.7;0;0;0.5;0" dur="2.5s" begin="0.5s" repeatCount="indefinite"/>
+    </line>
+    <line x1="0" y1="230" x2="600" y2="230">
+      <animate attributeName="opacity" values="0;0;0.6;0;0.4;0" dur="2.8s" begin="1.4s" repeatCount="indefinite"/>
+    </line>
+    <line x1="0" y1="310" x2="600" y2="310">
+      <animate attributeName="opacity" values="0;0.5;0;0;0.7;0" dur="2.3s" begin="0.8s" repeatCount="indefinite"/>
+    </line>
+  </g>
+
+
+  <!-- ============================================================
+       9. ТЕКСТ-ГЛИТЧ (буквы, разлетающиеся по экрану)
+       ============================================================ -->
+
+  <g font-family="monospace" font-weight="bold" filter="url(#rgbShift)">
+
+    <!-- «ERROR» в случайных местах -->
+    <text x="120" y="70" font-size="18" fill="#ff0033" opacity="0">
+      ERROR
+      <animate attributeName="opacity"
+               values="0;0;0;0.9;0.9;0;0;0;0;0"
+               dur="5s" repeatCount="indefinite"/>
+    </text>
+
+    <text x="380" y="180" font-size="14" fill="#00e5ff" opacity="0">
+      NULL
+      <animate attributeName="opacity"
+               values="0;0.8;0.8;0;0;0;0"
+               dur="4s" begin="1.2s" repeatCount="indefinite"/>
+    </text>
+
+    <text x="200" y="310" font-size="16" fill="#ff0033" opacity="0">
+      0x00
+      <animate attributeName="opacity"
+               values="0;0;0;0;0.9;0.9;0;0"
+               dur="4.5s" begin="2s" repeatCount="indefinite"/>
+    </text>
+
+    <text x="450" y="350" font-size="12" fill="#ffffff" opacity="0">
+      ////
+      <animate attributeName="opacity"
+               values="0;0;0.7;0;0.7;0;0"
+               dur="3.5s" begin="0.8s" repeatCount="indefinite"/>
+    </text>
+  </g>
+
+
+  <!-- ============================================================
+       10. ЛИНИЯ РАЗВЁРТКИ (тонкая линия, едет сверху вниз)
+       ============================================================ -->
+
+  <line x1="0" y1="0" x2="600" y2="0"
+        stroke="#ffffff" stroke-width="1.5" opacity="0.8"
+        filter="url(#glowStrong)">
+    <animate attributeName="y1" values="0;400" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="y2" values="0;400" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2s" repeatCount="indefinite"/>
+  </line>
+
+
+  <!-- ============================================================
+       11. ФИНАЛЬНАЯ ПУЛЬСАЦИЯ (общее дрожание)
+       ============================================================ -->
+
+  <rect x="0" y="0" width="600" height="400"
+        fill="#ff0033" opacity="0" filter="url(#glowBig)">
+    <animate attributeName="opacity"
+             values="0;0;0;0.06;0;0;0;0.04;0;0"
+             dur="5s" repeatCount="indefinite"/>
+  </rect>
+
+
+</svg>

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Вход • Nightmare{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <h1 class="auth-title">Вход</h1>
+        <p class="auth-subtitle">Войди, чтобы продолжить</p>
+
+        {% if error %}
+        <div class="auth-error">{{ error }}</div>
+        {% endif %}
+
+        {# ===== Ошибки OAuth-входа ===== #}
+        {% set err = request.query_params.get('error') %}
+        {% if err == 'discord_denied' %}
+        <div class="auth-error">❌ Вход через Discord отменён</div>
+        {% elif err == 'discord_token' %}
+        <div class="auth-error">❌ Не удалось получить токен Discord</div>
+        {% elif err == 'discord_user' %}
+        <div class="auth-error">❌ Не удалось получить данные Discord</div>
+        {% elif err %}
+        <div class="auth-error">Ошибка входа через соцсеть. Попробуй ещё раз.</div>
+        {% endif %}
+
+        <form method="post" class="auth-form">
+            <div class="form-group">
+                <label>Ник</label>
+                <input type="text" name="username" required autofocus autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label>Пароль</label>
+                <input type="password" name="password" required autocomplete="current-password">
+            </div>
+
+            <button type="submit" class="btn-primary">Войти</button>
+        </form>
+
+        <div class="auth-divider">или</div>
+
+        <div class="auth-social">
+            <a href="/auth/discord" class="btn-social btn-discord">
+                <span>💬</span> Войти через Discord
+            </a>
+        </div>
+
+        <p class="auth-footer">
+            Нет аккаунта? <a href="/register">Зарегистрироваться</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

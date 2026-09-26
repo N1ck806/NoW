@@ -1,0 +1,94 @@
+{
+  "quests": [
+    {
+      "id": "first_steps",
+      "name": "Первые шаги",
+      "description": "Напиши 10 сообщений в чате",
+      "type": "messages",
+      "target": 10,
+      "reward": 500,
+      "repeatable": false
+    },
+    {
+      "id": "chatterbox",
+      "name": "Болтун",
+      "description": "Напиши 100 сообщений",
+      "type": "messages",
+      "target": 100,
+      "reward": 2000,
+      "repeatable": false
+    },
+    {
+      "id": "chatterbox_daily",
+      "name": "Дневная норма",
+      "description": "Напиши 50 сообщений за сегодня",
+      "type": "messages",
+      "target": 50,
+      "reward": 500,
+      "repeatable": true
+    },
+    {
+      "id": "gambler",
+      "name": "Азартный",
+      "description": "Сыграй 10 игр",
+      "type": "games",
+      "target": 10,
+      "reward": 1000,
+      "repeatable": false
+    },
+    {
+      "id": "big_win",
+      "name": "Большой куш",
+      "description": "Выиграй 5 игр подряд",
+      "type": "wins",
+      "target": 5,
+      "reward": 3000,
+      "repeatable": false
+    },
+    {
+      "id": "voice_master",
+      "name": "Голосовой",
+      "description": "Проведи 60 минут в войсе",
+      "type": "voice_minutes",
+      "target": 60,
+      "reward": 1500,
+      "repeatable": false
+    },
+    {
+      "id": "level_5",
+      "name": "Пятёрочка",
+      "description": "Достигни 5 уровня",
+      "type": "level",
+      "target": 5,
+      "reward": 2500,
+      "repeatable": false
+    },
+    {
+      "id": "rich_man",
+      "name": "Богач",
+      "description": "Накопи 10000 монет",
+      "type": "balance",
+      "target": 10000,
+      "reward": 5000,
+      "repeatable": false
+    },
+    {
+      "id": "daily_hero",
+      "name": "Верный клану",
+      "description": "Забери daily 7 дней подряд",
+      "type": "daily_streak",
+      "target": 7,
+      "reward": 3000,
+      "repeatable": false
+    },
+    {
+      "id": "daily_messages",
+      "name": "Активный день",
+      "description": "Напиши 30 сообщений сегодня",
+      "type": "messages",
+      "target": 30,
+      "reward": 300,
+      "repeatable": true
+    }
+  ]
+}

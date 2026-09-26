@@ -1,0 +1,109 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Игры • Админка{% endblock %}
+
+{% block admin_title %}🎮 История игр{% endblock %}
+{% block admin_subtitle %}Всего: {{ total }} • Страница {{ page }} из {{ total_pages }}{% endblock %}
+
+{% block admin_content %}
+
+{# ============ ИНФО-БАННЕР ============ #}
+<div class="admin-info-banner">
+    💡 История ставок из таблицы <code>game_history</code>. Только просмотр — записи
+    нельзя удалять, чтобы не ломать аудит экономики.
+</div>
+
+{# ============ ТУЛБАР ============ #}
+<div class="admin-toolbar">
+    <div class="admin-toolbar-info">
+        Показано: <strong>{{ games|length }}</strong> из <strong>{{ total }}</strong>
+    </div>
+    <div class="admin-toolbar-actions">
+        <a href="/admin/games?page=1" class="admin-btn admin-btn-secondary">⟲ Первая</a>
+    </div>
+</div>
+
+{# ============ ТАБЛИЦА ============ #}
+{% if games %}
+<div class="admin-table-wrap">
+    <table class="admin-table admin-table-compact">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Игрок</th>
+                <th>Игра</th>
+                <th>Ставка</th>
+                <th>Результат</th>
+                <th>Профит</th>
+                <th>Дата</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for g in games %}
+            <tr>
+                <td class="admin-mono">#{{ g.id }}</td>
+                <td class="admin-mono">
+                    <a href="/profile/{{ g.user_id }}"
+                       class="admin-link"
+                       target="_blank">
+                        {{ g.user_id }}
+                    </a>
+                </td>
+                <td>
+                    <span class="admin-badge admin-badge-type">{{ g.game }}</span>
+                </td>
+                <td class="admin-balance">
+                    {{ currency_emoji }} {{ "{:,}".format(g.bet or 0).replace(",", " ") }}
+                </td>
+                <td>
+                    {% if g.win %}
+                        <span class="admin-badge admin-badge-ghost">🏆 Победа</span>
+                    {% else %}
+                        <span class="admin-badge admin-badge-danger">❌ Проигрыш</span>
+                    {% endif %}
+                </td>
+                <td class="
+                    {% if (g.profit or 0) > 0 %}profit-positive
+                    {% elif (g.profit or 0) < 0 %}profit-negative
+                    {% else %}admin-muted{% endif %}">
+                    {{ "{:+,}".format(g.profit or 0).replace(",", " ") }}
+                </td>
+                <td class="admin-muted admin-nowrap">
+                    {{ g.created_at[:16].replace("T", " ") if g.created_at else "—" }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{# ============ ПАГИНАЦИЯ ============ #}
+{% if total_pages > 1 %}
+<div class="admin-pagination">
+    {% if page > 1 %}
+        <a href="/admin/games?page={{ page - 1 }}" class="admin-page-btn">← Назад</a>
+    {% else %}
+        <span class="admin-page-btn disabled">← Назад</span>
+    {% endif %}
+
+    <span class="admin-page-info">Стр. {{ page }} / {{ total_pages }}</span>
+
+    {% if page < total_pages %}
+        <a href="/admin/games?page={{ page + 1 }}" class="admin-page-btn">Вперёд →</a>
+    {% else %}
+        <span class="admin-page-btn disabled">Вперёд →</span>
+    {% endif %}
+</div>
+{% endif %}
+
+{% else %}
+<div class="admin-empty">
+    <div class="admin-empty-icon">🎮</div>
+    <div class="admin-empty-text">
+        Пока ни одной сыгранной игры. Как только Discord-бот начнёт принимать ставки —
+        они появятся здесь.
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

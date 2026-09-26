@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Доступ запрещён • Nightmare{% endblock %}
+
+{% block content %}
+<div class="error-page">
+    <div class="error-code">403</div>
+
+    <div class="error-emoji">🚫</div>
+
+    <p class="error-text">
+        {% if message %}
+            {{ message }}
+        {% else %}
+            У тебя нет доступа к этой странице
+        {% endif %}
+    </p>
+
+    <div class="error-hint">
+        {% if current_user %}
+            {% if role_badge and role_badge.key == 'guest' %}
+                <p>Ты пока <strong>Гость</strong>. Доступ к этому разделу открыт только для
+                <strong>Призраков</strong> — участников клана.</p>
+                <p class="muted">Обратись к администратору, чтобы получить статус Призрака.</p>
+            {% else %}
+                <p>Похоже, у тебя не хватает прав для этого раздела.</p>
+                <p class="muted">Если считаешь, что это ошибка — обратись к администратору.</p>
+            {% endif %}
+        {% else %}
+            <p>Чтобы получить доступ, нужно авторизоваться.</p>
+        {% endif %}
+    </div>
+
+    <div class="error-actions">
+        <a href="/" class="btn-primary error-btn">← На главную</a>
+        {% if not current_user %}
+            <a href="/login" class="btn-secondary error-btn">Войти</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,767 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <!-- ============================================================
+         ГРАДИЕНТЫ
+         ============================================================ -->
+
+    <!-- Переливающийся хром для NIGHTMARE — БЕЗ размытия, только сдвиг цвета -->
+    <linearGradient id="metalGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff">
+        <animate attributeName="stop-color" values="#ffffff;#ffe8e8;#ffffff;#e8f0ff;#ffffff" dur="4s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="15%" stop-color="#e0e0ea">
+        <animate attributeName="stop-color" values="#e0e0ea;#ffd0d8;#e0e0ea;#d0d8ff;#e0e0ea" dur="4s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="30%" stop-color="#909098"/>
+      <stop offset="45%" stop-color="#3a3a48"/>
+      <stop offset="50%" stop-color="#0a0a12"/>
+      <stop offset="55%" stop-color="#4a4a58"/>
+      <stop offset="70%" stop-color="#c8c8d0">
+        <animate attributeName="stop-color" values="#c8c8d0;#ffc8d0;#c8c8d0;#c8d8ff;#c8c8d0" dur="4s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="85%" stop-color="#6a6a78"/>
+      <stop offset="100%" stop-color="#1a1a22"/>
+    </linearGradient>
+
+    <!-- Кровавый — переливающийся -->
+    <linearGradient id="bloodGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ff3a55">
+        <animate attributeName="stop-color" values="#ff3a55;#ff0033;#ff3a55;#8b0000;#ff3a55" dur="3.5s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="30%" stop-color="#e60026"/>
+      <stop offset="60%" stop-color="#a30020"/>
+      <stop offset="100%" stop-color="#4a0010"/>
+    </linearGradient>
+
+    <!-- Обводка текста — тёмная, но контрастная -->
+    <linearGradient id="metalDark" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3a0000"/>
+      <stop offset="50%" stop-color="#0a0000"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </linearGradient>
+
+    <!-- Кровавая лужа -->
+    <radialGradient id="puddleGrad" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#ff1a3d" stop-opacity="0.9"/>
+      <stop offset="35%" stop-color="#8b0000" stop-opacity="0.7"/>
+      <stop offset="70%" stop-color="#4a0000" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Аура красная -->
+    <radialGradient id="redAura" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#ff0033" stop-opacity="0.4"/>
+      <stop offset="30%" stop-color="#8b0000" stop-opacity="0.22"/>
+      <stop offset="60%" stop-color="#4a0050" stop-opacity="0.13"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Аура фиолетовая -->
+    <radialGradient id="purpleAura" cx="50%" cy="100%" r="70%">
+      <stop offset="0%" stop-color="#7f5af0" stop-opacity="0.3"/>
+      <stop offset="40%" stop-color="#4a2080" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Капля -->
+    <radialGradient id="dropGrad" cx="50%" cy="15%" r="65%">
+      <stop offset="0%" stop-color="#ff5577"/>
+      <stop offset="35%" stop-color="#c40026"/>
+      <stop offset="100%" stop-color="#2a0000"/>
+    </radialGradient>
+
+    <!-- Фон -->
+    <radialGradient id="bgGrad" cx="50%" cy="45%" r="80%">
+      <stop offset="0%" stop-color="#1e0a26"/>
+      <stop offset="40%" stop-color="#0e0518"/>
+      <stop offset="80%" stop-color="#040208"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+
+    <!-- Сетка -->
+    <pattern id="gridPattern" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#7f5af0" stroke-width="0.3" opacity="0.12"/>
+      <circle cx="0" cy="0" r="1.5" fill="#7f5af0" opacity="0.2"/>
+    </pattern>
+
+    <!-- Виньетка -->
+    <radialGradient id="vignette" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="60%" stop-color="#000000" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.8"/>
+    </radialGradient>
+
+    <!-- Кость -->
+    <linearGradient id="boneGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f0e8d8"/>
+      <stop offset="50%" stop-color="#c8b898"/>
+      <stop offset="100%" stop-color="#6a5a48"/>
+    </linearGradient>
+
+    <!-- Градиент для жилок -->
+    <linearGradient id="veinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#8b0000" stop-opacity="0.7"/>
+      <stop offset="50%" stop-color="#4a0010" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#1a0000" stop-opacity="0.1"/>
+    </linearGradient>
+
+    <!-- Потёк крови -->
+    <linearGradient id="dripGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#8b0000" stop-opacity="0.9"/>
+      <stop offset="60%" stop-color="#c40026" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#ff1a3d" stop-opacity="0.3"/>
+    </linearGradient>
+
+    <!-- ============================================================
+         ФИЛЬТРЫ
+         ============================================================ -->
+
+    <!-- Мягкое свечение ВОКРУГ текста (не размывает сам текст) -->
+    <filter id="softOuterGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/>
+      <feFlood flood-color="#ff0033" flood-opacity="0.6" result="color"/>
+      <feComposite in="color" in2="blur" operator="in" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Тройное свечение — тоже вокруг, не задевает буквы -->
+    <filter id="redGlow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="b1"/>
+      <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="b2"/>
+      <feGaussianBlur in="SourceAlpha" stdDeviation="18" result="b3"/>
+      <feFlood flood-color="#ff0033" flood-opacity="0.4" result="c1"/>
+      <feFlood flood-color="#8b0000" flood-opacity="0.3" result="c2"/>
+      <feFlood flood-color="#4a0000" flood-opacity="0.2" result="c3"/>
+      <feComposite in="c3" in2="b3" operator="in" result="g3"/>
+      <feComposite in="c2" in2="b2" operator="in" result="g2"/>
+      <feComposite in="c1" in2="b1" operator="in" result="g1"/>
+      <feMerge>
+        <feMergeNode in="g3"/>
+        <feMergeNode in="g2"/>
+        <feMergeNode in="g1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Объём металла — оставляем, он не размывает -->
+    <filter id="emboss">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
+      <feSpecularLighting in="blur" surfaceScale="3" specularConstant="1.2"
+                          specularExponent="25" lighting-color="#ffffff" result="spec">
+        <fePointLight x="800" y="50" z="250"/>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="SourceAlpha" operator="in" result="specOut"/>
+      <feComposite in="SourceGraphic" in2="specOut" operator="arithmetic"
+                   k1="0" k2="1" k3="1" k4="0"/>
+    </filter>
+
+    <!-- Мягкое свечение для фоновых элементов -->
+    <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Шум -->
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" seed="2">
+        <animate attributeName="seed" values="1;2;3;4;5;1" dur="0.4s" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.06"/>
+      </feComponentTransfer>
+    </filter>
+
+    <!-- Зернистость -->
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="5">
+        <animate attributeName="seed" values="1;5;3;7;2;1" dur="0.25s" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.08"/>
+      </feComponentTransfer>
+    </filter>
+
+    <!-- Размытие для глубины -->
+    <filter id="depthBlur">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+
+    <filter id="blurSoft">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+
+    <!-- Свечение углей -->
+    <filter id="emberGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="2" result="b1"/>
+      <feGaussianBlur stdDeviation="6" result="b2"/>
+      <feMerge>
+        <feMergeNode in="b2"/>
+        <feMergeNode in="b1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- ============================================================
+       ФОН
+       ============================================================ -->
+
+  <rect width="1600" height="900" fill="url(#bgGrad)"/>
+  <rect width="1600" height="900" fill="url(#gridPattern)"/>
+  <ellipse cx="800" cy="400" rx="900" ry="500" fill="url(#redAura)"/>
+  <ellipse cx="800" cy="900" rx="1000" ry="400" fill="url(#purpleAura)"/>
+  <rect width="1600" height="900" filter="url(#noise)" opacity="0.5"/>
+
+  <!-- ============================================================
+       ЖИЛКИ НА ФОНЕ — сеть вен, оплетающая всё
+       ============================================================ -->
+
+  <g stroke="url(#veinGrad)" stroke-width="1.2" fill="none" opacity="0.55">
+    <!-- Жилка 1 — сверху вниз слева -->
+    <path d="M 80 0 Q 120 80 100 180 Q 90 280 150 380 Q 200 480 180 600 Q 160 720 220 850">
+      <animate attributeName="stroke-dashoffset" values="0;-200" dur="12s" repeatCount="indefinite"/>
+    </path>
+    <path d="M 100 180 Q 160 200 200 240 Q 240 280 220 340" stroke-width="0.8"/>
+    <path d="M 150 380 Q 220 400 260 460" stroke-width="0.8"/>
+    <path d="M 180 600 Q 120 650 90 720" stroke-width="0.8"/>
+
+    <!-- Жилка 2 — сверху вниз справа -->
+    <path d="M 1520 0 Q 1480 90 1500 200 Q 1520 320 1460 420 Q 1400 520 1440 640 Q 1480 760 1420 880">
+      <animate attributeName="stroke-dashoffset" values="0;-180" dur="14s" repeatCount="indefinite"/>
+    </path>
+    <path d="M 1500 200 Q 1420 220 1380 280" stroke-width="0.8"/>
+    <path d="M 1460 420 Q 1380 440 1340 500" stroke-width="0.8"/>
+    <path d="M 1440 640 Q 1520 680 1560 760" stroke-width="0.8"/>
+
+    <!-- Жилка 3 — по центру (за текстом) -->
+    <path d="M 800 0 Q 780 100 820 200 Q 860 300 800 380" opacity="0.6"/>
+    <path d="M 800 380 Q 740 420 720 500" stroke-width="0.8" opacity="0.6"/>
+    <path d="M 800 380 Q 870 430 880 520" stroke-width="0.8" opacity="0.6"/>
+
+    <!-- Жилка 4 — нижняя ветвь -->
+    <path d="M 400 900 Q 440 800 420 700 Q 400 620 460 550" opacity="0.7"/>
+    <path d="M 460 550 Q 520 570 580 550" stroke-width="0.8"/>
+    <path d="M 420 700 Q 340 720 280 760" stroke-width="0.8"/>
+
+    <!-- Жилка 5 — нижняя ветвь справа -->
+    <path d="M 1200 900 Q 1160 800 1180 700 Q 1200 620 1140 550" opacity="0.7"/>
+    <path d="M 1140 550 Q 1080 570 1020 550" stroke-width="0.8"/>
+    <path d="M 1180 700 Q 1260 720 1320 760" stroke-width="0.8"/>
+  </g>
+
+  <!-- ============================================================
+       ДАЛЁКИЙ ПЛАН — КРЕСТЫ
+       ============================================================ -->
+
+  <g opacity="0.25" filter="url(#depthBlur)">
+    <g transform="translate(150, 550)">
+      <rect x="-6" y="0" width="12" height="180" fill="#1a0a1e"/>
+      <rect x="-40" y="30" width="80" height="12" fill="#1a0a1e"/>
+    </g>
+    <g transform="translate(320, 580) rotate(-6)">
+      <rect x="-5" y="0" width="10" height="150" fill="#1a0a1e"/>
+      <rect x="-35" y="25" width="70" height="10" fill="#1a0a1e"/>
+    </g>
+    <g transform="translate(500, 560)">
+      <rect x="-7" y="0" width="14" height="200" fill="#1a0a1e"/>
+      <rect x="-45" y="35" width="90" height="14" fill="#1a0a1e"/>
+    </g>
+    <g transform="translate(1120, 570) rotate(4)">
+      <rect x="-6" y="0" width="12" height="170" fill="#1a0a1e"/>
+      <rect x="-38" y="30" width="76" height="12" fill="#1a0a1e"/>
+    </g>
+    <g transform="translate(1320, 540)">
+      <rect x="-8" y="0" width="16" height="220" fill="#1a0a1e"/>
+      <rect x="-50" y="40" width="100" height="16" fill="#1a0a1e"/>
+    </g>
+    <g transform="translate(1480, 600) rotate(-3)">
+      <rect x="-5" y="0" width="10" height="140" fill="#1a0a1e"/>
+      <rect x="-30" y="22" width="60" height="10" fill="#1a0a1e"/>
+    </g>
+  </g>
+
+  <!-- ============================================================
+       ЛУНА
+       ============================================================ -->
+
+  <g transform="translate(800, 180)">
+    <circle r="200" fill="#ff0033" opacity="0.08" filter="url(#blurSoft)"/>
+    <circle r="140" fill="#ff0033" opacity="0.12" filter="url(#blurSoft)"/>
+    <circle r="100" fill="#8b0000" opacity="0.15" filter="url(#blurSoft)"/>
+    <circle r="80" fill="#2a0a1a" stroke="#8b0000" stroke-width="0.5" opacity="0.6"/>
+    <circle cx="-20" cy="-10" r="78" fill="#000000" opacity="0.7"/>
+    <circle cx="20" cy="15" r="8" fill="#1a0000" opacity="0.4"/>
+    <circle cx="40" cy="-20" r="5" fill="#1a0000" opacity="0.3"/>
+    <circle cx="-15" cy="30" r="6" fill="#1a0000" opacity="0.35"/>
+  </g>
+
+  <!-- ============================================================
+       ТУМАН
+       ============================================================ -->
+
+  <g opacity="0.35">
+    <ellipse cx="300" cy="820" rx="500" ry="120" fill="#4a0050" filter="url(#blurSoft)"/>
+    <ellipse cx="1100" cy="840" rx="600" ry="140" fill="#2a0040" filter="url(#blurSoft)"/>
+    <ellipse cx="700" cy="870" rx="700" ry="100" fill="#1a0028" filter="url(#blurSoft)"/>
+    <ellipse cx="1400" cy="800" rx="400" ry="100" fill="#3a0050" filter="url(#blurSoft)"/>
+  </g>
+
+  <!-- ============================================================
+       АРКИ
+       ============================================================ -->
+
+  <g opacity="0.4">
+    <path d="M 200 850 Q 800 -50 1400 850"
+          fill="none" stroke="#8b0000" stroke-width="2"
+          stroke-dasharray="8 4">
+      <animate attributeName="stroke-dashoffset" values="0;-24" dur="3s" repeatCount="indefinite"/>
+    </path>
+    <path d="M 260 850 Q 800 30 1340 850"
+          fill="none" stroke="#ff0033" stroke-width="0.8" opacity="0.6"/>
+  </g>
+
+  <!-- ============================================================
+       ЛУЖА КРОВИ
+       ============================================================ -->
+
+  <ellipse cx="800" cy="860" rx="600" ry="60" fill="url(#puddleGrad)" opacity="0.7"/>
+
+  <!-- ============================================================
+       NIGHTMARE — СУПЕР-ЧИТАЕМЫЙ ТЕКСТ
+       ============================================================ -->
+
+  <!-- 1) Мягкое внешнее свечение позади (не задевает буквы) -->
+  <text x="800" y="480"
+        font-family="'Impact', 'Arial Black', 'Bebas Neue', 'Anton', sans-serif"
+        font-size="280"
+        font-weight="900"
+        text-anchor="middle"
+        letter-spacing="6"
+        fill="#000000"
+        opacity="0.9"
+        filter="url(#redGlow)">
+    NIGHTMARE
+  </text>
+
+  <!-- 2) Основной текст: чёткий, переливающийся, с обводкой и объёмом -->
+  <text x="800" y="480"
+        font-family="'Impact', 'Arial Black', 'Bebas Neue', 'Anton', sans-serif"
+        font-size="280"
+        font-weight="900"
+        text-anchor="middle"
+        letter-spacing="6"
+        fill="url(#metalGrad)"
+        stroke="#000000"
+        stroke-width="4"
+        paint-order="stroke fill"
+        filter="url(#emboss)">
+    NIGHTMARE
+  </text>
+
+  <!-- 3) Тонкая красная подсветка сверху — для остроты, без размытия -->
+  <text x="800" y="480"
+        font-family="'Impact', 'Arial Black', 'Bebas Neue', 'Anton', sans-serif"
+        font-size="280"
+        font-weight="900"
+        text-anchor="middle"
+        letter-spacing="6"
+        fill="none"
+        stroke="#ff0033"
+        stroke-width="1.2"
+        opacity="0.75">
+    NIGHTMARE
+    <animate attributeName="opacity" values="0.75;1;0.5;0.9;0.75" dur="2.5s" repeatCount="indefinite"/>
+  </text>
+
+  <!-- ============================================================
+       КРОВАВЫЕ ПОТЁКИ С БУКВ NIGHTMARE
+       ============================================================ -->
+
+  <!-- Потёк с "N" -->
+  <g>
+    <path d="M 490 500 Q 492 540 490 570 Q 488 600 492 640"
+          stroke="url(#dripGrad)" stroke-width="2.5" fill="none" stroke-linecap="round">
+      <animate attributeName="stroke-dasharray" values="0 200;200 0" dur="6s" repeatCount="indefinite"/>
+    </path>
+    <ellipse cx="492" cy="645" rx="3" ry="4" fill="#8b0000">
+      <animate attributeName="cy" values="645; 700; 645" dur="6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.6;1" dur="6s" repeatCount="indefinite"/>
+    </ellipse>
+  </g>
+
+  <!-- Потёк с "G" -->
+  <g>
+    <path d="M 700 500 Q 698 550 700 600 Q 702 640 698 680"
+          stroke="url(#dripGrad)" stroke-width="2" fill="none" stroke-linecap="round">
+      <animate attributeName="stroke-dasharray" values="0 200;200 0" dur="7.5s" repeatCount="indefinite" begin="1s"/>
+    </path>
+    <ellipse cx="698" cy="685" rx="2.5" ry="3.5" fill="#8b0000">
+      <animate attributeName="cy" values="685; 740; 685" dur="7.5s" repeatCount="indefinite" begin="1s"/>
+    </ellipse>
+  </g>
+
+  <!-- Потёк с "T" -->
+  <g>
+    <path d="M 850 500 Q 852 530 850 570"
+          stroke="url(#dripGrad)" stroke-width="2.2" fill="none" stroke-linecap="round">
+      <animate attributeName="stroke-dasharray" values="0 200;200 0" dur="5.5s" repeatCount="indefinite" begin="0.5s"/>
+    </path>
+    <ellipse cx="850" cy="575" rx="2.8" ry="4" fill="#8b0000">
+      <animate attributeName="cy" values="575; 630; 575" dur="5.5s" repeatCount="indefinite" begin="0.5s"/>
+    </ellipse>
+  </g>
+
+  <!-- Потёк с "M" -->
+  <g>
+    <path d="M 960 500 Q 958 560 962 620 Q 964 660 960 700"
+          stroke="url(#dripGrad)" stroke-width="2.5" fill="none" stroke-linecap="round">
+      <animate attributeName="stroke-dasharray" values="0 250;250 0" dur="8s" repeatCount="indefinite" begin="2s"/>
+    </path>
+    <ellipse cx="960" cy="705" rx="3" ry="4.5" fill="#8b0000">
+      <animate attributeName="cy" values="705; 770; 705" dur="8s" repeatCount="indefinite" begin="2s"/>
+    </ellipse>
+  </g>
+
+  <!-- Потёк с "R" -->
+  <g>
+    <path d="M 1180 500 Q 1178 540 1180 580"
+          stroke="url(#dripGrad)" stroke-width="1.8" fill="none" stroke-linecap="round">
+      <animate attributeName="stroke-dasharray" values="0 200;200 0" dur="6.5s" repeatCount="indefinite" begin="3s"/>
+    </path>
+    <ellipse cx="1180" cy="585" rx="2.2" ry="3.5" fill="#8b0000">
+      <animate attributeName="cy" values="585; 640; 585" dur="6.5s" repeatCount="indefinite" begin="3s"/>
+    </ellipse>
+  </g>
+
+  <!-- ============================================================
+       ДЕКОРАТИВНЫЕ ЛИНИИ ПО БОКАМ
+       ============================================================ -->
+
+  <g stroke="#8b0000" stroke-width="1" opacity="0.5" fill="none">
+    <line x1="60" y1="420" x2="180" y2="420">
+      <animate attributeName="opacity" values="0.5;0.9;0.3;0.7;0.5" dur="2.5s" repeatCount="indefinite"/>
+    </line>
+    <line x1="80" y1="440" x2="200" y2="440">
+      <animate attributeName="opacity" values="0.3;0.8;0.4;0.6;0.3" dur="3s" repeatCount="indefinite"/>
+    </line>
+    <line x1="60" y1="460" x2="160" y2="460">
+      <animate attributeName="opacity" values="0.4;0.7;0.2;0.6;0.4" dur="2.8s" repeatCount="indefinite"/>
+    </line>
+    <polygon points="220,420 230,430 220,440 210,430" stroke="#ff0033" fill="none"/>
+    <polygon points="240,420 248,428 240,436 232,428" stroke="#ff0033" fill="none" opacity="0.6"/>
+
+    <line x1="1540" y1="420" x2="1420" y2="420">
+      <animate attributeName="opacity" values="0.5;0.9;0.3;0.7;0.5" dur="2.5s" repeatCount="indefinite"/>
+    </line>
+    <line x1="1520" y1="440" x2="1400" y2="440">
+      <animate attributeName="opacity" values="0.3;0.8;0.4;0.6;0.3" dur="3s" repeatCount="indefinite"/>
+    </line>
+    <line x1="1540" y1="460" x2="1440" y2="460">
+      <animate attributeName="opacity" values="0.4;0.7;0.2;0.6;0.4" dur="2.8s" repeatCount="indefinite"/>
+    </line>
+    <polygon points="1380,420 1370,430 1380,440 1390,430" stroke="#ff0033" fill="none"/>
+    <polygon points="1360,420 1352,428 1360,436 1368,428" stroke="#ff0033" fill="none" opacity="0.6"/>
+  </g>
+
+  <!-- ============================================================
+       OF WHINERS — СУПЕР-ЧИТАЕМЫЙ
+       ============================================================ -->
+
+  <!-- 1) Мягкое свечение позади -->
+  <text x="800" y="640"
+        font-family="'Impact', 'Arial Black', sans-serif"
+        font-size="120"
+        font-weight="900"
+        text-anchor="middle"
+        letter-spacing="20"
+        fill="#000000"
+        opacity="0.85"
+        filter="url(#redGlow)">
+    OF WHINERS
+  </text>
+
+  <!-- 2) Основной текст — чёткий, с обводкой -->
+  <text x="800" y="640"
+        font-family="'Impact', 'Arial Black', sans-serif"
+        font-size="120"
+        font-weight="900"
+        text-anchor="middle"
+        letter-spacing="20"
+        fill="url(#bloodGrad)"
+        stroke="#000000"
+        stroke-width="3"
+        paint-order="stroke fill">
+    OF WHINERS
+  </text>
+
+  <!-- 3) Тонкая светлая подсветка -->
+  <text x="800" y="640"
+        font-family="'Impact', 'Arial Black', sans-serif"
+        font-size="120"
+        font-weight="900"
+        text-anchor="middle"
+        letter-spacing="20"
+        fill="none"
+        stroke="#ff5577"
+        stroke-width="0.8"
+        opacity="0.6">
+    OF WHINERS
+    <animate attributeName="opacity" values="0.6;1;0.4;0.8;0.6" dur="2s" repeatCount="indefinite"/>
+  </text>
+
+  <!-- ============================================================
+       ЧЕРЕПА
+       ============================================================ -->
+
+  <g transform="translate(180, 700) scale(0.7)" opacity="0.6">
+    <path d="M -40 -20 Q -50 -60 -20 -80 Q 0 -95 20 -80 Q 50 -60 40 -20 L 40 10 L -40 10 Z"
+          fill="url(#boneGrad)" stroke="#3a2a1a" stroke-width="1.5"/>
+    <ellipse cx="-15" cy="-40" rx="9" ry="12" fill="#000000"/>
+    <ellipse cx="15" cy="-40" rx="9" ry="12" fill="#000000"/>
+    <ellipse cx="-15" cy="-40" rx="3" ry="4" fill="#ff0033" opacity="0.6">
+      <animate attributeName="opacity" values="0.3;0.9;0.3" dur="2s" repeatCount="indefinite"/>
+    </ellipse>
+    <ellipse cx="15" cy="-40" rx="3" ry="4" fill="#ff0033" opacity="0.6">
+      <animate attributeName="opacity" values="0.9;0.3;0.9" dur="2s" repeatCount="indefinite"/>
+    </ellipse>
+    <path d="M -5 -20 L 0 -12 L 5 -20 Z" fill="#000000"/>
+    <line x1="-20" y1="5" x2="20" y2="5" stroke="#3a2a1a" stroke-width="0.8"/>
+    <line x1="-15" y1="-2" x2="-15" y2="10" stroke="#3a2a1a" stroke-width="0.6"/>
+    <line x1="-5" y1="-2" x2="-5" y2="10" stroke="#3a2a1a" stroke-width="0.6"/>
+    <line x1="5" y1="-2" x2="5" y2="10" stroke="#3a2a1a" stroke-width="0.6"/>
+    <line x1="15" y1="-2" x2="15" y2="10" stroke="#3a2a1a" stroke-width="0.6"/>
+  </g>
+
+  <g transform="translate(280, 750) rotate(30)" opacity="0.5">
+    <rect x="0" y="-3" width="80" height="6" rx="3" fill="url(#boneGrad)"/>
+    <circle cx="0" cy="-4" r="5" fill="url(#boneGrad)"/>
+    <circle cx="0" cy="4" r="5" fill="url(#boneGrad)"/>
+    <circle cx="80" cy="-4" r="5" fill="url(#boneGrad)"/>
+    <circle cx="80" cy="4" r="5" fill="url(#boneGrad)"/>
+  </g>
+
+  <g transform="translate(1420, 700) scale(-0.7, 0.7)" opacity="0.6">
+    <path d="M -40 -20 Q -50 -60 -20 -80 Q 0 -95 20 -80 Q 50 -60 40 -20 L 40 10 L -40 10 Z"
+          fill="url(#boneGrad)" stroke="#3a2a1a" stroke-width="1.5"/>
+    <ellipse cx="-15" cy="-40" rx="9" ry="12" fill="#000000"/>
+    <ellipse cx="15" cy="-40" rx="9" ry="12" fill="#000000"/>
+    <ellipse cx="-15" cy="-40" rx="3" ry="4" fill="#ff0033" opacity="0.6">
+      <animate attributeName="opacity" values="0.9;0.3;0.9" dur="2.2s" repeatCount="indefinite"/>
+    </ellipse>
+    <ellipse cx="15" cy="-40" rx="3" ry="4" fill="#ff0033" opacity="0.6">
+      <animate attributeName="opacity" values="0.3;0.9;0.3" dur="2.2s" repeatCount="indefinite"/>
+    </ellipse>
+    <path d="M -5 -20 L 0 -12 L 5 -20 Z" fill="#000000"/>
+    <line x1="-20" y1="5" x2="20" y2="5" stroke="#3a2a1a" stroke-width="0.8"/>
+    <line x1="-15" y1="-2" x2="-15" y2="10" stroke="#3a2a1a" stroke-width="0.6"/>
+    <line x1="-5" y1="-2" x2="-5" y2="10" stroke="#3a2a1a" stroke-width="0.6"/>
+    <line x1="5" y1="-2" x2="5" y2="10" stroke="#3a2a1a" stroke-width="0.6"/>
+    <line x1="15" y1="-2" x2="15" y2="10" stroke="#3a2a1a" stroke-width="0.6"/>
+  </g>
+
+  <!-- ============================================================
+       ПАУТИНА
+       ============================================================ -->
+
+  <g stroke="#7f5af0" stroke-width="0.5" fill="none" opacity="0.4">
+    <path d="M 0 0 L 200 180 M 0 0 L 240 100 M 0 0 L 240 40 M 0 0 L 180 240"/>
+    <path d="M 60 60 Q 80 50 100 70" stroke-width="0.3"/>
+    <path d="M 100 100 Q 130 90 150 110" stroke-width="0.3"/>
+    <path d="M 140 140 Q 170 130 190 150" stroke-width="0.3"/>
+    <path d="M 60 60 L 100 100 L 140 140" stroke-width="0.3"/>
+    <path d="M 100 40 L 140 80 L 180 120" stroke-width="0.3"/>
+
+    <path d="M 1600 0 L 1400 180 M 1600 0 L 1360 100 M 1600 0 L 1360 40 M 1600 0 L 1420 240"/>
+    <path d="M 1540 60 Q 1520 50 1500 70" stroke-width="0.3"/>
+    <path d="M 1500 100 Q 1470 90 1450 110" stroke-width="0.3"/>
+    <path d="M 1460 140 Q 1430 130 1410 150" stroke-width="0.3"/>
+    <path d="M 1540 60 L 1500 100 L 1460 140" stroke-width="0.3"/>
+    <path d="M 1500 40 L 1460 80 L 1420 120" stroke-width="0.3"/>
+  </g>
+
+  <!-- ============================================================
+       РАМКА
+       ============================================================ -->
+
+  <rect x="10" y="10" width="1580" height="880"
+        fill="none" stroke="#8b0000" stroke-width="2.5" opacity="0.65">
+    <animate attributeName="opacity" values="0.65;1;0.35;0.85;0.65" dur="2.2s" repeatCount="indefinite"/>
+  </rect>
+
+  <rect x="26" y="26" width="1548" height="848"
+        fill="none" stroke="#ff0033" stroke-width="0.7" opacity="0.35">
+    <animate attributeName="opacity" values="0.35;0.7;0.15;0.55;0.35" dur="3.2s" repeatCount="indefinite"/>
+  </rect>
+
+  <rect x="36" y="36" width="1528" height="828"
+        fill="none" stroke="#7f5af0" stroke-width="0.4" opacity="0.2"
+        stroke-dasharray="2 6">
+    <animate attributeName="stroke-dashoffset" values="0;-16" dur="2s" repeatCount="indefinite"/>
+  </rect>
+
+  <g stroke="#ff0033" stroke-width="1.5" fill="none" opacity="0.8">
+    <path d="M 10 60 L 10 10 L 60 10"/>
+    <path d="M 1540 10 L 1590 10 L 1590 60"/>
+    <path d="M 10 840 L 10 890 L 60 890"/>
+    <path d="M 1540 890 L 1590 890 L 1590 840"/>
+  </g>
+
+  <g stroke="#ff0033" stroke-width="0.5" opacity="0.5" fill="none">
+    <path d="M 400 12 L 450 8"/>
+    <path d="M 900 12 L 950 14"/>
+    <path d="M 1200 888 L 1260 892"/>
+    <path d="M 500 888 L 560 890"/>
+  </g>
+
+  <!-- ============================================================
+       КАПЛИ КРОВИ
+       ============================================================ -->
+
+  <g>
+    <ellipse cx="120" cy="0" rx="3" ry="5" fill="url(#dropGrad)">
+      <animate attributeName="cy" values="-10; 950" dur="5s" repeatCount="indefinite" begin="0s"/>
+      <animate attributeName="opacity" values="0;1;1;0.9;0" dur="5s" repeatCount="indefinite" begin="0s"/>
+    </ellipse>
+    <ellipse cx="220" cy="0" rx="2.2" ry="4" fill="url(#dropGrad)">
+      <animate attributeName="cy" values="-10; 950" dur="6.5s" repeatCount="indefinite" begin="1.4s"/>
+      <animate attributeName="opacity" values="0;1;1;0.9;0" dur="6.5s" repeatCount="indefinite" begin="1.4s"/>
+    </ellipse>
+    <ellipse cx="340" cy="0" rx="2.8" ry="5.5" fill="url(#dropGrad)">
+      <animate attributeName="cy" values="-10; 950" dur="4.2s" repeatCount="indefinite" begin="0.6s"/>
+      <animate attributeName="opacity" values="0;1;1;0.9;0" dur="4.2s" repeatCount="indefinite" begin="0.6s"/>
+    </ellipse>
+    <ellipse cx="480" cy="0" rx="2" ry="3.5" fill="url(#dropGrad)">
+      <animate attributeName="cy" values="-10; 950" dur="7.4s" repeatCount="indefinite" begin="2.6s"/>
+      <animate attributeName="opacity" values="0;1;1;0.9;0" dur="7.4s" repeatCount="indefinite" begin="2.6s"/>
+    </ellipse>
+    <ellipse cx="620" cy="0" rx="2.6" ry="4.8" fill="url(#dropGrad)">
+      <animate attributeName="cy" values="-10; 950" dur="6s" repeatCount="indefinite" begin="3.2s"/>
+      <animate attributeName="opacity" values="0;1;1;0.9;0" dur="6s" repeatCount="indefinite" begin="3.2s"/>
+    </ellipse>
+    <ellipse cx="760" cy="0" rx="3" ry="5" fill="url(#dropGrad)">
+      <animate attributeName="cy" values="-10; 950" dur="5.5s" repeatCount="indefinite" begin="1s"/>
+      <animate attributeName="opacity" values="0;1;1;0.9;0" dur="5.5s" repeatCount="indefinite" begin="1s"/>
+    </ellipse>
+    <ellipse cx="900" cy="0" rx="2.4" ry="4.2" fill="url(#dropGrad)">
+      <animate attributeName="cy" values="-10; 950" dur="6.8s" repeatCount="indefinite" begin="4s"/>
+      <animate attributeName="opacity" values="0;1;1;0.9;0" dur="6.8s" repeatCount="indefinite" begin="4s"/>
+    </ellipse>
+    <ellipse cx="1040" cy="0" rx="2.8" ry="5" fill="url(#dropGrad)">
+      <animate attributeName="cy" values="-10; 950" dur="5.2s" repeatCount="indefinite" begin="2s"/>
+      <animate attributeName="opacity" values="0;1;1;0.9;0" dur="5.2s" repeatCount="indefinite" begin="2s"/>
+    </ellipse>
+    <ellipse cx="1180" cy="0" rx="2" ry="3.8" fill="url(#dropGrad)">
+      <animate attributeName="cy" values="-10; 950" dur="7s" repeatCount="indefinite" begin="3.8s"/>
+      <animate attributeName="opacity" values="0;1;1;0.9;0" dur="7s" repeatCount="indefinite" begin="3.8s"/>
+    </ellipse>
+    <ellipse cx="1320" cy="0" rx="3.2" ry="5.5" fill="url(#dropGrad)">
+      <animate attributeName="cy" values="-10; 950" dur="4.8s" repeatCount="indefinite" begin="1.6s"/>
+      <animate attributeName="opacity" values="0;1;1;0.9;0" dur="4.8s" repeatCount="indefinite" begin="1.6s"/>
+    </ellipse>
+    <ellipse cx="1440" cy="0" rx="2.3" ry="4" fill="url(#dropGrad)">
+      <animate attributeName="cy" values="-10; 950" dur="6.2s" repeatCount="indefinite" begin="4.4s"/>
+      <animate attributeName="opacity" values="0;1;1;0.9;0" dur="6.2s" repeatCount="indefinite" begin="4.4s"/>
+    </ellipse>
+    <ellipse cx="1540" cy="0" rx="2.6" ry="4.6" fill="url(#dropGrad)">
+      <animate attributeName="cy" values="-10; 950" dur="5.6s" repeatCount="indefinite" begin="2.4s"/>
+      <animate attributeName="opacity" values="0;1;1;0.9;0" dur="5.6s" repeatCount="indefinite" begin="2.4s"/>
+    </ellipse>
+  </g>
+
+  <!-- ============================================================
+       ПЕПЕЛ И УГЛИ
+       ============================================================ -->
+
+  <g>
+    <circle cx="200" cy="0" r="1" fill="#ff5577" opacity="0.6">
+      <animate attributeName="cy" values="-10; 910" dur="10s" repeatCount="indefinite" begin="0s"/>
+      <animate attributeName="cx" values="200; 230; 200" dur="10s" repeatCount="indefinite" begin="0s"/>
+      <animate attributeName="opacity" values="0;0.7;0.3;0" dur="10s" repeatCount="indefinite" begin="0s"/>
+    </circle>
+    <circle cx="420" cy="0" r="1.3" fill="#ff5577" opacity="0.6">
+      <animate attributeName="cy" values="-10; 910" dur="12s" repeatCount="indefinite" begin="3s"/>
+      <animate attributeName="cx" values="420; 390; 420" dur="12s" repeatCount="indefinite" begin="3s"/>
+      <animate attributeName="opacity" values="0;0.6;0.2;0" dur="12s" repeatCount="indefinite" begin="3s"/>
+    </circle>
+    <circle cx="600" cy="0" r="0.9" fill="#ff5577" opacity="0.6">
+      <animate attributeName="cy" values="-10; 910" dur="11s" repeatCount="indefinite" begin="5s"/>
+      <animate attributeName="cx" values="600; 630; 600" dur="11s" repeatCount="indefinite" begin="5s"/>
+      <animate attributeName="opacity" values="0;0.5;0.2;0" dur="11s" repeatCount="indefinite" begin="5s"/>
+    </circle>
+    <circle cx="820" cy="0" r="1.2" fill="#ff5577" opacity="0.6">
+      <animate attributeName="cy" values="-10; 910" dur="13s" repeatCount="indefinite" begin="2s"/>
+      <animate attributeName="cx" values="820; 790; 820" dur="13s" repeatCount="indefinite" begin="2s"/>
+      <animate attributeName="opacity" values="0;0.55;0.25;0" dur="13s" repeatCount="indefinite" begin="2s"/>
+    </circle>
+    <circle cx="1050" cy="0" r="1" fill="#ff5577" opacity="0.6">
+      <animate attributeName="cy" values="-10; 910" dur="9.5s" repeatCount="indefinite" begin="4.5s"/>
+      <animate attributeName="cx" values="1050; 1080; 1050" dur="9.5s" repeatCount="indefinite" begin="4.5s"/>
+      <animate attributeName="opacity" values="0;0.6;0.3;0" dur="9.5s" repeatCount="indefinite" begin="4.5s"/>
+    </circle>
+    <circle cx="1280" cy="0" r="1.4" fill="#ff5577" opacity="0.6">
+      <animate attributeName="cy" values="-10; 910" dur="11.5s" repeatCount="indefinite" begin="1.5s"/>
+      <animate attributeName="cx" values="1280; 1250; 1280" dur="11.5s" repeatCount="indefinite" begin="1.5s"/>
+      <animate attributeName="opacity" values="0;0.55;0.25;0" dur="11.5s" repeatCount="indefinite" begin="1.5s"/>
+    </circle>
+    <circle cx="1450" cy="0" r="0.8" fill="#ff5577" opacity="0.6">
+      <animate attributeName="cy" values="-10; 910" dur="10.5s" repeatCount="indefinite" begin="6s"/>
+      <animate attributeName="cx" values="1450; 1480; 1450" dur="10.5s" repeatCount="indefinite" begin="6s"/>
+      <animate attributeName="opacity" values="0;0.5;0.2;0" dur="10.5s" repeatCount="indefinite" begin="6s"/>
+    </circle>
+  </g>
+
+  <g filter="url(#emberGlow)">
+    <circle cx="300" cy="900" r="2" fill="#ff6600" opacity="0.8">
+      <animate attributeName="cy" values="900; -20" dur="9s" repeatCount="indefinite" begin="0s"/>
+      <animate attributeName="opacity" values="0.8;0.4;0" dur="9s" repeatCount="indefinite" begin="0s"/>
+    </circle>
+    <circle cx="600" cy="900" r="1.5" fill="#ff6600" opacity="0.8">
+      <animate attributeName="cy" values="900; -20" dur="11s" repeatCount="indefinite" begin="2s"/>
+      <animate attributeName="opacity" values="0.8;0.4;0" dur="11s" repeatCount="indefinite" begin="2s"/>
+    </circle>
+    <circle cx="900" cy="900" r="2.2" fill="#ff6600" opacity="0.8">
+      <animate attributeName="cy" values="900; -20" dur="10s" repeatCount="indefinite" begin="4s"/>
+      <animate attributeName="opacity" values="0.8;0.4;0" dur="10s" repeatCount="indefinite" begin="4s"/>
+    </circle>
+    <circle cx="1200" cy="900" r="1.8" fill="#ff6600" opacity="0.8">
+      <animate attributeName="cy" values="900; -20" dur="12s" repeatCount="indefinite" begin="1s"/>
+      <animate attributeName="opacity" values="0.8;0.4;0" dur="12s" repeatCount="indefinite" begin="1s"/>
+    </circle>
+  </g>
+
+  <!-- ============================================================
+       ЗЕРНИСТОСТЬ И ВИНЬЕТКА
+       ============================================================ -->
+
+  <rect width="1600" height="900" filter="url(#grain)" opacity="0.3" pointer-events="none"/>
+  <rect width="1600" height="900" fill="url(#vignette)" pointer-events="none"/>
+
+  <!-- Вспышки -->
+  <rect width="1600" height="900" fill="#ff0033" opacity="0">
+    <animate attributeName="opacity"
+             values="0;0;0;0;0;0.1;0;0;0;0.05;0;0;0;0;0;0.08;0;0"
+             dur="9s" repeatCount="indefinite"/>
+  </rect>
+
+  <rect width="1600" height="900" fill="#7f5af0" opacity="0">
+    <animate attributeName="opacity"
+             values="0;0;0;0;0;0;0;0.04;0;0;0;0;0;0.03;0;0"
+             dur="13s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- CRT-сканер -->
+  <g opacity="0.1">
+    <line x1="0" y1="0" x2="1600" y2="0" stroke="#ff0033" stroke-width="1.5">
+      <animate attributeName="y1" values="0; 900; 0" dur="8s" repeatCount="indefinite"/>
+      <animate attributeName="y2" values="0; 900; 0" dur="8s" repeatCount="indefinite"/>
+    </line>
+  </g>
+</svg>

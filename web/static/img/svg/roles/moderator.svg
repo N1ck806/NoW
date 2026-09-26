@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 200 60"
+     width="200"
+     height="60"
+     preserveAspectRatio="xMidYMid meet">
+
+  <!-- ==============================================================
+       NIGHTMARE • ROLE: MODERATOR
+       Светло-синий + тёмно-синий. Щит. Следит за порядком.
+       ============================================================== -->
+
+  <defs>
+
+    <!-- ============ ГРАДИЕНТЫ ============ -->
+
+    <!-- Фон бейджа — глубокий синий -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#0a1428"/>
+      <stop offset="50%"  stop-color="#050a18"/>
+      <stop offset="100%" stop-color="#0a1a35"/>
+    </linearGradient>
+
+    <!-- Обводка — переливается от светло-синего к тёмному -->
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#4a9eff">
+        <animate attributeName="stop-color"
+                 values="#4a9eff;#1e5fbf;#7ecfff;#4a9eff"
+                 dur="5s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="50%"  stop-color="#7ecfff">
+        <animate attributeName="stop-color"
+                 values="#7ecfff;#4a9eff;#1e5fbf;#7ecfff"
+                 dur="5s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" stop-color="#1e5fbf">
+        <animate attributeName="stop-color"
+                 values="#1e5fbf;#7ecfff;#4a9eff;#1e5fbf"
+                 dur="5s" repeatCount="indefinite"/>
+      </stop>
+    </linearGradient>
+
+    <!-- Текст — белый с голубым -->
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#ffffff"/>
+      <stop offset="50%"  stop-color="#e8f4ff"/>
+      <stop offset="100%" stop-color="#7ecfff"/>
+    </linearGradient>
+
+    <!-- Щит — градиент сверху вниз -->
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#7ecfff"/>
+      <stop offset="40%"  stop-color="#4a9eff"/>
+      <stop offset="100%" stop-color="#1e5fbf"/>
+    </linearGradient>
+
+    <!-- Блик на щите -->
+    <linearGradient id="shieldShine" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.9"/>
+      <stop offset="60%"  stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Аура вокруг щита -->
+    <radialGradient id="shieldAura" cx="50%" cy="50%" r="60%">
+      <stop offset="0%"   stop-color="#4a9eff" stop-opacity="0.7"/>
+      <stop offset="60%"  stop-color="#1e5fbf" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#0a1428" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- ============ ФИЛЬТРЫ ============ -->
+
+    <!-- Сильное свечение щита -->
+    <filter id="shieldGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="b1"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b2"/>
+      <feMerge>
+        <feMergeNode in="b2"/>
+        <feMergeNode in="b1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3"/>
+    </filter>
+
+    <clipPath id="roundedBadge">
+      <rect x="0" y="0" width="200" height="60" rx="30" ry="30"/>
+    </clipPath>
+
+  </defs>
+
+  <!-- ============================================================
+       ФОН БЕЙДЖА
+       ============================================================ -->
+  <rect x="0" y="0" width="200" height="60" rx="30" ry="30"
+        fill="url(#bgGrad)"/>
+
+  <!-- Внутренний туман -->
+  <rect x="0" y="0" width="200" height="60" rx="30" ry="30"
+        fill="url(#shieldAura)" clip-path="url(#roundedBadge)" opacity="0.5">
+    <animate attributeName="opacity" values="0.3;0.6;0.3" dur="4s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- ОБВОДКА (переливается синим) -->
+  <rect x="0" y="0" width="200" height="60" rx="30" ry="30"
+        fill="none" stroke="url(#borderGrad)" stroke-width="1.8"
+        filter="url(#softGlow)">
+    <animate attributeName="stroke-width" values="1.5;2.2;1.5" dur="3s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- ============================================================
+       ИКОНКА — ЩИТ (слева)
+       ============================================================ -->
+  <g transform="translate(30 30)">
+
+    <!-- Аура вокруг щита -->
+    <ellipse cx="0" cy="0" rx="20" ry="20"
+             fill="url(#shieldAura)" filter="url(#softGlow)">
+      <animate attributeName="rx" values="18;22;18" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="ry" values="18;22;18" dur="3s" repeatCount="indefinite"/>
+    </ellipse>
+
+    <!-- Щит -->
+    <g filter="url(#shieldGlow)">
+      <path d="M 0 -18
+               L 13 -12
+               L 13 2
+               Q 13 12, 0 18
+               Q -13 12, -13 2
+               L -13 -12 Z"
+            fill="url(#shieldGrad)"
+            stroke="#0a1428" stroke-width="1.2">
+
+        <!-- Пульс щита -->
+        <animate attributeName="opacity"
+                 values="0.9;1;0.9"
+                 dur="2s" repeatCount="indefinite"/>
+      </path>
+
+      <!-- Блик на щите (сверху) -->
+      <path d="M 0 -18
+               L 13 -12
+               L 13 -2
+               L -13 -2
+               L -13 -12 Z"
+            fill="url(#shieldShine)" opacity="0.5"/>
+
+      <!-- Вертикальная линия (разделение) -->
+      <line x1="0" y1="-18" x2="0" y2="18"
+            stroke="#0a1428" stroke-width="0.8" opacity="0.6"/>
+    </g>
+
+    <!-- ЗВЕЗДА В ЦЕНТРЕ ЩИТА (символ порядка) -->
+    <g filter="url(#shieldGlow)">
+      <path d="M 0 -8
+               L 2 -2
+               L 8 -2
+               L 3 2
+               L 5 8
+               L 0 4
+               L -5 8
+               L -3 2
+               L -8 -2
+               L -2 -2 Z"
+            fill="#ffffff" opacity="0.9">
+        <animate attributeName="opacity"
+                 values="0.7;1;0.7"
+                 dur="2.5s" repeatCount="indefinite"/>
+      </path>
+    </g>
+
+    <!-- Пульс вокруг щита -->
+    <circle cx="0" cy="0" r="20" fill="none"
+            stroke="#7ecfff" stroke-width="1.2" opacity="0.6">
+      <animate attributeName="r" values="18;22;18" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;0;0.6" dur="3s" repeatCount="indefinite"/>
+    </circle>
+
+  </g>
+
+  <!-- ============================================================
+       ПОДЛОЖКА ПОД ТЕКСТОМ
+       ============================================================ -->
+  <rect x="60" y="12" width="130" height="24" rx="6"
+        fill="#000000" opacity="0.4"/>
+
+  <!-- ============================================================
+       ТЕКСТ — "МОДЕРАТОР"
+       ============================================================ -->
+  <text x="120" y="28"
+        font-family="'Impact', 'Arial Black', sans-serif"
+        font-size="17"
+        font-weight="900"
+        letter-spacing="3"
+        text-anchor="middle"
+        fill="url(#textGrad)"
+        stroke="#050a18"
+        stroke-width="3"
+        paint-order="stroke fill"
+        filter="url(#shieldGlow)">
+    МОДЕРАТОР
+
+    <animate attributeName="opacity"
+             values="1;1;1;1;0.85;1;1;1;1;1"
+             dur="5s" repeatCount="indefinite"/>
+  </text>
+
+  <!-- Тонкая светлая обводка -->
+  <text x="120" y="28"
+        font-family="'Impact', 'Arial Black', sans-serif"
+        font-size="17"
+        font-weight="900"
+        letter-spacing="3"
+        text-anchor="middle"
+        fill="none"
+        stroke="#7ecfff"
+        stroke-width="0.7"
+        opacity="0.7">
+    МОДЕРАТОР
+  </text>
+
+  <!-- Подпись снизу -->
+  <text x="120" y="48"
+        font-family="'Inter', sans-serif"
+        font-size="9"
+        letter-spacing="2"
+        text-anchor="middle"
+        fill="#7ecfff"
+        stroke="#050a18"
+        stroke-width="2"
+        paint-order="stroke fill">
+    СЛЕДИТ ЗА ПОРЯДКОМ
+
+    <animate attributeName="opacity" values="0.7;1;0.7" dur="3s" repeatCount="indefinite"/>
+  </text>
+
+  <!-- ============================================================
+       ЛЕТАЮЩИЕ ЧАСТИЦЫ (синие искры)
+       ============================================================ -->
+  <g filter="url(#softGlow)">
+    <circle cx="80" cy="15" r="1.2" fill="#4a9eff">
+      <animate attributeName="cy" values="15;8;15" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.9;0" dur="4s" repeatCount="indefinite"/>
+    </circle>
+
+    <circle cx="140" cy="45" r="1" fill="#7ecfff">
+      <animate attributeName="cy" values="45;35;45" dur="5s" begin="1s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.8;0" dur="5s" begin="1s" repeatCount="indefinite"/>
+    </circle>
+
+    <circle cx="170" cy="20" r="1.3" fill="#1e5fbf">
+      <animate attributeName="cy" values="20;10;20" dur="4.5s" begin="0.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;0" dur="4.5s" begin="0.5s" repeatCount="indefinite"/>
+    </circle>
+
+    <circle cx="100" cy="48" r="0.9" fill="#4a9eff">
+      <animate attributeName="cy" values="48;40;48" dur="3.8s" begin="1.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.7;0" dur="3.8s" begin="1.5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- ============================================================
+       ЛЁГКАЯ СИНЯЯ ВСПЫШКА ПО ПОВЕРХНОСТИ
+       ============================================================ -->
+  <rect x="0" y="0" width="200" height="60" rx="30" ry="30"
+        fill="#4a9eff" opacity="0" clip-path="url(#roundedBadge)"
+        filter="url(#softGlow)">
+    <animate attributeName="opacity"
+             values="0;0;0;0;0.1;0;0;0;0;0;0;0;0.07;0"
+             dur="6s" repeatCount="indefinite"/>
+  </rect>
+
+</svg>

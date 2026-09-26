@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 700 700"
+     width="700"
+     height="700"
+     preserveAspectRatio="xMidYMid meet">
+
+  <!-- ==============================================================
+       NIGHTMARE • PORTAL
+       Проклятый портал: воронка тьмы, вихрь из энергии, глаза
+       внутри, разрывы реальности, искры. Медленно вращается.
+       Прозрачный фон.
+       ============================================================== -->
+
+  <defs>
+
+    <!-- ============ ГРАДИЕНТЫ ============ -->
+
+    <!-- Ядро портала (абсолютная тьма) -->
+    <radialGradient id="portalCore" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#000000"/>
+      <stop offset="40%"  stop-color="#0a0002"/>
+      <stop offset="70%"  stop-color="#1a0006"/>
+      <stop offset="100%" stop-color="#2a0004" stop-opacity="0.5"/>
+    </radialGradient>
+
+    <!-- Внутреннее свечение портала -->
+    <radialGradient id="innerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#ff8095" stop-opacity="0.9"/>
+      <stop offset="25%"  stop-color="#ff0033" stop-opacity="0.7"/>
+      <stop offset="55%"  stop-color="#8b0000" stop-opacity="0.4"/>
+      <stop offset="85%"  stop-color="#4a0000" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#2a0004" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Внешнее свечение -->
+    <radialGradient id="outerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#ff0033" stop-opacity="0.35"/>
+      <stop offset="40%"  stop-color="#8b0000" stop-opacity="0.15"/>
+      <stop offset="70%"  stop-color="#7f5af0" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#2a0004" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Градиент воронки (закручивается) -->
+    <radialGradient id="vortex" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#ff0033" stop-opacity="0.9"/>
+      <stop offset="25%"  stop-color="#8b0000" stop-opacity="0.7"/>
+      <stop offset="55%"  stop-color="#4a0000" stop-opacity="0.5"/>
+      <stop offset="80%"  stop-color="#2a1533" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Фиолетовая энергия -->
+    <radialGradient id="violetEnergy" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#a78bfa" stop-opacity="0.8"/>
+      <stop offset="50%"  stop-color="#7f5af0" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#2a1533" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Глаз в портале -->
+    <radialGradient id="eyeInPortal" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#ffffff"/>
+      <stop offset="20%"  stop-color="#ffe17a"/>
+      <stop offset="50%"  stop-color="#ff8800"/>
+      <stop offset="80%"  stop-color="#ff0033"/>
+      <stop offset="100%" stop-color="#4a0000"/>
+    </radialGradient>
+
+    <!-- Разрыв реальности (полоса) -->
+    <linearGradient id="riftLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#4a0000" stop-opacity="0"/>
+      <stop offset="30%"  stop-color="#ff0033" stop-opacity="1"/>
+      <stop offset="50%"  stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="70%"  stop-color="#ff0033" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#4a0000" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- ============ ФИЛЬТРЫ ============ -->
+
+    <filter id="glowStrong" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="b1"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b2"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="b3"/>
+      <feMerge>
+        <feMergeNode in="b3"/>
+        <feMergeNode in="b2"/>
+        <feMergeNode in="b1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="glowSoft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="8"/>
+    </filter>
+
+    <filter id="glowBig" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="20"/>
+    </filter>
+
+    <filter id="glowHuge" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="35"/>
+    </filter>
+
+    <!-- Размытие + вихрь -->
+    <filter id="swirl" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise"
+                    baseFrequency="0.012"
+                    numOctaves="2"
+                    seed="5"
+                    result="swirlNoise">
+        <animate attributeName="seed" values="5;8;11;8;5" dur="6s" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="swirlNoise" scale="18"/>
+    </filter>
+
+    <!-- Мелкое искажение -->
+    <filter id="ripple" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise"
+                    baseFrequency="0.03"
+                    numOctaves="3"
+                    seed="12"
+                    result="rippleNoise">
+        <animate attributeName="seed" values="12;15;18;15;12" dur="4s" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="rippleNoise" scale="8"/>
+    </filter>
+
+  </defs>
+
+
+  <!-- ============================================================
+       0. ВНЕШНЯЯ АУРА (огромное свечение вокруг портала)
+       ============================================================ -->
+  <ellipse cx="350" cy="350" rx="340" ry="340"
+           fill="url(#outerGlow)" filter="url(#glowHuge)"
+           opacity="0.8">
+    <animate attributeName="rx" values="320;360;320" dur="7s" repeatCount="indefinite"/>
+    <animate attributeName="ry" values="320;360;320" dur="7s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.6;0.9;0.6" dur="5s" repeatCount="indefinite"/>
+  </ellipse>
+
+
+  <!-- ============================================================
+       1. ВНЕШНЕЕ КОЛЬЦО (тёмный обод портала)
+       ============================================================ -->
+  <g transform="translate(350 350)" filter="url(#glowSoft)">
+
+    <!-- Толстое тёмное кольцо -->
+    <circle cx="0" cy="0" r="250" fill="none"
+            stroke="#0a0002" stroke-width="30" opacity="0.9"/>
+
+    <!-- Светящаяся кромка внешняя -->
+    <circle cx="0" cy="0" r="265" fill="none"
+            stroke="#ff0033" stroke-width="2" opacity="0.6">
+      <animateTransform attributeName="transform"
+                        type="rotate"
+                        values="0;360"
+                        dur="50s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.4;0.9;0.4" dur="4s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Светящаяся кромка внутренняя -->
+    <circle cx="0" cy="0" r="235" fill="none"
+            stroke="#ff4d6d" stroke-width="1.5" opacity="0.7">
+      <animateTransform attributeName="transform"
+                        type="rotate"
+                        values="360;0"
+                        dur="40s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Пунктирный рунический круг -->
+    <circle cx="0" cy="0" r="250" fill="none"
+            stroke="#ff0033" stroke-width="4"
+            stroke-dasharray="8 20" opacity="0.8">
+      <animateTransform attributeName="transform"
+                        type="rotate"
+                        values="0;360"
+                        dur="80s" repeatCount="indefinite"/>
+    </circle>
+
+  </g>
+
+
+  <!-- ============================================================
+       2. ВНЕШНИЕ РАЗРЫВЫ РЕАЛЬНОСТИ (молнии из центра)
+       ============================================================ -->
+  <g filter="url(#glowStrong)">
+
+    <!-- Разрыв 1 (сверху) -->
+    <line x1="350" y1="350" x2="350" y2="80"
+          stroke="url(#riftLine)" stroke-width="2.5" stroke-linecap="round">
+      <animate attributeName="opacity"
+               values="0;0;0.9;0;0;0;0.7;0"
+               dur="3s" repeatCount="indefinite"/>
+    </line>
+
+    <!-- Разрыв 2 (справа-снизу) -->
+    <line x1="350" y1="350" x2="580" y2="500"
+          stroke="url(#riftLine)" stroke-width="2" stroke-linecap="round">
+      <animate attributeName="opacity"
+               values="0;0.8;0;0;0;0.6;0;0"
+               dur="3.5s" begin="0.5s" repeatCount="indefinite"/>
+    </line>
+
+    <!-- Разрыв 3 (слева-снизу) -->
+    <line x1="350" y1="350" x2="120" y2="550"
+          stroke="url(#riftLine)" stroke-width="2.5" stroke-linecap="round">
+      <animate attributeName="opacity"
+               values="0;0;0;0.9;0;0;0.8;0"
+               dur="4s" begin="1s" repeatCount="indefinite"/>
+    </line>
+
+    <!-- Разрыв 4 (левый верхний) -->
+    <line x1="350" y1="350" x2="100" y2="180"
+          stroke="url(#riftLine)" stroke-width="1.8" stroke-linecap="round">
+      <animate attributeName="opacity"
+               values="0;0.7;0;0;0.9;0;0;0"
+               dur="3.8s" begin="1.5s" repeatCount="indefinite"/>
+    </line>
+
+  </g>
+
+
+  <!-- ============================================================
+       3. ВИХРЬ (закрученные спирали вокруг центра)
+       ============================================================ -->
+  <g transform="translate(350 350)" filter="url(#swirl)">
+
+    <!-- Спираль 1 (медленно вращается по часовой) -->
+    <g opacity="0.8">
+      <animateTransform attributeName="transform"
+                        type="rotate"
+                        values="0;360"
+                        dur="20s" repeatCount="indefinite"/>
+
+      <path d="M 0 0
+               Q 80 40 120 90
+               Q 160 140 130 190
+               Q 100 230 50 220
+               Q -10 200 -20 150
+               Q -25 100 10 60
+               Q 50 30 90 60
+               Q 120 100 110 150
+               Q 95 190 60 195
+               Q 25 195 20 165
+               Q 15 140 40 130
+               Q 60 125 70 145"
+            fill="none" stroke="url(#vortex)" stroke-width="6"
+            stroke-linecap="round" opacity="0.7"/>
+    </g>
+
+    <!-- Спираль 2 (вращается против часовой) -->
+    <g opacity="0.7">
+      <animateTransform attributeName="transform"
+                        type="rotate"
+                        values="360;0"
+                        dur="25s" repeatCount="indefinite"/>
+
+      <path d="M 0 0
+               Q -80 -50 -130 -100
+               Q -170 -150 -140 -200
+               Q -100 -240 -50 -230
+               Q 10 -210 20 -160
+               Q 25 -110 -10 -70
+               Q -50 -40 -90 -70
+               Q -120 -110 -110 -160
+               Q -95 -200 -60 -205"
+            fill="none" stroke="url(#violetEnergy)" stroke-width="5"
+            stroke-linecap="round" opacity="0.6"/>
+    </g>
+
+    <!-- Спираль 3 (быстрая, тонкая) -->
+    <g opacity="0.9">
+      <animateTransform attributeName="transform"
+                        type="rotate"
+                        values="0;-360"
+                        dur="12s" repeatCount="indefinite"/>
+
+      <path d="M 0 0
+               Q 50 80 100 120
+               Q 150 160 120 220
+               Q 80 270 20 250
+               Q -40 220 -50 160
+               Q -55 100 -20 60"
+            fill="none" stroke="#ff8095" stroke-width="3"
+            stroke-linecap="round" opacity="0.8"/>
+    </g>
+
+    <!-- Спираль 4 (фиолетовая) -->
+    <g opacity="0.7">
+      <animateTransform attributeName="transform"
+                        type="rotate"
+                        values="90;450"
+                        dur="30s" repeatCount="indefinite"/>
+
+      <path d="M 0 0 Q 40 60 80 100 Q 120 140 90 190 Q 50 230 0 210"
+            fill="none" stroke="#a78bfa" stroke-width="4"
+            stroke-linecap="round" opacity="0.6"/>
+    </g>
+
+  </g>
+
+
+  <!-- ============================================================
+       4. ВНУТРЕННЯЯ ВОРОНКА (тёмное ядро с бликами)
+       ============================================================ -->
+  <g transform="translate(350 350)">
+
+    <!-- Тёмное ядро -->
+    <circle cx="0" cy="0" r="150" fill="url(#portalCore)"/>
+
+    <!-- Внутреннее свечение ядра -->
+    <circle cx="0" cy="0" r="130" fill="url(#innerGlow)" opacity="0.7" filter="url(#glowSoft)">
+      <animate attributeName="r" values="120;140;120" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;0.9;0.5" dur="4s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Слой вихря внутри -->
+    <g filter="url(#ripple)" opacity="0.6">
+      <animateTransform attributeName="transform"
+                        type="rotate"
+                        values="0;360"
+                        dur="15s" repeatCount="indefinite"/>
+
+      <ellipse cx="0" cy="0" rx="100" ry="85" fill="none"
+               stroke="#ff0033" stroke-width="2" opacity="0.7"/>
+      <ellipse cx="0" cy="0" rx="80" ry="70" fill="none"
+               stroke="#8b0000" stroke-width="3" opacity="0.6"/>
+      <ellipse cx="0" cy="0" rx="60" ry="50" fill="none"
+               stroke="#ff4d6d" stroke-width="1.5" opacity="0.8"/>
+    </g>
+
+    <!-- Ещё слой (вращается в другую сторону) -->
+    <g filter="url(#ripple)" opacity="0.5">
+      <animateTransform attributeName="transform"
+                        type="rotate"
+                        values="360;0"
+                        dur="20s" repeatCount="indefinite"/>
+
+      <ellipse cx="0" cy="0" rx="90" ry="75" fill="none"
+               stroke="#a78bfa" stroke-width="1.5" opacity="0.6"/>
+      <ellipse cx="0" cy="0" rx="50" ry="45" fill="none"
+               stroke="#7f5af0" stroke-width="2" opacity="0.5"/>
+    </g>
+
+  </g>
+
+
+  <!-- ============================================================
+       5. ГЛАЗА ВНУТРИ ПОРТАЛА (следят из тьмы)
+       ============================================================ -->
+  <g transform="translate(350 350)" filter="url(#glowStrong)">
+
+    <!-- Глаз 1 (левый, большой) -->
+    <g>
+      <ellipse cx="-40" cy="-10" rx="18" ry="12" fill="url(#eyeInPortal)">
+        <animate attributeName="ry" values="12;12;12;12;12;1;12;12;12" dur="6s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="1;1;1;0.7;1;1;1;1;1" dur="6s" repeatCount="indefinite"/>
+      </ellipse>
+      <!-- Зрачок -->
+      <ellipse cx="-40" cy="-10" rx="5" ry="7" fill="#0a0002">
+        <animate attributeName="cx" values="-40;-35;-40;-45;-40" dur="8s" repeatCount="indefinite"/>
+      </ellipse>
+      <!-- Блик -->
+      <ellipse cx="-43" cy="-13" rx="2" ry="3" fill="#ffffff" opacity="0.8"/>
+    </g>
+
+    <!-- Глаз 2 (правый, большой) -->
+    <g>
+      <ellipse cx="40" cy="-10" rx="18" ry="12" fill="url(#eyeInPortal)">
+        <animate attributeName="ry" values="12;12;12;12;12;1;12;12;12" dur="6s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="1;1;1;0.7;1;1;1;1;1" dur="6s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="40" cy="-10" rx="5" ry="7" fill="#0a0002">
+        <animate attributeName="cx" values="40;45;40;35;40" dur="8s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="37" cy="-13" rx="2" ry="3" fill="#ffffff" opacity="0.8"/>
+    </g>
+
+    <!-- Глаз 3 (маленький, внизу) -->
+    <g>
+      <ellipse cx="0" cy="60" rx="10" ry="7" fill="url(#eyeInPortal)" opacity="0.8">
+        <animate attributeName="opacity" values="0.5;0.9;0.5" dur="4s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="0" cy="60" rx="3" ry="4" fill="#0a0002"/>
+    </g>
+
+  </g>
+
+
+  <!-- ============================================================
+       6. ЧАСТИЦЫ, ЛЕТЯЩИЕ В ЦЕНТР (засасывает)
+       ============================================================ -->
+  <g filter="url(#glowStrong)">
+    <!-- Частица 1 (сверху) -->
+    <circle cx="350" cy="80" r="3" fill="#ff4d6d">
+      <animate attributeName="cy" values="80;200;340" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="cx" values="350;340;350" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.7;0" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="r" values="3;2;0.5" dur="3s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Частица 2 (справа) -->
+    <circle cx="620" cy="350" r="2.5" fill="#ff4d6d">
+      <animate attributeName="cx" values="620;480;360" dur="3.5s" begin="0.5s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="350;360;350" dur="3.5s" begin="0.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.6;0" dur="3.5s" begin="0.5s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Частица 3 (снизу слева) -->
+    <circle cx="120" cy="600" r="3.5" fill="#a78bfa">
+      <animate attributeName="cx" values="120;240;340" dur="4s" begin="1s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="600;480;360" dur="4s" begin="1s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.8;0" dur="4s" begin="1s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Частица 4 (сверху справа) -->
+    <circle cx="580" cy="120" r="2.8" fill="#ff8095">
+      <animate attributeName="cx" values="580;460;360" dur="3.8s" begin="1.5s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="120;240;350" dur="3.8s" begin="1.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.7;0" dur="3.8s" begin="1.5s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Частица 5 (слева) -->
+    <circle cx="80" cy="350" r="3" fill="#ff4d6d">
+      <animate attributeName="cx" values="80;220;340" dur="3.2s" begin="0.8s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="350;340;350" dur="3.2s" begin="0.8s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.7;0" dur="3.2s" begin="0.8s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Частица 6 (сверху слева) -->
+    <circle cx="180" cy="100" r="2" fill="#a78bfa">
+      <animate attributeName="cx" values="180;260;345" dur="3.7s" begin="2s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="100;220;345" dur="3.7s" begin="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.6;0" dur="3.7s" begin="2s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Частица 7 (справа снизу) -->
+    <circle cx="620" cy="600" r="3" fill="#ff8095">
+      <animate attributeName="cx" values="620;480;360" dur="4.2s" begin="2.5s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="600;480;360" dur="4.2s" begin="2.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.7;0" dur="4.2s" begin="2.5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+
+  <!-- ============================================================
+       7. ЧАСТИЦЫ, ВЫЛЕТАЮЩИЕ ИЗ ПОРТАЛА (выбросы)
+       ============================================================ -->
+  <g filter="url(#glowStrong)">
+    <!-- Выброс 1 -->
+    <circle cx="350" cy="350" r="2.5" fill="#ff0033">
+      <animate attributeName="cy" values="350;200;50" dur="3.5s" repeatCount="indefinite"/>
+      <animate attributeName="cx" values="350;400;440" dur="3.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.9;0" dur="3.5s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Выброс 2 -->
+    <circle cx="350" cy="350" r="2" fill="#ff8095">
+      <animate attributeName="cy" values="350;250;130" dur="4s" begin="0.7s" repeatCount="indefinite"/>
+      <animate attributeName="cx" values="350;300;250" dur="4s" begin="0.7s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.8;0" dur="4s" begin="0.7s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Выброс 3 -->
+    <circle cx="350" cy="350" r="3" fill="#a78bfa">
+      <animate attributeName="cy" values="350;300;220" dur="3.8s" begin="1.4s" repeatCount="indefinite"/>
+      <animate attributeName="cx" values="350;420;480" dur="3.8s" begin="1.4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.9;0" dur="3.8s" begin="1.4s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Выброс 4 -->
+    <circle cx="350" cy="350" r="2.5" fill="#ff4d6d">
+      <animate attributeName="cy" values="350;280;200" dur="4.2s" begin="2.1s" repeatCount="indefinite"/>
+      <animate attributeName="cx" values="350;260;190" dur="4.2s" begin="2.1s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.7;0" dur="4.2s" begin="2.1s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+
+  <!-- ============================================================
+       8. МЕРЦАНИЕ ПОРТАЛА (вспышки)
+       ============================================================ -->
+  <circle cx="350" cy="350" r="200"
+          fill="none" stroke="#ff0033" stroke-width="3"
+          opacity="0" filter="url(#glowStrong)">
+    <animate attributeName="r" values="150;320;150" dur="5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.8;0;0.8" dur="5s" repeatCount="indefinite"/>
+    <animate attributeName="stroke-width" values="4;0.5;4" dur="5s" repeatCount="indefinite"/>
+  </circle>
+
+  <circle cx="350" cy="350" r="200"
+          fill="none" stroke="#a78bfa" stroke-width="2"
+          opacity="0" filter="url(#glowStrong)">
+    <animate attributeName="r" values="150;320;150" dur="5s" begin="1.7s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.6;0;0.6" dur="5s" begin="1.7s" repeatCount="indefinite"/>
+  </circle>
+
+  <circle cx="350" cy="350" r="200"
+          fill="none" stroke="#ff4d6d" stroke-width="3"
+          opacity="0" filter="url(#glowStrong)">
+    <animate attributeName="r" values="150;320;150" dur="5s" begin="3.3s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.7;0;0.7" dur="5s" begin="3.3s" repeatCount="indefinite"/>
+  </circle>
+
+
+  <!-- ============================================================
+       9. ВСПЫШКИ (общая пульсация света)
+       ============================================================ -->
+  <rect x="0" y="0" width="700" height="700"
+        fill="#ff0033" opacity="0" filter="url(#glowHuge)">
+    <animate attributeName="opacity"
+             values="0;0;0.08;0;0;0;0.05;0;0;0.06;0"
+             dur="7s" repeatCount="indefinite"/>
+  </rect>
+
+
+</svg>

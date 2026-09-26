@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 600 500"
+     width="600"
+     height="500"
+     preserveAspectRatio="xMidYMid meet">
+
+  <defs>
+    <!-- ============ ГРАДИЕНТЫ ДЫМА ============ -->
+
+    <!-- Фиолетовый дым (основной) -->
+    <radialGradient id="smokeViolet1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.55"/>
+      <stop offset="40%" stop-color="#7f5af0" stop-opacity="0.35"/>
+      <stop offset="75%" stop-color="#5a3fa0" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#2a1533" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="smokeViolet2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#c4b5fd" stop-opacity="0.4"/>
+      <stop offset="50%" stop-color="#7f5af0" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#3a1d5c" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Красный дым (акценты) -->
+    <radialGradient id="smokeRed1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff4d6d" stop-opacity="0.5"/>
+      <stop offset="40%" stop-color="#ff0033" stop-opacity="0.3"/>
+      <stop offset="75%" stop-color="#8b0000" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#4a0000" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="smokeRed2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff8095" stop-opacity="0.4"/>
+      <stop offset="50%" stop-color="#c40026" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#3a0008" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Смешанный (фиолет + красный) -->
+    <radialGradient id="smokeMixed" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff4d6d" stop-opacity="0.35"/>
+      <stop offset="45%" stop-color="#7f5af0" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#2a1533" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Градиент для частиц -->
+    <radialGradient id="particleGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="40%" stop-color="#ff8095" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#ff0033" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- ============ ФИЛЬТРЫ ============ -->
+
+    <!-- Сильное размытие для дыма -->
+    <filter id="smokeBlur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="22"/>
+    </filter>
+
+    <filter id="smokeBlurMedium" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="14"/>
+    </filter>
+
+    <filter id="smokeBlurLight" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+
+    <!-- Свечение для частиц -->
+    <filter id="particleGlowFilter" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Турбулентность (для «живого» дыма) -->
+    <filter id="turbulence" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" seed="5">
+        <animate attributeName="baseFrequency"
+                 values="0.015;0.025;0.015"
+                 dur="12s" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" scale="25"/>
+    </filter>
+
+    <!-- Мягкое свечение -->
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="10"/>
+    </filter>
+  </defs>
+
+  <!-- ============================================================
+       СЛОЙ 1: ФОНОВОЕ СВЕЧЕНИЕ (общая аура)
+       ============================================================ -->
+  <ellipse cx="300" cy="280" rx="260" ry="180"
+           fill="#7f5af0" opacity="0.12" filter="url(#smokeBlur)">
+    <animate attributeName="rx" values="240;280;240" dur="14s" repeatCount="indefinite"/>
+    <animate attributeName="ry" values="160;200;160" dur="12s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.08;0.18;0.08" dur="10s" repeatCount="indefinite"/>
+  </ellipse>
+
+  <ellipse cx="300" cy="280" rx="220" ry="150"
+           fill="#ff0033" opacity="0.08" filter="url(#smokeBlur)">
+    <animate attributeName="cx" values="300;320;280;300" dur="16s" repeatCount="indefinite"/>
+  </ellipse>
+
+  <!-- ============================================================
+       СЛОЙ 2: КРУПНЫЕ ФИОЛЕТОВЫЕ КЛУБЫ (основной объём)
+       ============================================================ -->
+  <g filter="url(#smokeBlur)">
+    <!-- Левый крупный клуб -->
+    <ellipse cx="180" cy="280" rx="120" ry="100" fill="url(#smokeViolet1)">
+      <animate attributeName="cx" values="180;210;170;180" dur="14s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="280;250;300;280" dur="12s" repeatCount="indefinite"/>
+      <animate attributeName="rx" values="120;140;110;120" dur="10s" repeatCount="indefinite"/>
+      <animate attributeName="ry" values="100;120;90;100" dur="11s" repeatCount="indefinite"/>
+    </ellipse>
+
+    <!-- Центральный клуб -->
+    <ellipse cx="300" cy="260" rx="140" ry="110" fill="url(#smokeViolet1)">
+      <animate attributeName="cx" values="300;280;320;300" dur="13s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="260;280;240;260" dur="15s" repeatCount="indefinite"/>
+      <animate attributeName="rx" values="140;160;130;140" dur="12s" repeatCount="indefinite"/>
+    </ellipse>
+
+    <!-- Правый крупный клуб -->
+    <ellipse cx="420" cy="290" rx="120" ry="100" fill="url(#smokeViolet1)">
+      <animate attributeName="cx" values="420;390;430;420" dur="15s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="290;270;310;290" dur="13s" repeatCount="indefinite"/>
+      <animate attributeName="rx" values="120;135;115;120" dur="11s" repeatCount="indefinite"/>
+    </ellipse>
+
+    <!-- Нижний широкий клуб -->
+    <ellipse cx="300" cy="350" rx="180" ry="90" fill="url(#smokeViolet1)">
+      <animate attributeName="cx" values="300;320;280;300" dur="17s" repeatCount="indefinite"/>
+      <animate attributeName="rx" values="180;200;170;180" dur="13s" repeatCount="indefinite"/>
+    </ellipse>
+
+    <!-- Верхний тонкий клуб -->
+    <ellipse cx="300" cy="180" rx="100" ry="70" fill="url(#smokeViolet2)">
+      <animate attributeName="cx" values="300;280;320;300" dur="14s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="180;160;200;180" dur="12s" repeatCount="indefinite"/>
+    </ellipse>
+  </g>
+
+  <!-- ============================================================
+       СЛОЙ 3: КРАСНЫЕ АКЦЕНТНЫЕ КЛУБЫ
+       ============================================================ -->
+  <g filter="url(#smokeBlurMedium)">
+    <!-- Красный в левой части -->
+    <ellipse cx="200" cy="300" rx="80" ry="70" fill="url(#smokeRed1)">
+      <animate attributeName="cx" values="200;220;190;200" dur="11s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="300;280;320;300" dur="13s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="8s" repeatCount="indefinite"/>
+    </ellipse>
+
+    <!-- Красный справа -->
+    <ellipse cx="400" cy="290" rx="90" ry="75" fill="url(#smokeRed1)">
+      <animate attributeName="cx" values="400;380;420;400" dur="12s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="290;310;270;290" dur="10s" repeatCount="indefinite"/>
+    </ellipse>
+
+    <!-- Красный снизу по центру -->
+    <ellipse cx="300" cy="380" rx="100" ry="60" fill="url(#smokeRed2)">
+      <animate attributeName="rx" values="90;115;90" dur="9s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;0.9;0.6" dur="7s" repeatCount="indefinite"/>
+    </ellipse>
+  </g>
+
+  <!-- ============================================================
+       СЛОЙ 4: СМЕШАННЫЕ КЛУБЫ (фиолет + красный, для перехода)
+       ============================================================ -->
+  <g filter="url(#smokeBlurMedium)">
+    <ellipse cx="250" cy="260" rx="70" ry="60" fill="url(#smokeMixed)">
+      <animate attributeName="cx" values="250;270;240;250" dur="10s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="260;240;280;260" dur="12s" repeatCount="indefinite"/>
+    </ellipse>
+
+    <ellipse cx="360" cy="320" rx="75" ry="65" fill="url(#smokeMixed)">
+      <animate attributeName="cx" values="360;340;380;360" dur="11s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="320;300;340;320" dur="13s" repeatCount="indefinite"/>
+    </ellipse>
+  </g>
+
+  <!-- ============================================================
+       СЛОЙ 5: ВИХРИ (тонкие струйки дыма, поднимаются)
+       ============================================================ -->
+  <g filter="url(#smokeBlurLight)" opacity="0.5">
+    <path d="M 220 450 Q 200 380 230 320 Q 260 260 240 200 Q 220 140 250 90"
+          stroke="#7f5af0" stroke-width="18" fill="none" stroke-linecap="round">
+      <animate attributeName="d"
+               values="
+                 M 220 450 Q 200 380 230 320 Q 260 260 240 200 Q 220 140 250 90;
+                 M 220 450 Q 240 380 220 320 Q 200 260 230 200 Q 260 140 240 90;
+                 M 220 450 Q 200 380 230 320 Q 260 260 240 200 Q 220 140 250 90"
+               dur="10s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.3;0.6;0.3" dur="8s" repeatCount="indefinite"/>
+    </path>
+
+    <path d="M 380 450 Q 400 380 370 320 Q 340 260 360 200 Q 380 140 350 90"
+          stroke="#ff0033" stroke-width="14" fill="none" stroke-linecap="round">
+      <animate attributeName="d"
+               values="
+                 M 380 450 Q 400 380 370 320 Q 340 260 360 200 Q 380 140 350 90;
+                 M 380 450 Q 360 380 390 320 Q 420 260 390 200 Q 360 140 380 90;
+                 M 380 450 Q 400 380 370 320 Q 340 260 360 200 Q 380 140 350 90"
+               dur="12s" repeatCount="indefinite"/>
+    </path>
+
+    <path d="M 300 470 Q 300 400 310 330 Q 320 260 300 200"
+          stroke="#a78bfa" stroke-width="12" fill="none" stroke-linecap="round">
+      <animate attributeName="d"
+               values="
+                 M 300 470 Q 300 400 310 330 Q 320 260 300 200;
+                 M 300 470 Q 290 400 295 330 Q 300 260 290 200;
+                 M 300 470 Q 300 400 310 330 Q 320 260 300 200"
+               dur="9s" repeatCount="indefinite"/>
+    </path>
+  </g>
+
+  <!-- ============================================================
+       СЛОЙ 6: ЧАСТИЦЫ-ИСКРЫ (яркие точки, летают)
+       ============================================================ -->
+  <g filter="url(#particleGlowFilter)">
+    <circle cx="150" cy="300" r="3" fill="url(#particleGlow)">
+      <animate attributeName="cy" values="380;200;380" dur="7s" repeatCount="indefinite"/>
+      <animate attributeName="cx" values="150;170;150" dur="9s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;0" dur="7s" repeatCount="indefinite"/>
+    </circle>
+
+    <circle cx="220" cy="350" r="2.5" fill="url(#particleGlow)">
+      <animate attributeName="cy" values="420;240;420" dur="8s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.9;0" dur="8s" repeatCount="indefinite"/>
+    </circle>
+
+    <circle cx="290" cy="320" r="3.5" fill="url(#particleGlow)">
+      <animate attributeName="cy" values="400;180;400" dur="6s" repeatCount="indefinite"/>
+      <animate attributeName="cx" values="290;310;290" dur="7s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;0" dur="6s" repeatCount="indefinite"/>
+    </circle>
+
+    <circle cx="360" cy="340" r="2" fill="url(#particleGlow)">
+      <animate attributeName="cy" values="410;220;410" dur="9s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.8;0" dur="9s" repeatCount="indefinite"/>
+    </circle>
+
+    <circle cx="440" cy="310" r="3" fill="url(#particleGlow)">
+      <animate attributeName="cy" values="390;200;390" dur="7.5s" repeatCount="indefinite"/>
+      <animate attributeName="cx" values="440;420;440" dur="8s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;0" dur="7.5s" repeatCount="indefinite"/>
+    </circle>
+
+    <circle cx="180" cy="260" r="2" fill="url(#particleGlow)">
+      <animate attributeName="cy" values="320;180;320" dur="5.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.7;0" dur="5.5s" repeatCount="indefinite"/>
+    </circle>
+
+    <circle cx="400" cy="270" r="2.5" fill="url(#particleGlow)">
+      <animate attributeName="cy" values="330;190;330" dur="6.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.9;0" dur="6.5s" repeatCount="indefinite"/>
+    </circle>
+
+    <circle cx="250" cy="200" r="1.8" fill="url(#particleGlow)">
+      <animate attributeName="cy" values="260;140;260" dur="5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.8;0" dur="5s" repeatCount="indefinite"/>
+    </circle>
+
+    <circle cx="340" cy="220" r="2.2" fill="url(#particleGlow)">
+      <animate attributeName="cy" values="280;150;280" dur="6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.7;0" dur="6s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- ============================================================
+       СЛОЙ 7: МЕЛКИЕ ЧАСТИЦЫ (пыль, 20 точек)
+       ============================================================ -->
+  <g fill="#a78bfa" opacity="0.5">
+    <circle cx="120" cy="220" r="1">
+      <animate attributeName="cy" values="220;180;220" dur="5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="470" cy="240" r="1.2">
+      <animate attributeName="cy" values="240;200;240" dur="6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="160" cy="180" r="0.8">
+      <animate attributeName="cy" values="180;140;180" dur="4.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="440" cy="170" r="1">
+      <animate attributeName="cy" values="170;130;170" dur="5.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="80" cy="300" r="1.3">
+      <animate attributeName="cy" values="300;250;300" dur="7s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="520" cy="290" r="1.1">
+      <animate attributeName="cy" values="290;240;290" dur="6.5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- ============================================================
+       СЛОЙ 8: КРАСНАЯ ДЫМКА СНИЗУ (кровавый туман)
+       ============================================================ -->
+  <g filter="url(#softGlow)" opacity="0.35">
+    <ellipse cx="300" cy="460" rx="280" ry="70" fill="#ff0033">
+      <animate attributeName="rx" values="260;300;260" dur="10s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.25;0.45;0.25" dur="9s" repeatCount="indefinite"/>
+    </ellipse>
+  </g>
+
+</svg>

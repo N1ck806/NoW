@@ -1,0 +1,94 @@
+{
+    "items": [
+        {
+            "id": "custom_color",
+            "name": "Кастомный цвет ника",
+            "description": "Возможность выбрать свой цвет отображения в чате клана",
+            "price": 2500,
+            "icon": "🎨",
+            "role_id": null,
+            "stock": -1
+        },
+        {
+            "id": "vip_channel",
+            "name": "Доступ к VIP-каналу",
+            "description": "Закрытый канал для избранных участников клана",
+            "price": 5000,
+            "icon": "🔒",
+            "role_id": null,
+            "stock": -1
+        },
+        {
+            "id": "custom_nick",
+            "name": "Смена ника",
+            "description": "Смена отображаемого имени на сервере",
+            "price": 1000,
+            "icon": "✏️",
+            "role_id": null,
+            "stock": 10
+        },
+        {
+            "id": "immunity_1day",
+            "name": "Иммунитет на 1 день",
+            "description": "Модераторы не смогут выдать тебе мут или предупреждение в течение дня",
+            "price": 7500,
+            "icon": "🛡️",
+            "role_id": null,
+            "stock": -1
+        },
+        {
+            "id": "xp_boost_2x",
+            "name": "Буст опыта x2",
+            "description": "Удвоение получаемого опыта за сообщения на 24 часа",
+            "price": 3000,
+            "icon": "⚡",
+            "role_id": null,
+            "stock": -1
+        },
+        {
+            "id": "coin_boost_2x",
+            "name": "Буст монет x2",
+            "description": "Удвоение получаемых монет за игры и активность на 24 часа",
+            "price": 3000,
+            "icon": "💰",
+            "role_id": null,
+            "stock": -1
+        },
+        {
+            "id": "custom_role",
+            "name": "Персональная роль",
+            "description": "Создание собственной роли с кастомным названием и цветом",
+            "price": 15000,
+            "icon": "👑",
+            "role_id": null,
+            "stock": 5
+        },
+        {
+            "id": "unmute_self",
+            "name": "Снятие мута",
+            "description": "Мгновенное снятие мута с себя (даже если он выдан модератором)",
+            "price": 10000,
+            "icon": "🔓",
+            "role_id": null,
+            "stock": -1
+        },
+        {
+            "id": "warning_clear",
+            "name": "Снятие предупреждения",
+            "description": "Сброс одного предупреждения из истории",
+            "price": 8000,
+            "icon": "🧹",
+            "role_id": null,
+            "stock": -1
+        },
+        {
+            "id": "ghost_aura",
+            "name": "Призрачная аура",
+            "description": "Особый эффект вокруг ника — ты становишься призраком в чате",
+            "price": 20000,
+            "icon": "👻",
+            "role_id": null,
+            "stock": 3
+        }
+    ]
+}

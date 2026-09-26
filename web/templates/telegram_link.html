@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Telegram • Nightmare{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <h1 class="auth-title">Telegram</h1>
+
+        {% if current_user %}
+            <p class="auth-subtitle">
+                Привязка Telegram к аккаунту <strong>{{ current_user.display_name }}</strong>
+            </p>
+        {% else %}
+            <p class="auth-subtitle">
+                Вход через Telegram
+            </p>
+        {% endif %}
+
+        {# ===== Сообщения об ошибках ===== #}
+        {% if request.query_params.get('error') == 'telegram_invalid' %}
+            <div class="auth-error">
+                ❌ Ошибка проверки данных Telegram. Попробуй ещё раз.
+            </div>
+        {% endif %}
+
+        {% if request.query_params.get('error') == 'telegram_taken' %}
+            <div class="auth-error">
+                ❌ Этот Telegram уже привязан к другому аккаунту.
+            </div>
+        {% endif %}
+
+        {% if request.query_params.get('error') == 'telegram_no_token' %}
+            <div class="auth-error">
+                ⚙️ Telegram не настроен на сервере. Обратись к администратору.
+            </div>
+        {% endif %}
+
+        {# ===== Сам виджет Telegram ===== #}
+        {% if telegram_bot_username %}
+            <div class="telegram-widget-wrap">
+                <script async
+                        src="https://telegram.org/js/telegram-widget.js?22"
+                        data-telegram-login="{{ telegram_bot_username }}"
+                        data-size="large"
+                        data-radius="8"
+                        data-auth-url="{{ request.url.scheme }}://{{ request.url.netloc }}/auth/telegram/callback"
+                        data-request-access="write">
+                </script>
+            </div>
+        {% else %}
+            <div class="auth-error">
+                ⚠️ Telegram Login не настроен. Проверь <code>TELEGRAM_BOT_USERNAME</code> в <code>.env</code>.
+            </div>
+        {% endif %}
+
+        {# ===== Альтернатива: привязка через бота (только для залогиненных) ===== #}
+        {% if current_user and not current_user.telegram_id %}
+            <div class="auth-divider">или</div>
+
+            <div class="auth-social">
+                <a href="/auth/telegram/bot" class="btn-social btn-telegram">
+                    <span>🤖</span> Привязать через бота
+                </a>
+            </div>
+
+            <p class="auth-footer" style="margin-top: 10px;">
+                Откроется страница с кодом — отправь его боту
+                <code>/link КОД</code>.
+            </p>
+        {% endif %}
+
+        <div class="auth-divider">или</div>
+
+        <div class="auth-social">
+            <a href="{% if current_user %}/settings{% else %}/login{% endif %}"
+               class="btn-social btn-telegram">
+                <span>←</span>
+                {% if current_user %}Назад в настройки{% else %}Войти другим способом{% endif %}
+            </a>
+        </div>
+
+        <p class="auth-footer">
+            {% if current_user %}
+                После привязки Telegram-аккаунт будет отображаться в твоём профиле.
+            {% else %}
+                Войди через Telegram, чтобы получить доступ к кабинету и магазину.
+            {% endif %}
+        </p>
+    </div>
+</div>
+{% endblock %}

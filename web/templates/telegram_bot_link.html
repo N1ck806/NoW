@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Привязка Telegram • Nightmare{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <h1 class="auth-title">Привязка Telegram</h1>
+
+        <p class="auth-subtitle">
+            Открой бота и нажми <b>Start</b> — привязка произойдёт автоматически.
+        </p>
+
+        {# ===== Ошибки ===== #}
+        {% if request.query_params.get('error') == 'no_bot_username' %}
+            <div class="auth-error">
+                ⚠️ Имя бота не настроено. Проверь <code>TELEGRAM_BOT_USERNAME</code> в <code>.env</code>.
+            </div>
+        {% endif %}
+
+        {% if not bot_link %}
+            <div class="auth-error">
+                ⚙️ Не удалось сформировать ссылку на бота. Обратись к администратору.
+            </div>
+        {% else %}
+            {# ===== Основная кнопка ===== #}
+            <div class="auth-social" style="margin-top: 20px;">
+                <a href="{{ bot_link }}" class="btn-social btn-telegram" target="_blank" rel="noopener">
+                    <span>✈️</span> Открыть бота и привязать
+                </a>
+            </div>
+
+            {# ===== Ручной код ===== #}
+            <div class="auth-divider">или</div>
+
+            <div class="telegram-manual-code">
+                <p class="muted" style="margin-bottom: 10px;">
+                    Открой бота <b>@{{ bot_username }}</b> и отправь ему команду:
+                </p>
+                <div class="telegram-code-box">
+                    <code>/link {{ code }}</code>
+                </div>
+                <p class="muted" style="margin-top: 10px; font-size: 13px;">
+                    ⏱ Код действует 10 минут. После привязки обнови страницу настроек.
+                </p>
+            </div>
+        {% endif %}
+
+        {# ===== Назад ===== #}
+        <div class="auth-divider">←</div>
+
+        <div class="auth-social">
+            <a href="/settings" class="btn-social">
+                <span>←</span> Назад в настройки
+            </a>
+        </div>
+
+        <p class="auth-footer">
+            После привязки Telegram-аккаунт будет отображаться в твоём профиле.
+        </p>
+    </div>
+</div>
+
+<style>
+.telegram-manual-code {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.telegram-code-box {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 0 auto;
+    display: inline-block;
+    min-width: 200px;
+}
+
+.telegram-code-box code {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #7f5af0;
+    background: transparent;
+    padding: 0;
+}
+</style>
+{% endblock %}

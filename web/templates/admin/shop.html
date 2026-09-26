@@ -1,0 +1,359 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Магазин • Админка{% endblock %}
+
+{% block admin_title %}🛒 Магазин{% endblock %}
+{% block admin_subtitle %}Товаров: {{ items|length }}{% endblock %}
+
+{% block admin_content %}
+
+{# ============ КНОПКА ДОБАВИТЬ ============ #}
+<div class="admin-toolbar">
+    <div class="admin-toolbar-info">
+        Всего товаров: <strong>{{ items|length }}</strong>
+    </div>
+    <div class="admin-toolbar-actions">
+        <button type="button"
+                class="admin-btn admin-btn-primary"
+                onclick="toggleEditor('add-item-form')">
+            ➕ Добавить товар
+        </button>
+    </div>
+</div>
+
+{# ============ ФОРМА ДОБАВЛЕНИЯ (скрыта) ============ #}
+<div class="admin-card admin-add-form" id="add-item-form" style="display: none;">
+    <h2 class="admin-card-title">➕ Новый товар</h2>
+
+    <form method="post"
+          action="/admin/shop/add"
+          class="admin-form"
+          enctype="multipart/form-data">
+
+        <div class="admin-form-row">
+            <div class="admin-form-group">
+                <label class="admin-label">Название *</label>
+                <input type="text"
+                       name="name"
+                       class="admin-input"
+                       placeholder="Например: VIP-роль"
+                       maxlength="64"
+                       required>
+            </div>
+
+            <div class="admin-form-group">
+                <label class="admin-label">Цена *</label>
+                <input type="number"
+                       name="price"
+                       class="admin-input"
+                       placeholder="1000"
+                       min="1"
+                       required>
+            </div>
+
+            <div class="admin-form-group">
+                <label class="admin-label">Иконка (эмодзи)</label>
+                <input type="text"
+                       name="icon"
+                       class="admin-input"
+                       placeholder="📦"
+                       maxlength="4">
+                <small class="admin-hint">1 эмодзи. Показывается, если нет картинки.</small>
+            </div>
+        </div>
+
+        <div class="admin-form-row">
+            <div class="admin-form-group">
+                <label class="admin-label">Склад (-1 = ∞)</label>
+                <input type="number"
+                       name="stock"
+                       class="admin-input"
+                       value="-1"
+                       min="-1">
+            </div>
+
+            <div class="admin-form-group">
+                <label class="admin-label">ID роли Discord (необязательно)</label>
+                <input type="text"
+                       name="role_id"
+                       class="admin-input"
+                       placeholder="123456789012345678"
+                       pattern="\d*">
+            </div>
+        </div>
+
+        <div class="admin-form-group">
+            <label class="admin-label">Описание</label>
+            <textarea name="description"
+                      class="admin-input admin-textarea"
+                      rows="2"
+                      maxlength="255"
+                      placeholder="Что даёт товар..."></textarea>
+        </div>
+
+        {# ===== Загрузка картинки ===== #}
+        <div class="admin-form-group">
+            <label class="admin-label">Картинка (необязательно)</label>
+            <div class="admin-upload-wrap">
+                <input type="file"
+                       name="image"
+                       class="admin-file-input"
+                       accept="image/png,image/jpeg,image/webp,image/gif"
+                       onchange="previewImage(this, 'preview-add')">
+                <div class="admin-preview" id="preview-add">
+                    <span class="admin-preview-hint">Превью появится здесь</span>
+                </div>
+            </div>
+            <small class="admin-hint">PNG, JPG, WEBP, GIF. До 2 МБ. Заменит иконку-эмодзи.</small>
+        </div>
+
+        <div class="admin-form-actions">
+            <button type="submit" class="admin-btn admin-btn-primary">💾 Сохранить</button>
+            <button type="button"
+                    class="admin-btn admin-btn-secondary"
+                    onclick="toggleEditor('add-item-form')">
+                Отмена
+            </button>
+        </div>
+    </form>
+</div>
+
+{# ============ СПИСОК ТОВАРОВ ============ #}
+{% if items %}
+<div class="admin-table-wrap">
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Превью</th>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Цена</th>
+                <th>Склад</th>
+                <th>Роль</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td class="admin-mono">#{{ item.id }}</td>
+                <td class="admin-icon-cell">
+                    {% if item.image_url %}
+                        <img src="{{ item.image_url }}"
+                             alt="{{ item.name }}"
+                             class="admin-thumb">
+                    {% else %}
+                        <span class="admin-thumb-emoji">{{ item.icon or '📦' }}</span>
+                    {% endif %}
+                </td>
+                <td><strong>{{ item.name }}</strong></td>
+                <td class="admin-muted admin-desc-cell">
+                    {{ item.description or '—' }}
+                </td>
+                <td class="admin-balance">
+                    {{ currency_emoji }} {{ "{:,}".format(item.price).replace(",", " ") }}
+                </td>
+                <td>
+                    {% if item.stock == -1 %}
+                        <span class="admin-badge admin-badge-ghost">∞</span>
+                    {% elif item.stock == 0 %}
+                        <span class="admin-badge admin-badge-danger">0</span>
+                    {% elif item.stock <= 3 %}
+                        <span class="admin-badge admin-badge-warn">{{ item.stock }}</span>
+                    {% else %}
+                        <span class="admin-badge">{{ item.stock }}</span>
+                    {% endif %}
+                </td>
+                <td class="admin-mono admin-muted">
+                    {% if item.role_id %}{{ item.role_id }}{% else %}—{% endif %}
+                </td>
+                <td>
+                    <div class="admin-actions-cell">
+                        <button type="button"
+                                class="admin-btn admin-btn-sm admin-btn-primary"
+                                onclick="toggleEditor('edit-item-{{ item.id }}')">
+                            ✏️
+                        </button>
+                        <form method="post"
+                              action="/admin/shop/{{ item.id }}/delete"
+                              onsubmit="return confirm('Удалить товар «{{ item.name }}»?');"
+                              style="display:inline">
+                            <button type="submit" class="admin-btn admin-btn-sm admin-btn-danger">
+                                🗑
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+
+            {# ===== Скрытая форма редактирования ===== #}
+            <tr class="admin-editor-row" id="edit-item-{{ item.id }}" style="display: none;">
+                <td colspan="8">
+                    <div class="admin-editor">
+                        <h4 class="admin-editor-title">✏️ Редактирование #{{ item.id }}</h4>
+
+                        <form method="post"
+                              action="/admin/shop/{{ item.id }}/update"
+                              class="admin-form"
+                              enctype="multipart/form-data">
+
+                            <div class="admin-form-row">
+                                <div class="admin-form-group">
+                                    <label class="admin-label">Название *</label>
+                                    <input type="text"
+                                           name="name"
+                                           class="admin-input"
+                                           value="{{ item.name }}"
+                                           maxlength="64"
+                                           required>
+                                </div>
+                                <div class="admin-form-group">
+                                    <label class="admin-label">Цена *</label>
+                                    <input type="number"
+                                           name="price"
+                                           class="admin-input"
+                                           value="{{ item.price }}"
+                                           min="1"
+                                           required>
+                                </div>
+                                <div class="admin-form-group">
+                                    <label class="admin-label">Иконка (эмодзи)</label>
+                                    <input type="text"
+                                           name="icon"
+                                           class="admin-input"
+                                           value="{{ item.icon or '' }}"
+                                           placeholder="📦"
+                                           maxlength="4">
+                                </div>
+                            </div>
+
+                            <div class="admin-form-row">
+                                <div class="admin-form-group">
+                                    <label class="admin-label">Склад (-1 = ∞)</label>
+                                    <input type="number"
+                                           name="stock"
+                                           class="admin-input"
+                                           value="{{ item.stock }}"
+                                           min="-1">
+                                </div>
+                                <div class="admin-form-group">
+                                    <label class="admin-label">ID роли Discord</label>
+                                    <input type="text"
+                                           name="role_id"
+                                           class="admin-input"
+                                           value="{{ item.role_id or '' }}"
+                                           placeholder="123456789012345678">
+                                </div>
+                            </div>
+
+                            <div class="admin-form-group">
+                                <label class="admin-label">Описание</label>
+                                <textarea name="description"
+                                          class="admin-input admin-textarea"
+                                          rows="2"
+                                          maxlength="255">{{ item.description or '' }}</textarea>
+                            </div>
+
+                            {# ===== Картинка ===== #}
+                            <div class="admin-form-group">
+                                <label class="admin-label">Картинка</label>
+                                <div class="admin-upload-wrap">
+                                    <input type="file"
+                                           name="image"
+                                           class="admin-file-input"
+                                           accept="image/png,image/jpeg,image/webp,image/gif"
+                                           onchange="previewImage(this, 'preview-edit-{{ item.id }}')">
+                                    <div class="admin-preview" id="preview-edit-{{ item.id }}">
+                                        {% if item.image_url %}
+                                            <img src="{{ item.image_url }}" alt="">
+                                        {% else %}
+                                            <span class="admin-preview-hint">Превью появится здесь</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                {% if item.image_url %}
+                                <label class="admin-checkbox-label">
+                                    <input type="checkbox"
+                                           name="remove_image"
+                                           value="1">
+                                    Удалить текущую картинку
+                                </label>
+                                {% endif %}
+
+                                <small class="admin-hint">PNG, JPG, WEBP, GIF. До 2 МБ. Заменит иконку-эмодзи.</small>
+                            </div>
+
+                            <div class="admin-form-actions">
+                                <button type="submit" class="admin-btn admin-btn-primary">
+                                    💾 Сохранить
+                                </button>
+                                <button type="button"
+                                        class="admin-btn admin-btn-secondary"
+                                        onclick="toggleEditor('edit-item-{{ item.id }}')">
+                                    Отмена
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% else %}
+<div class="admin-empty">
+    <div class="admin-empty-icon">🛒</div>
+    <div class="admin-empty-text">
+        Магазин пуст. Добавь первый товар кнопкой выше.
+    </div>
+</div>
+{% endif %}
+
+<script>
+// Раскрытие/скрытие редактора
+function toggleEditor(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.tagName === 'TR') {
+        el.style.display = el.style.display === 'none' ? 'table-row' : 'none';
+    } else {
+        el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
+}
+
+// Живое превью выбранного файла
+function previewImage(input, previewId) {
+    const preview = document.getElementById(previewId);
+    if (!preview) return;
+
+    preview.innerHTML = '';
+
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+
+        // Проверка размера — 2 МБ
+        if (file.size > 2 * 1024 * 1024) {
+            preview.innerHTML = '<span class="admin-preview-error">⚠️ Файл больше 2 МБ</span>';
+            input.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.alt = 'preview';
+            preview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    } else {
+        preview.innerHTML = '<span class="admin-preview-hint">Превью появится здесь</span>';
+    }
+}
+</script>
+
+{% endblock %}

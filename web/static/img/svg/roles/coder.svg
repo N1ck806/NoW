@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 200 60"
+     width="200"
+     height="60"
+     preserveAspectRatio="xMidYMid meet">
+
+  <!-- ==============================================================
+       NIGHTMARE • ROLE: CODER (v2)
+       Терминал. Глитчи. Код. Постоянные эффекты.
+       Стилизованный "ᴄᴏᴅᴇʀ" с бесконечными анимациями.
+       ============================================================== -->
+
+  <defs>
+
+    <!-- ============ ГРАДИЕНТЫ ============ -->
+
+    <!-- Фон — глубокий чёрный терминал -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#0a0e14"/>
+      <stop offset="50%"  stop-color="#05080c"/>
+      <stop offset="100%" stop-color="#0a0f15"/>
+    </linearGradient>
+
+    <!-- Обводка — циан/зелёный, переливается -->
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#00e5ff">
+        <animate attributeName="stop-color"
+                 values="#00e5ff;#00ff9d;#00e5ff;#00b8ff;#00e5ff"
+                 dur="4s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="50%"  stop-color="#00ff9d">
+        <animate attributeName="stop-color"
+                 values="#00ff9d;#00e5ff;#00b8ff;#00ff9d;#00ff9d"
+                 dur="4s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" stop-color="#00b8ff">
+        <animate attributeName="stop-color"
+                 values="#00b8ff;#00ff9d;#00e5ff;#00b8ff;#00b8ff"
+                 dur="4s" repeatCount="indefinite"/>
+      </stop>
+    </linearGradient>
+
+    <!-- Текст — почти белый с зеленцой -->
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#ffffff"/>
+      <stop offset="50%"  stop-color="#e8fff5"/>
+      <stop offset="100%" stop-color="#00ff9d"/>
+    </linearGradient>
+
+    <!-- Экран терминала -->
+    <linearGradient id="termGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#1a2a20"/>
+      <stop offset="100%" stop-color="#050d09"/>
+    </linearGradient>
+
+    <!-- Аура вокруг терминала -->
+    <radialGradient id="termAura" cx="50%" cy="50%" r="60%">
+      <stop offset="0%"   stop-color="#00ff9d" stop-opacity="0.6"/>
+      <stop offset="60%"  stop-color="#00e5ff" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#05080c" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Градиент для бегущей строки -->
+    <linearGradient id="scanLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#00ff9d" stop-opacity="0"/>
+      <stop offset="50%"  stop-color="#00ff9d" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#00ff9d" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- ============ ФИЛЬТРЫ ============ -->
+
+    <!-- Свечение терминала -->
+    <filter id="coderGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="b1"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="b2"/>
+      <feMerge>
+        <feMergeNode in="b2"/>
+        <feMergeNode in="b1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3"/>
+    </filter>
+
+    <filter id="bigGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6"/>
+    </filter>
+
+    <!-- Глитч: красный сдвиг -->
+    <filter id="glitchR">
+      <feOffset in="SourceGraphic" dx="2" dy="0"/>
+      <feColorMatrix type="matrix"
+                     values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0"/>
+    </filter>
+
+    <!-- Глитч: синий сдвиг -->
+    <filter id="glitchB">
+      <feOffset in="SourceGraphic" dx="-2" dy="0"/>
+      <feColorMatrix type="matrix"
+                     values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+    </filter>
+
+    <clipPath id="roundedBadge">
+      <rect x="0" y="0" width="200" height="60" rx="30" ry="30"/>
+    </clipPath>
+
+    <!-- Клип только для текстовой зоны -->
+    <clipPath id="textArea">
+      <rect x="60" y="8" width="130" height="30" rx="6"/>
+    </clipPath>
+
+  </defs>
+
+  <!-- ============================================================
+       ФОН БЕЙДЖА
+       ============================================================ -->
+  <rect x="0" y="0" width="200" height="60" rx="30" ry="30"
+        fill="url(#bgGrad)"/>
+
+  <!-- Туман-аура -->
+  <rect x="0" y="0" width="200" height="60" rx="30" ry="30"
+        fill="url(#termAura)" clip-path="url(#roundedBadge)" opacity="0.5">
+    <animate attributeName="opacity" values="0.3;0.7;0.3" dur="3s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- ============================================================
+       SCANLINES (горизонтальные полосы)
+       ============================================================ -->
+  <g clip-path="url(#roundedBadge)" opacity="0.15">
+    <line x1="0" y1="5"  x2="200" y2="5"  stroke="#00ff9d" stroke-width="0.5"/>
+    <line x1="0" y1="12" x2="200" y2="12" stroke="#00ff9d" stroke-width="0.5"/>
+    <line x1="0" y1="19" x2="200" y2="19" stroke="#00ff9d" stroke-width="0.5"/>
+    <line x1="0" y1="26" x2="200" y2="26" stroke="#00ff9d" stroke-width="0.5"/>
+    <line x1="0" y1="33" x2="200" y2="33" stroke="#00ff9d" stroke-width="0.5"/>
+    <line x1="0" y1="40" x2="200" y2="40" stroke="#00ff9d" stroke-width="0.5"/>
+    <line x1="0" y1="47" x2="200" y2="47" stroke="#00ff9d" stroke-width="0.5"/>
+    <line x1="0" y1="54" x2="200" y2="54" stroke="#00ff9d" stroke-width="0.5"/>
+  </g>
+
+  <!-- ============================================================
+       БЕГУЩАЯ ПОЛОСА СКАНИРОВАНИЯ
+       ============================================================ -->
+  <g clip-path="url(#roundedBadge)">
+    <rect x="0" y="0" width="200" height="3" fill="url(#scanLine)" opacity="0.6">
+      <animate attributeName="y" values="-3;60;-3" dur="3s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="0" y="0" width="200" height="1.5" fill="#00ff9d" opacity="0.8">
+      <animate attributeName="y" values="-3;60;-3" dur="3s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+
+  <!-- ============================================================
+       СЕТКА (микро-паттерн программирования)
+       ============================================================ -->
+  <g clip-path="url(#roundedBadge)" opacity="0.06">
+    <pattern id="gridPattern" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+      <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#00ff9d" stroke-width="0.3"/>
+    </pattern>
+    <rect x="0" y="0" width="200" height="60" fill="url(#gridPattern)"/>
+  </g>
+
+  <!-- ============================================================
+       ОБВОДКА (переливается)
+       ============================================================ -->
+  <rect x="0" y="0" width="200" height="60" rx="30" ry="30"
+        fill="none" stroke="url(#borderGrad)" stroke-width="1.8"
+        filter="url(#softGlow)">
+    <animate attributeName="stroke-width" values="1.5;2.2;1.5" dur="2s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- Внешнее свечение обводки -->
+  <rect x="0" y="0" width="200" height="60" rx="30" ry="30"
+        fill="none" stroke="url(#borderGrad)" stroke-width="0.8"
+        opacity="0.4" filter="url(#bigGlow)"/>
+
+  <!-- ============================================================
+       ИКОНКА — ТЕРМИНАЛ (слева)
+       ============================================================ -->
+  <g transform="translate(30 30)">
+
+    <!-- Аура -->
+    <ellipse cx="0" cy="0" rx="20" ry="20"
+             fill="url(#termAura)" filter="url(#softGlow)">
+      <animate attributeName="rx" values="18;22;18" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="ry" values="18;22;18" dur="3s" repeatCount="indefinite"/>
+    </ellipse>
+
+    <!-- Экран терминала -->
+    <g filter="url(#coderGlow)">
+      <rect x="-14" y="-12" width="28" height="24" rx="2"
+            fill="url(#termGrad)" stroke="#00ff9d" stroke-width="1.2">
+        <animate attributeName="opacity" values="0.9;1;0.9" dur="1.5s" repeatCount="indefinite"/>
+      </rect>
+
+      <!-- Заголовок терминала -->
+      <rect x="-14" y="-12" width="28" height="4" fill="#00ff9d" opacity="0.4"/>
+
+      <!-- Три точки-кнопки -->
+      <circle cx="-10" cy="-10" r="0.8" fill="#ff5f56"/>
+      <circle cx="-7"  cy="-10" r="0.8" fill="#ffbd2e"/>
+      <circle cx="-4"  cy="-10" r="0.8" fill="#27c93f"/>
+    </g>
+
+    <!-- Промпт-символ ">_" с курсором -->
+    <text x="-10" y="2"
+          font-family="'Consolas', 'Courier New', monospace"
+          font-size="9"
+          font-weight="bold"
+          fill="#00ff9d">
+      &gt;_
+      <animate attributeName="opacity"
+               values="1;1;0;1;1;0;1"
+               dur="1.2s" repeatCount="indefinite"/>
+    </text>
+
+    <!-- Строки кода (динамические) -->
+    <g fill="#00ff9d" opacity="0.7">
+      <rect x="-10" y="6" width="8" height="0.8" rx="0.4">
+        <animate attributeName="width" values="8;12;8;10;8" dur="2s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="-10" y="9" width="14" height="0.8" rx="0.4">
+        <animate attributeName="width" values="14;6;14;10;14" dur="2.5s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="-10" y="12" width="10" height="0.8" rx="0.4">
+        <animate attributeName="width" values="10;16;10;8;10" dur="1.8s" repeatCount="indefinite"/>
+      </rect>
+    </g>
+
+    <!-- Пульс-кольцо -->
+    <circle cx="0" cy="0" r="18" fill="none"
+            stroke="#00ff9d" stroke-width="1" opacity="0.5">
+      <animate attributeName="r" values="17;22;17" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;0;0.5" dur="3s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Дополнительное пульсирующее кольцо (с задержкой) -->
+    <circle cx="0" cy="0" r="20" fill="none"
+            stroke="#00e5ff" stroke-width="0.8" opacity="0.3">
+      <animate attributeName="r" values="18;24;18" dur="3s" begin="1.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.3;0;0.3" dur="3s" begin="1.5s" repeatCount="indefinite"/>
+    </circle>
+
+  </g>
+
+  <!-- ============================================================
+       ПОДЛОЖКА ПОД ТЕКСТОМ
+       ============================================================ -->
+  <rect x="60" y="10" width="130" height="26" rx="6"
+        fill="#000000" opacity="0.55"/>
+
+  <!-- ============================================================
+       ТЕКСТ — "ᴄᴏᴅᴇʀ"
+       ============================================================ -->
+
+  <!-- Слой 1: Основной текст -->
+  <text x="122" y="28"
+        font-family="'Impact', 'Arial Black', sans-serif"
+        font-size="19"
+        font-weight="900"
+        letter-spacing="5"
+        text-anchor="middle"
+        fill="url(#textGrad)"
+        stroke="#05080c"
+        stroke-width="3"
+        paint-order="stroke fill"
+        filter="url(#coderGlow)">
+    ᴄᴏᴅᴇʀ
+
+    <!-- Плавное мерцание главного текста -->
+    <animate attributeName="opacity"
+             values="1;1;1;0.95;1;1;1;1;0.9;1;1;1;1;1;0.95;1"
+             dur="5s" repeatCount="indefinite"/>
+  </text>
+
+  <!-- Слой 2: Циановая обводка -->
+  <text x="122" y="28"
+        font-family="'Impact', 'Arial Black', sans-serif"
+        font-size="19"
+        font-weight="900"
+        letter-spacing="5"
+        text-anchor="middle"
+        fill="none"
+        stroke="#00ff9d"
+        stroke-width="0.8"
+        opacity="0.8">
+    ᴄᴏᴅᴇʀ
+  </text>
+
+  <!-- Слой 3: ГЛИТЧ КРАСНЫЙ -->
+  <text x="122" y="28"
+        font-family="'Impact', 'Arial Black', sans-serif"
+        font-size="19"
+        font-weight="900"
+        letter-spacing="5"
+        text-anchor="middle"
+        fill="#ff0040"
+        opacity="0"
+        filter="url(#glitchR)">
+    ᴄᴏᴅᴇʀ
+    <animate attributeName="opacity"
+             values="0;0;0;0;0;0.7;0;0.5;0;0;0;0;0.6;0;0;0;0;0"
+             dur="3s" repeatCount="indefinite"/>
+    <animateTransform attributeName="transform"
+                      type="translate"
+                      values="0 0;0 0;0 0;0 0;-3 0;2 0;-2 0;0 0;0 0;0 0;3 -1;0 0;-2 1;0 0;0 0;0 0;0 0;0 0"
+                      dur="3s" repeatCount="indefinite"/>
+  </text>
+
+  <!-- Слой 4: ГЛИТЧ СИНИЙ -->
+  <text x="122" y="28"
+        font-family="'Impact', 'Arial Black', sans-serif"
+        font-size="19"
+        font-weight="900"
+        letter-spacing="5"
+        text-anchor="middle"
+        fill="#00b8ff"
+        opacity="0"
+        filter="url(#glitchB)">
+    ᴄᴏᴅᴇʀ
+    <animate attributeName="opacity"
+             values="0;0;0;0.5;0;0;0.6;0;0;0;0.5;0;0;0;0.7;0;0;0"
+             dur="3s" repeatCount="indefinite"/>
+    <animateTransform attributeName="transform"
+                      type="translate"
+                      values="0 0;0 0;3 0;0 0;-2 0;0 0;2 -1;-3 0;0 0;0 0;-2 1;0 0;3 0;0 0;0 0;0 0;0 0;0 0"
+                      dur="3s" repeatCount="indefinite"/>
+  </text>
+
+  <!-- Слой 5: СТИРАНИЕ БУКВ -->
+  <text x="122" y="28"
+        font-family="'Impact', 'Arial Black', sans-serif"
+        font-size="19"
+        font-weight="900"
+        letter-spacing="5"
+        text-anchor="middle"
+        fill="#00ff9d"
+        opacity="0"
+        filter="url(#coderGlow)">
+    <tspan>ᴄ</tspan><tspan>ᴏ</tspan><tspan>ᴅ</tspan><tspan>ᴇ</tspan><tspan>ʀ</tspan>
+    <animate attributeName="opacity"
+             values="0;0;0;0;0;0;0;0;0;0.85;0;0;0;0;0;0;0.65;0;0;0"
+             dur="5s" repeatCount="indefinite"/>
+  </text>
+
+  <!-- Слой 6: ТОЧКИ-ГЛИТЧИ НА БУКВАХ -->
+  <g fill="#ff0040" opacity="0">
+    <animate attributeName="opacity"
+             values="0;0;0;0;0;0.9;0;0;0;0;0;0.7;0;0;0;0;0"
+             dur="4s" repeatCount="indefinite"/>
+    <circle cx="106" cy="22" r="1"/>
+    <circle cx="122" cy="26" r="1.2"/>
+    <circle cx="138" cy="21" r="1"/>
+    <circle cx="152" cy="24" r="1.2"/>
+    <circle cx="94" cy="26" r="0.8"/>
+  </g>
+
+  <!-- ============================================================
+       ПОДПИСЬ СНИЗУ (стилизованный код)
+       ============================================================ -->
+  <text x="122" y="47"
+        font-family="'Consolas', 'Courier New', monospace"
+        font-size="8"
+        letter-spacing="1.5"
+        text-anchor="middle"
+        fill="#00ff9d"
+        stroke="#05080c"
+        stroke-width="1.5"
+        paint-order="stroke fill"
+        opacity="0.9">
+    [ SYSTEM • DEV • CODE ]
+    <animate attributeName="opacity"
+             values="0.7;1;0.7"
+             dur="2s" repeatCount="indefinite"/>
+  </text>
+
+  <!-- ============================================================
+       ЛЕТАЮЩИЕ СИМВОЛЫ КОДА (по всему бейджу)
+       ============================================================ -->
+  <g font-family="'Consolas', monospace" fill="#00ff9d">
+    <!-- { -->
+    <text x="80" y="15" font-size="9" opacity="0">
+      {
+      <animate attributeName="opacity" values="0;0;0.9;0" dur="3s" repeatCount="indefinite"/>
+    </text>
+
+    <!-- ; -->
+    <text x="175" y="20" font-size="9" opacity="0">
+      ;
+      <animate attributeName="opacity" values="0;0;0;0.9;0" dur="4s" repeatCount="indefinite"/>
+    </text>
+
+    <!-- } -->
+    <text x="90" y="50" font-size="8" opacity="0">
+      }
+      <animate attributeName="opacity" values="0;0.7;0" dur="3.5s" begin="1s" repeatCount="indefinite"/>
+    </text>
+
+    <!-- </> -->
+    <text x="180" y="50" font-size="8" opacity="0">
+      &lt;/&gt;
+      <animate attributeName="opacity" values="0;0.8;0" dur="4.5s" begin="0.5s" repeatCount="indefinite"/>
+    </text>
+
+    <!-- $ -->
+    <text x="65" y="40" font-size="7" opacity="0">
+      $
+      <animate attributeName="opacity" values="0;0.9;0" dur="3.2s" begin="1.5s" repeatCount="indefinite"/>
+    </text>
+
+    <!-- = -->
+    <text x="155" y="10" font-size="8" opacity="0">
+      =
+      <animate attributeName="opacity" values="0;0.8;0" dur="3.8s" begin="2s" repeatCount="indefinite"/>
+    </text>
+
+    <!-- () -->
+    <text x="70" y="55" font-size="7" opacity="0">
+      ()
+      <animate attributeName="opacity" values="0;0;0.7;0" dur="4.2s" begin="2.5s" repeatCount="indefinite"/>
+    </text>
+
+    <!-- &amp;&amp; -->
+    <text x="165" y="35" font-size="7" opacity="0">
+      &amp;&amp;
+      <animate attributeName="opacity" values="0;0.8;0" dur="3.6s" begin="3s" repeatCount="indefinite"/>
+    </text>
+
+    <!-- [] -->
+    <text x="95" y="8" font-size="7" opacity="0">
+      []
+      <animate attributeName="opacity" values="0;0;0.7;0" dur="4.8s" begin="0.8s" repeatCount="indefinite"/>
+    </text>
+
+    <!-- => -->
+    <text x="145" y="55" font-size="7" opacity="0">
+      =&gt;
+      <animate attributeName="opacity" values="0;0;0.8;0" dur="4s" begin="2.2s" repeatCount="indefinite"/>
+    </text>
+  </g>
+
+  <!-- ============================================================
+       БИНАРНЫЙ КОД (вертикальные столбцы)
+       ============================================================ -->
+  <g font-family="'Consolas', monospace" font-size="6" fill="#00ff9d">
+    <!-- Левый столбец -->
+    <g opacity="0.4">
+      <text x="62" y="18">1</text>
+      <text x="62" y="26">0</text>
+      <text x="62" y="34">1</text>
+      <text x="62" y="42">0</text>
+      <text x="62" y="50">1</text>
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="2s" repeatCount="indefinite"/>
+    </g>
+
+    <!-- Правый столбец -->
+    <g opacity="0.4">
+      <text x="192" y="14">0</text>
+      <text x="192" y="22">1</text>
+      <text x="192" y="30">0</text>
+      <text x="192" y="38">1</text>
+      <text x="192" y="46">0</text>
+      <animate attributeName="opacity" values="0.1;0.5;0.1" dur="2.5s" repeatCount="indefinite"/>
+    </g>
+  </g>
+
+  <!-- ============================================================
+       ВЕРТИКАЛЬНАЯ БЕГУЩАЯ ПОЛОСА
+       ============================================================ -->
+  <g clip-path="url(#roundedBadge)">
+    <rect x="0" y="0" width="5" height="60" fill="#00ff9d" opacity="0.15"
+          filter="url(#softGlow)">
+      <animate attributeName="x" values="-5;200;-5" dur="6s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+
+  <!-- ============================================================
+       СЛУЧАЙНЫЕ ВСПЫШКИ (глитч)
+       ============================================================ -->
+  <rect x="0" y="0" width="200" height="60" rx="30" ry="30"
+        fill="#00ff9d" opacity="0" clip-path="url(#roundedBadge)"
+        filter="url(#softGlow)">
+    <animate attributeName="opacity"
+             values="0;0;0.12;0;0;0;0.08;0;0;0;0;0;0.15;0;0;0"
+             dur="4s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- ============================================================
+       КУРСОР (мигающий, в конце текста)
+       ============================================================ -->
+  <rect x="182" y="18" width="2" height="12" fill="#00ff9d" opacity="0.8"
+        filter="url(#coderGlow)">
+    <animate attributeName="opacity"
+             values="1;1;0;0;1;1;1;1;0;0;1;1"
+             dur="1s" repeatCount="indefinite"/>
+  </rect>
+
+</svg>

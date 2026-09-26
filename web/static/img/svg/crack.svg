@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 600 600"
+     width="600"
+     height="600"
+     preserveAspectRatio="xMidYMid meet">
+
+  <defs>
+    <!-- ============ ГРАДИЕНТЫ ============ -->
+
+    <!-- Основной градиент трещины (светящаяся сердцевина) -->
+    <linearGradient id="crackCore" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="30%" stop-color="#ff4d6d" stop-opacity="1"/>
+      <stop offset="70%" stop-color="#ff0033" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#8b0000" stop-opacity="0.8"/>
+    </linearGradient>
+
+    <!-- Градиент внешней обводки (тёмная корка) -->
+    <linearGradient id="crackEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2a1533"/>
+      <stop offset="50%" stop-color="#4a0000"/>
+      <stop offset="100%" stop-color="#1a0004"/>
+    </linearGradient>
+
+    <!-- Градиент свечения вокруг трещины -->
+    <radialGradient id="crackGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff0033" stop-opacity="0.5"/>
+      <stop offset="50%" stop-color="#8b0000" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#4a0000" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Градиент для осколков -->
+    <linearGradient id="shardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7f5af0" stop-opacity="0.9"/>
+      <stop offset="50%" stop-color="#ff0033" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#4a0000" stop-opacity="0.5"/>
+    </linearGradient>
+
+    <!-- Частицы пыли -->
+    <radialGradient id="dustGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff8095" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#ff0033" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- ============ ФИЛЬТРЫ ============ -->
+
+    <!-- Свечение -->
+    <filter id="crackGlowFilter" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur1"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur2"/>
+      <feMerge>
+        <feMergeNode in="blur2"/>
+        <feMergeNode in="blur1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Мягкое свечение -->
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="12"/>
+    </filter>
+
+    <!-- Турбулентность (для эффекта пыли) -->
+    <filter id="dust" x="-50%" y="-50%" width="200%" height="200%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2">
+        <animate attributeName="seed" values="1;5;10;5;1" dur="3s" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+    </filter>
+
+  </defs>
+
+  <!-- ============================================================
+       СЛОЙ 1: ФОНОВОЕ СВЕЧЕНИЕ ВОКРУГ ЦЕНТРА
+       ============================================================ -->
+  <ellipse cx="300" cy="300" rx="280" ry="280"
+           fill="url(#crackGlow)" filter="url(#softGlow)">
+    <animate attributeName="opacity" values="0.5;1;0.5" dur="4s" repeatCount="indefinite"
+             calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+  </ellipse>
+
+  <!-- ============================================================
+       СЛОЙ 2: ТЁМНАЯ ПОДЛОЖКА (создаёт ощущение разлома)
+       ============================================================ -->
+  <g stroke="url(#crackEdge)" stroke-width="14" fill="none"
+     stroke-linecap="round" stroke-linejoin="round" opacity="0.8">
+
+    <!-- Основной ствол -->
+    <path d="M 300 0 L 285 80 L 305 160 L 280 240 L 310 320 L 285 400 L 300 480 L 290 560 L 300 600"/>
+
+    <!-- Крупные ветки -->
+    <path d="M 285 80 L 220 140 L 180 200 L 140 260 L 100 320"/>
+    <path d="M 305 160 L 370 200 L 420 260 L 470 300"/>
+    <path d="M 280 240 L 220 260 L 160 280 L 100 300"/>
+    <path d="M 310 320 L 380 340 L 440 380 L 510 400"/>
+    <path d="M 285 400 L 220 440 L 160 470"/>
+    <path d="M 300 480 L 360 500 L 420 540"/>
+
+    <!-- Мелкие ветки -->
+    <path d="M 240 160 L 200 180 L 170 210"/>
+    <path d="M 340 180 L 400 200 L 440 220"/>
+    <path d="M 240 260 L 200 320 L 180 360"/>
+    <path d="M 360 340 L 400 380 L 440 420"/>
+    <path d="M 230 440 L 190 500 L 170 540"/>
+    <path d="M 370 500 L 410 540 L 430 580"/>
+  </g>
+
+  <!-- ============================================================
+       СЛОЙ 3: СВЕТЯЩАЯСЯ СЕРДЦЕВИНА ТРЕЩИНЫ
+       ============================================================ -->
+  <g filter="url(#crackGlowFilter)" stroke="url(#crackCore)" fill="none"
+     stroke-linecap="round" stroke-linejoin="round">
+
+    <!-- Ствол с анимацией проявления -->
+    <path d="M 300 0 L 285 80 L 305 160 L 280 240 L 310 320 L 285 400 L 300 480 L 290 560 L 300 600"
+          stroke-width="3" stroke-dasharray="0 2000">
+      <animate attributeName="stroke-dasharray"
+               values="0 2000;2000 0;2000 0;0 2000"
+               dur="6s" repeatCount="indefinite"
+               calcMode="spline"
+               keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"/>
+    </path>
+
+    <!-- Левые крупные ветки -->
+    <path d="M 285 80 L 220 140 L 180 200 L 140 260 L 100 320"
+          stroke-width="2.5" stroke-dasharray="0 800">
+      <animate attributeName="stroke-dasharray"
+               values="0 800;0 800;800 0;800 0;0 800"
+               dur="6s" repeatCount="indefinite"/>
+    </path>
+
+    <path d="M 280 240 L 220 260 L 160 280 L 100 300"
+          stroke-width="2" stroke-dasharray="0 800">
+      <animate attributeName="stroke-dasharray"
+               values="0 800;0 800;0 800;800 0;800 0;0 800"
+               dur="6s" repeatCount="indefinite"/>
+    </path>
+
+    <path d="M 285 400 L 220 440 L 160 470"
+          stroke-width="2" stroke-dasharray="0 600">
+      <animate attributeName="stroke-dasharray"
+               values="0 600;0 600;0 600;600 0;600 0;0 600"
+               dur="6s" repeatCount="indefinite"/>
+    </path>
+
+    <!-- Правые крупные ветки -->
+    <path d="M 305 160 L 370 200 L 420 260 L 470 300"
+          stroke-width="2.5" stroke-dasharray="0 800">
+      <animate attributeName="stroke-dasharray"
+               values="0 800;0 800;0 800;800 0;800 0;0 800"
+               dur="6s" repeatCount="indefinite"/>
+    </path>
+
+    <path d="M 310 320 L 380 340 L 440 380 L 510 400"
+          stroke-width="2" stroke-dasharray="0 800">
+      <animate attributeName="stroke-dasharray"
+               values="0 800;0 800;0 800;0 800;800 0;800 0;0 800"
+               dur="6s" repeatCount="indefinite"/>
+    </path>
+
+    <path d="M 300 480 L 360 500 L 420 540"
+          stroke-width="2" stroke-dasharray="0 600">
+      <animate attributeName="stroke-dasharray"
+               values="0 600;0 600;0 600;0 600;600 0;600 0;0 600"
+               dur="6s" repeatCount="indefinite"/>
+    </path>
+
+    <!-- Мелкие ветки (проявляются ещё позже) -->
+    <g stroke-width="1.5">
+      <path d="M 240 160 L 200 180 L 170 210" stroke-dasharray="0 400">
+        <animate attributeName="stroke-dasharray"
+                 values="0 400;0 400;0 400;0 400;400 0;400 0;0 400"
+                 dur="6s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 340 180 L 400 200 L 440 220" stroke-dasharray="0 400">
+        <animate attributeName="stroke-dasharray"
+                 values="0 400;0 400;0 400;0 400;0 400;400 0;400 0;0 400"
+                 dur="6s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 240 260 L 200 320 L 180 360" stroke-dasharray="0 400">
+        <animate attributeName="stroke-dasharray"
+                 values="0 400;0 400;0 400;0 400;0 400;400 0;400 0;0 400"
+                 dur="6s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 360 340 L 400 380 L 440 420" stroke-dasharray="0 400">
+        <animate attributeName="stroke-dasharray"
+                 values="0 400;0 400;0 400;0 400;0 400;0 400;400 0;400 0;0 400"
+                 dur="6s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 230 440 L 190 500 L 170 540" stroke-dasharray="0 400">
+        <animate attributeName="stroke-dasharray"
+                 values="0 400;0 400;0 400;0 400;0 400;0 400;400 0;400 0;0 400"
+                 dur="6s" repeatCount="indefinite"/>
+      </path>
+      <path d="M 370 500 L 410 540 L 430 580" stroke-dasharray="0 400">
+        <animate attributeName="stroke-dasharray"
+                 values="0 400;0 400;0 400;0 400;0 400;0 400;0 400;400 0;400 0;0 400"
+                 dur="6s" repeatCount="indefinite"/>
+      </path>
+    </g>
+  </g>
+
+  <!-- ============================================================
+       СЛОЙ 4: ВСПЫШКИ ПО ТРЕЩИНЕ (яркие проблески)
+       ============================================================ -->
+  <g stroke="#ffffff" fill="none" stroke-linecap="round" opacity="0.9">
+    <path d="M 300 0 L 285 80 L 305 160 L 280 240 L 310 320 L 285 400 L 300 480 L 290 560 L 300 600"
+          stroke-width="2">
+      <animate attributeName="opacity"
+               values="0;0;0;0.9;0;0;0;0;0;0.7;0;0"
+               dur="6s" repeatCount="indefinite"/>
+    </path>
+
+    <path d="M 285 80 L 220 140 L 180 200 L 140 260 L 100 320"
+          stroke-width="1.5">
+      <animate attributeName="opacity"
+               values="0;0;0;0;0.8;0;0;0;0;0;0.6;0"
+               dur="6s" repeatCount="indefinite"/>
+    </path>
+
+    <path d="M 305 160 L 370 200 L 420 260 L 470 300"
+          stroke-width="1.5">
+      <animate attributeName="opacity"
+               values="0;0;0;0;0;0.7;0;0;0;0;0;0.5;0"
+               dur="6s" repeatCount="indefinite"/>
+    </path>
+  </g>
+
+  <!-- ============================================================
+       СЛОЙ 5: ОСКОЛКИ (отлетают от трещины)
+       ============================================================ -->
+  <g fill="url(#shardGrad)" opacity="0.85">
+    <!-- Осколок 1 -->
+    <polygon points="240,180 250,175 248,195 235,192">
+      <animateTransform attributeName="transform"
+                        type="translate"
+                        values="0 0; -40 -30; -80 -50"
+                        dur="6s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform"
+                        type="rotate"
+                        values="0 240 180; 180 240 180; 360 240 180"
+                        dur="6s" repeatCount="indefinite" additive="sum"/>
+      <animate attributeName="opacity"
+               values="0;0.9;0"
+               dur="6s" repeatCount="indefinite"/>
+    </polygon>
+
+    <!-- Осколок 2 -->
+    <polygon points="360,200 370,195 372,215 358,212">
+      <animateTransform attributeName="transform"
+                        type="translate"
+                        values="0 0; 50 20; 90 40"
+                        dur="7s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform"
+                        type="rotate"
+                        values="0 360 200; -180 360 200; -360 360 200"
+                        dur="7s" repeatCount="indefinite" additive="sum"/>
+      <animate attributeName="opacity"
+               values="0;0.8;0"
+               dur="7s" repeatCount="indefinite"/>
+    </polygon>
+
+    <!-- Осколок 3 -->
+    <polygon points="280,300 290,295 292,310 278,308">
+      <animateTransform attributeName="transform"
+                        type="translate"
+                        values="0 0; -30 40; -60 80"
+                        dur="5.5s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform"
+                        type="rotate"
+                        values="0 280 300; 120 280 300; 240 280 300"
+                        dur="5.5s" repeatCount="indefinite" additive="sum"/>
+      <animate attributeName="opacity"
+               values="0;1;0"
+               dur="5.5s" repeatCount="indefinite"/>
+    </polygon>
+
+    <!-- Осколок 4 -->
+    <polygon points="320,400 332,398 330,415 318,413">
+      <animateTransform attributeName="transform"
+                        type="translate"
+                        values="0 0; 35 25; 70 50"
+                        dur="6.5s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform"
+                        type="rotate"
+                        values="0 320 400; -90 320 400; -180 320 400"
+                        dur="6.5s" repeatCount="indefinite" additive="sum"/>
+      <animate attributeName="opacity"
+               values="0;0.75;0"
+               dur="6.5s" repeatCount="indefinite"/>
+    </polygon>
+
+    <!-- Осколок 5 -->
+    <polygon points="200,260 212,255 214,268 202,270">
+      <animateTransform attributeName="transform"
+                        type="translate"
+                        values="0 0; -25 -15; -55 -35"
+                        dur="7.5s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform"
+                        type="rotate"
+                        values="0 200 260; 200 200 260; 400 200 260"
+                        dur="7.5s" repeatCount="indefinite" additive="sum"/>
+      <animate attributeName="opacity"
+               values="0;0.85;0"
+               dur="7.5s" repeatCount="indefinite"/>
+    </polygon>
+
+    <!-- Осколок 6 -->
+    <polygon points="400,320 415,315 418,332 402,335">
+      <animateTransform attributeName="transform"
+                        type="translate"
+                        values="0 0; 40 -10; 80 -25"
+                        dur="8s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform"
+                        type="rotate"
+                        values="0 400 320; -150 400 320; -300 400 320"
+                        dur="8s" repeatCount="indefinite" additive="sum"/>
+      <animate attributeName="opacity"
+               values="0;0.7;0"
+               dur="8s" repeatCount="indefinite"/>
+    </polygon>
+  </g>
+
+  <!-- ============================================================
+       СЛОЙ 6: ЧАСТИЦЫ ПЫЛИ
+       ============================================================ -->
+  <g fill="#ff8095" filter="url(#crackGlowFilter)">
+    <circle cx="260" cy="140" r="2">
+      <animate attributeName="cx" values="260;220;180" dur="5s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="140;120;100" dur="5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;0" dur="5s" repeatCount="indefinite"/>
+      <animate attributeName="r" values="1;2.5;0.5" dur="5s" repeatCount="indefinite"/>
+    </circle>
+
+    <circle cx="340" cy="220" r="1.5">
+      <animate attributeName="cx" values="340;380;420" dur="6s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="220;200;180" dur="6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.9;0" dur="6s" repeatCount="indefinite"/>
+    </circle>
+
+    <circle cx="250" cy="350" r="2.5">
+      <animate attributeName="cx" values="250;210;170" dur="7s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;0" dur="7s" repeatCount="indefinite"/>
+    </circle>
+
+    <circle cx="380" cy="380" r="1.8">
+      <animate attributeName="cx" values="380;420;460" dur="5.5s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="380;400;420" dur="5.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.8;0" dur="5.5s" repeatCount="indefinite"/>
+    </circle>
+
+    <circle cx="300" cy="260" r="2">
+      <animate attributeName="cy" values="260;230;200" dur="4.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;0" dur="4.5s" repeatCount="indefinite"/>
+    </circle>
+
+    <circle cx="220" cy="280" r="1.5">
+      <animate attributeName="cx" values="220;180;140" dur="6.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.85;0" dur="6.5s" repeatCount="indefinite"/>
+    </circle>
+
+    <circle cx="360" cy="280" r="2.2">
+      <animate attributeName="cx" values="360;400;440" dur="5.8s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.95;0" dur="5.8s" repeatCount="indefinite"/>
+    </circle>
+
+    <circle cx="280" cy="440" r="1.8">
+      <animate attributeName="cy" values="440;480;520" dur="7s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.75;0" dur="7s" repeatCount="indefinite"/>
+    </circle>
+
+    <circle cx="320" cy="420" r="2">
+      <animate attributeName="cx" values="320;360;400" dur="6.2s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="420;440;460" dur="6.2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;1;0" dur="6.2s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- ============================================================
+       СЛОЙ 7: КРАСНЫЙ ТУМАН ВНИЗУ
+       ============================================================ -->
+  <g opacity="0.35" filter="url(#softGlow)">
+    <ellipse cx="300" cy="560" rx="260" ry="70" fill="#ff0033">
+      <animate attributeName="rx" values="240;280;240" dur="6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.25;0.5;0.25" dur="5s" repeatCount="indefinite"/>
+    </ellipse>
+  </g>
+
+  <!-- ============================================================
+       СЛОЙ 8: ФИОЛЕТОВАЯ ДЫМКА СВЕРХУ
+       ============================================================ -->
+  <g opacity="0.25" filter="url(#softGlow)">
+    <ellipse cx="300" cy="40" rx="240" ry="60" fill="#7f5af0">
+      <animate attributeName="rx" values="220;260;220" dur="7s" repeatCount="indefinite"/>
+    </ellipse>
+  </g>
+
+</svg>

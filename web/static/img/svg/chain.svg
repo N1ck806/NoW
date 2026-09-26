@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 400 800"
+     width="400"
+     height="800"
+     preserveAspectRatio="xMidYMid meet">
+
+  <!-- ==============================================================
+       NIGHTMARE • CHAIN
+       Цепь с крюком на конце, свисает сверху вниз.
+       Покачивается. Прозрачный фон.
+       ============================================================== -->
+
+  <defs>
+
+    <!-- ============ ГРАДИЕНТЫ ============ -->
+
+    <!-- Металл звена (свет сверху) -->
+    <linearGradient id="metalLink" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#8a8a9a"/>
+      <stop offset="20%"  stop-color="#4a4a5a"/>
+      <stop offset="50%"  stop-color="#2a2a3a"/>
+      <stop offset="80%"  stop-color="#4a4a5a"/>
+      <stop offset="100%" stop-color="#1a1a2a"/>
+    </linearGradient>
+
+    <!-- Металл (тёмная сторона звена) -->
+    <linearGradient id="metalDark" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#1a1a2a"/>
+      <stop offset="50%"  stop-color="#3a3a4a"/>
+      <stop offset="100%" stop-color="#0a0a1a"/>
+    </linearGradient>
+
+    <!-- Блик на металле -->
+    <linearGradient id="metalShine" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.9"/>
+      <stop offset="50%"  stop-color="#ffffff" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Ржавчина (пятна) -->
+    <radialGradient id="rust" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#8b4513" stop-opacity="0.7"/>
+      <stop offset="60%"  stop-color="#5a2a08" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#3a1a04" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Кровь на цепи -->
+    <linearGradient id="bloodOnChain" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#8b0000"/>
+      <stop offset="50%"  stop-color="#c40026"/>
+      <stop offset="100%" stop-color="#4a0000"/>
+    </linearGradient>
+
+    <!-- Аура (мрак вокруг цепи) -->
+    <radialGradient id="chainAura" cx="50%" cy="50%" r="60%">
+      <stop offset="0%"   stop-color="#ff0033" stop-opacity="0.25"/>
+      <stop offset="60%"  stop-color="#8b0000" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#2a0004" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- ============ ФИЛЬТРЫ ============ -->
+
+    <filter id="glowStrong" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="b1"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b2"/>
+      <feMerge>
+        <feMergeNode in="b2"/>
+        <feMergeNode in="b1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="glowSoft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6"/>
+    </filter>
+
+    <filter id="glowBig" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="14"/>
+    </filter>
+
+    <!-- Тень под звеном -->
+    <filter id="linkShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+      <feOffset dx="2" dy="3" result="offset"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.5"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+  </defs>
+
+
+  <!-- ============================================================
+       0. ФОНОВАЯ АУРА (мрак вокруг цепи)
+       ============================================================ -->
+  <ellipse cx="200" cy="400" rx="180" ry="400"
+           fill="url(#chainAura)" filter="url(#glowBig)"
+           opacity="0.5">
+    <animate attributeName="rx" values="160;200;160" dur="6s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.3;0.6;0.3" dur="5s" repeatCount="indefinite"/>
+  </ellipse>
+
+
+  <!-- ============================================================
+       1. ЦЕПЬ (покачивается как маятник)
+       ============================================================ -->
+  <g transform="translate(200 0)">
+    <!-- Покачивание вокруг верхней точки -->
+    <animateTransform attributeName="transform"
+                      type="rotate"
+                      values="-3 0 0; 3 0 0; -3 0 0"
+                      dur="6s" repeatCount="indefinite"
+                      additive="sum"/>
+
+    <!-- ========================================================
+         1a. КРЕПЛЕНИЕ СВЕРХУ (кольцо, вбитое в потолок)
+         ======================================================== -->
+    <g>
+      <ellipse cx="0" cy="0" rx="22" ry="8" fill="#1a1a2a"/>
+      <ellipse cx="0" cy="0" rx="18" ry="6" fill="#3a3a4a"/>
+      <ellipse cx="0" cy="0" rx="12" ry="3" fill="#0a0a1a"/>
+    </g>
+
+    <!-- ========================================================
+         1b. ЗВЕНЬЯ ЦЕПИ (18 штук, чередуются вертикальные/горизонтальные)
+         ======================================================== -->
+
+    <!-- Звено 1 (вертикальное) -->
+    <g transform="translate(0 40)" filter="url(#linkShadow)">
+      <ellipse cx="0" cy="0" rx="10" ry="22" fill="none"
+               stroke="url(#metalLink)" stroke-width="4"/>
+      <ellipse cx="0" cy="0" rx="10" ry="22" fill="none"
+               stroke="url(#metalShine)" stroke-width="1" opacity="0.6"/>
+      <ellipse cx="-3" cy="-8" rx="2" ry="4" fill="#ffffff" opacity="0.4"/>
+    </g>
+
+    <!-- Звено 2 (горизонтальное) -->
+    <g transform="translate(0 82)" filter="url(#linkShadow)">
+      <ellipse cx="0" cy="0" rx="22" ry="10" fill="none"
+               stroke="url(#metalLink)" stroke-width="4"/>
+      <ellipse cx="0" cy="0" rx="22" ry="10" fill="none"
+               stroke="url(#metalShine)" stroke-width="1" opacity="0.6"/>
+      <ellipse cx="-8" cy="-3" rx="4" ry="2" fill="#ffffff" opacity="0.4"/>
+    </g>
+
+    <!-- Звено 3 -->
+    <g transform="translate(0 124)" filter="url(#linkShadow)">
+      <ellipse cx="0" cy="0" rx="10" ry="22" fill="none"
+               stroke="url(#metalLink)" stroke-width="4"/>
+      <ellipse cx="-3" cy="-8" rx="2" ry="4" fill="#ffffff" opacity="0.4"/>
+      <!-- Ржавое пятно -->
+      <ellipse cx="4" cy="6" rx="4" ry="5" fill="url(#rust)"/>
+    </g>
+
+    <!-- Звено 4 -->
+    <g transform="translate(0 166)" filter="url(#linkShadow)">
+      <ellipse cx="0" cy="0" rx="22" ry="10" fill="none"
+               stroke="url(#metalLink)" stroke-width="4"/>
+      <ellipse cx="-8" cy="-3" rx="4" ry="2" fill="#ffffff" opacity="0.4"/>
+    </g>
+
+    <!-- Звено 5 -->
+    <g transform="translate(0 208)" filter="url(#linkShadow)">
+      <ellipse cx="0" cy="0" rx="10" ry="22" fill="none"
+               stroke="url(#metalLink)" stroke-width="4"/>
+      <ellipse cx="-3" cy="-8" rx="2" ry="4" fill="#ffffff" opacity="0.4"/>
+    </g>
+
+    <!-- Звено 6 -->
+    <g transform="translate(0 250)" filter="url(#linkShadow)">
+      <ellipse cx="0" cy="0" rx="22" ry="10" fill="none"
+               stroke="url(#metalLink)" stroke-width="4"/>
+      <ellipse cx="-8" cy="-3" rx="4" ry="2" fill="#ffffff" opacity="0.4"/>
+      <ellipse cx="6" cy="2" rx="4" ry="3" fill="url(#rust)"/>
+    </g>
+
+    <!-- Звено 7 -->
+    <g transform="translate(0 292)" filter="url(#linkShadow)">
+      <ellipse cx="0" cy="0" rx="10" ry="22" fill="none"
+               stroke="url(#metalLink)" stroke-width="4"/>
+      <ellipse cx="-3" cy="-8" rx="2" ry="4" fill="#ffffff" opacity="0.4"/>
+    </g>
+
+    <!-- Звено 8 (с каплей крови) -->
+    <g transform="translate(0 334)" filter="url(#linkShadow)">
+      <ellipse cx="0" cy="0" rx="22" ry="10" fill="none"
+               stroke="url(#metalLink)" stroke-width="4"/>
+      <ellipse cx="-8" cy="-3" rx="4" ry="2" fill="#ffffff" opacity="0.4"/>
+      <!-- Кровавая капля на звене -->
+      <ellipse cx="8" cy="0" rx="3" ry="4" fill="url(#bloodOnChain)">
+        <animate attributeName="ry" values="4;6;4" dur="3s" repeatCount="indefinite"/>
+      </ellipse>
+    </g>
+
+    <!-- Звено 9 -->
+    <g transform="translate(0 376)" filter="url(#linkShadow)">
+      <ellipse cx="0" cy="0" rx="10" ry="22" fill="none"
+               stroke="url(#metalLink)" stroke-width="4"/>
+      <ellipse cx="-3" cy="-8" rx="2" ry="4" fill="#ffffff" opacity="0.4"/>
+    </g>
+
+    <!-- Звено 10 -->
+    <g transform="translate(0 418)" filter="url(#linkShadow)">
+      <ellipse cx="0" cy="0" rx="22" ry="10" fill="none"
+               stroke="url(#metalLink)" stroke-width="4"/>
+      <ellipse cx="-8" cy="-3" rx="4" ry="2" fill="#ffffff" opacity="0.4"/>
+    </g>
+
+    <!-- Звено 11 -->
+    <g transform="translate(0 460)" filter="url(#linkShadow)">
+      <ellipse cx="0" cy="0" rx="10" ry="22" fill="none"
+               stroke="url(#metalLink)" stroke-width="4"/>
+      <ellipse cx="-3" cy="-8" rx="2" ry="4" fill="#ffffff" opacity="0.4"/>
+      <ellipse cx="3" cy="8" rx="4" ry="4" fill="url(#rust)"/>
+    </g>
+
+    <!-- Звено 12 -->
+    <g transform="translate(0 502)" filter="url(#linkShadow)">
+      <ellipse cx="0" cy="0" rx="22" ry="10" fill="none"
+               stroke="url(#metalLink)" stroke-width="4"/>
+      <ellipse cx="-8" cy="-3" rx="4" ry="2" fill="#ffffff" opacity="0.4"/>
+    </g>
+
+    <!-- Звено 13 -->
+    <g transform="translate(0 544)" filter="url(#linkShadow)">
+      <ellipse cx="0" cy="0" rx="10" ry="22" fill="none"
+               stroke="url(#metalLink)" stroke-width="4"/>
+      <ellipse cx="-3" cy="-8" rx="2" ry="4" fill="#ffffff" opacity="0.4"/>
+    </g>
+
+    <!-- Звено 14 (с кровью) -->
+    <g transform="translate(0 586)" filter="url(#linkShadow)">
+      <ellipse cx="0" cy="0" rx="22" ry="10" fill="none"
+               stroke="url(#metalLink)" stroke-width="4"/>
+      <ellipse cx="-8" cy="-3" rx="4" ry="2" fill="#ffffff" opacity="0.4"/>
+      <ellipse cx="-8" cy="0" rx="3" ry="4" fill="url(#bloodOnChain)">
+        <animate attributeName="ry" values="4;7;4" dur="3.5s" repeatCount="indefinite"/>
+      </ellipse>
+    </g>
+
+    <!-- Звено 15 -->
+    <g transform="translate(0 628)" filter="url(#linkShadow)">
+      <ellipse cx="0" cy="0" rx="10" ry="22" fill="none"
+               stroke="url(#metalLink)" stroke-width="4"/>
+      <ellipse cx="-3" cy="-8" rx="2" ry="4" fill="#ffffff" opacity="0.4"/>
+    </g>
+
+    <!-- Звено 16 -->
+    <g transform="translate(0 670)" filter="url(#linkShadow)">
+      <ellipse cx="0" cy="0" rx="22" ry="10" fill="none"
+               stroke="url(#metalLink)" stroke-width="4"/>
+      <ellipse cx="-8" cy="-3" rx="4" ry="2" fill="#ffffff" opacity="0.4"/>
+    </g>
+
+    <!-- Звено 17 -->
+    <g transform="translate(0 712)" filter="url(#linkShadow)">
+      <ellipse cx="0" cy="0" rx="10" ry="22" fill="none"
+               stroke="url(#metalLink)" stroke-width="4"/>
+      <ellipse cx="-3" cy="-8" rx="2" ry="4" fill="#ffffff" opacity="0.4"/>
+    </g>
+
+    <!-- Звено 18 (последнее, соединяется с крюком) -->
+    <g transform="translate(0 754)" filter="url(#linkShadow)">
+      <ellipse cx="0" cy="0" rx="22" ry="10" fill="none"
+               stroke="url(#metalLink)" stroke-width="4"/>
+      <ellipse cx="-8" cy="-3" rx="4" ry="2" fill="#ffffff" opacity="0.4"/>
+    </g>
+
+
+    <!-- ========================================================
+         1c. КРЮК (на конце цепи)
+         ======================================================== -->
+    <g transform="translate(0 790)" filter="url(#linkShadow)">
+
+      <!-- Верхнее кольцо крюка (соединяется со звеном) -->
+      <ellipse cx="0" cy="0" rx="14" ry="6" fill="none"
+               stroke="url(#metalLink)" stroke-width="5"/>
+
+      <!-- Тело крюка (изогнутая толстая линия) -->
+      <path d="M 0 6
+               Q -4 30 0 50
+               Q 6 70 20 78
+               Q 32 82 38 74
+               Q 42 64 34 58
+               Q 26 55 22 62
+               Q 20 68 26 72"
+            fill="none" stroke="url(#metalDark)" stroke-width="9"
+            stroke-linecap="round"/>
+
+      <!-- Блик на крюке -->
+      <path d="M 0 6
+               Q -4 30 0 50
+               Q 6 70 20 78"
+            fill="none" stroke="url(#metalShine)" stroke-width="2"
+            stroke-linecap="round" opacity="0.6"/>
+
+      <!-- Остриё крюка -->
+      <path d="M 22 62 Q 26 68 22 74"
+            fill="none" stroke="#0a0a1a" stroke-width="4"
+            stroke-linecap="round"/>
+
+      <!-- Ржавое пятно на крюке -->
+      <ellipse cx="8" cy="45" rx="6" ry="8" fill="url(#rust)"/>
+
+      <!-- Кровавый потёк с крюка -->
+      <path d="M 20 78 Q 22 85 20 92 Q 18 88 18 82 Z"
+            fill="url(#bloodOnChain)" opacity="0.9">
+        <animate attributeName="opacity" values="0.6;1;0.6" dur="3s" repeatCount="indefinite"/>
+      </path>
+    </g>
+
+
+    <!-- ========================================================
+         1d. КАПЛИ, ПАДАЮЩИЕ С ЦЕПИ
+         ======================================================== -->
+    <g fill="#c40026" filter="url(#glowStrong)">
+
+      <!-- Капля 1 (с 8 звена) -->
+      <ellipse cx="8" cy="334" rx="2.5" ry="3">
+        <animate attributeName="cy" values="334;450;570" dur="4s" repeatCount="indefinite"/>
+        <animate attributeName="ry" values="3;5;8" dur="4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="1;0.6;0" dur="4s" repeatCount="indefinite"/>
+      </ellipse>
+
+      <!-- Капля 2 (с 14 звена) -->
+      <ellipse cx="-8" cy="586" rx="2.5" ry="3">
+        <animate attributeName="cy" values="586;700;800" dur="3.5s" begin="0.8s" repeatCount="indefinite"/>
+        <animate attributeName="ry" values="3;6;10" dur="3.5s" begin="0.8s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="1;0.5;0" dur="3.5s" begin="0.8s" repeatCount="indefinite"/>
+      </ellipse>
+
+      <!-- Капля 3 (с крюка) -->
+      <ellipse cx="20" cy="800" rx="3" ry="4">
+        <animate attributeName="cy" values="800;850;900" dur="2.5s" begin="0.4s" repeatCount="indefinite"/>
+        <animate attributeName="ry" values="4;7;12" dur="2.5s" begin="0.4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="1;0.6;0" dur="2.5s" begin="0.4s" repeatCount="indefinite"/>
+      </ellipse>
+
+    </g>
+
+  </g>
+
+
+  <!-- ============================================================
+       2. ЛЕТАЮЩИЕ ЧАСТИЦЫ ВОКРУГ (пепел, пыль)
+       ============================================================ -->
+  <g filter="url(#glowSoft)" opacity="0.6">
+    <circle cx="100" cy="200" r="1.2" fill="#a78bfa">
+      <animate attributeName="cy" values="200;170;140" dur="5s" repeatCount="indefinite"/>
+      <animate attributeName="cx" values="100;110;100" dur="7s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.8;0" dur="5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="300" cy="300" r="1.5" fill="#a78bfa">
+      <animate attributeName="cy" values="300;270;240" dur="6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.2;0.7;0.2" dur="6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="80" cy="500" r="1" fill="#e8dff0">
+      <animate attributeName="cy" values="500;470;440" dur="5.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="320" cy="600" r="1.3" fill="#e8dff0">
+      <animate attributeName="cy" values="600;570;540" dur="6.5s" repeatCount="indefinite"/>
+      <animate attributeName="cx" values="320;310;320" dur="8s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+
+  <!-- ============================================================
+       3. МЕРЦАНИЕ (лёгкое дыхание тьмы)
+       ============================================================ -->
+  <rect x="0" y="0" width="400" height="800"
+        fill="#ff0033" opacity="0" filter="url(#glowBig)">
+    <animate attributeName="opacity"
+             values="0;0;0.04;0;0;0;0.03;0"
+             dur="7s" repeatCount="indefinite"/>
+  </rect>
+
+
+</svg>

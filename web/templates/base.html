@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0a0610">
+    <meta name="description" content="{{ clan_name }} — дашборд клана Nightmare of Whiners">
+    <title>{% block title %}Nightmare Dashboard{% endblock %}</title>
+    <link rel="icon" type="image/png" href="/static/img/logo.png">
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/logo.css">
+    <link rel="stylesheet" href="/static/role-badge.css">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header class="header">
+        <div class="container header-inner">
+            <a href="/" class="brand">
+                <div class="brand-icon">
+                    <img src="/static/img/logo.png" alt="Nightmare">
+                </div>
+                <div class="brand-text">
+                    <img src="/static/img/nightmare-text.svg" alt="Nightmare of Whiners">
+                </div>
+            </a>
+
+            <nav class="nav">
+                {# ===== ОСНОВНАЯ НАВИГАЦИЯ ===== #}
+                <a href="/" class="nav-link">🏠 Главная</a>
+
+                {# Топы, логи, транзакции, магазин — только для залогиненных с ролью ghost #}
+                {% if current_user and role_badge and role_badge.key == 'ghost' %}
+                    <a href="/tops" class="nav-link">🏆 Топы</a>
+                    <a href="/transactions" class="nav-link">💸 Транзакции</a>
+                    <a href="/shop" class="nav-link">🛒 Магазин</a>
+
+                    {# Логи модерации — только для системных ролей #}
+                    {% if system_badges and system_badges|length > 0 %}
+                        <a href="/logs" class="nav-link">📜 Логи</a>
+                    {% endif %}
+                {% endif %}
+
+                {# ===== АДМИНКА — для is_admin и is_coder (независимо от ghost) ===== #}
+                {% if current_user and (current_user.is_admin or current_user.is_coder) %}
+                    <a href="/admin" class="nav-link nav-link-admin">👑 Админ</a>
+                {% endif %}
+
+                {# ===== ПРАВАЯ ЧАСТЬ (АВАТАРКА + РОЛИ + ВЫХОД) ===== #}
+                {% if current_user %}
+                    <a href="/dashboard" class="nav-user" title="{{ current_user.display_name }}">
+
+                        {# Аватарка + точка роли #}
+                        <div class="nav-user-avatar">
+                            {% if current_user.discord_avatar %}
+                                <img src="{{ current_user.discord_avatar }}" class="nav-avatar" alt="">
+                            {% else %}
+                                <span class="nav-avatar nav-avatar-placeholder">👤</span>
+                            {% endif %}
+
+                            {% if role_badge %}
+                                <span class="nav-role-dot nav-role-dot-{{ role_badge.key }}"
+                                      title="{{ role_badge.name }}"></span>
+                            {% endif %}
+                        </div>
+
+                        {# Имя + мини-бейджи ролей #}
+                        <div class="nav-user-info">
+                            <span class="nav-username">{{ current_user.display_name }}</span>
+
+                            <span class="nav-badges">
+                                {% if role_badge %}
+                                    <span class="mini-badge mini-badge-{{ role_badge.key }}"
+                                          title="{{ role_badge.name }}">
+                                        {{ role_badge.icon }}
+                                    </span>
+                                {% endif %}
+                                {% for badge in system_badges %}
+                                    <span class="mini-badge mini-badge-{{ badge.key }}"
+                                          title="{{ badge.name }}">
+                                        {{ badge.icon }}
+                                    </span>
+                                {% endfor %}
+                            </span>
+                        </div>
+                    </a>
+                    <a href="/logout" class="nav-link nav-btn">Выйти</a>
+                {% else %}
+                    <a href="/login" class="nav-link nav-btn">Войти</a>
+                    <a href="/register" class="nav-link nav-btn nav-btn-primary">Регистрация</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <main class="container main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <p>{{ clan_name }} • {{ bot_name }} © 2026</p>
+            <p class="footer-sub">Сделано во тьме 🌑</p>
+        </div>
+    </footer>
+
+    <script src="/static/app.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

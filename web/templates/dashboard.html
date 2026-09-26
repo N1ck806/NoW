@@ -1,0 +1,556 @@
+{% extends "base.html" %}
+
+{% block title %}Кабинет • Nightmare{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="/static/dashboard.css">
+<link rel="stylesheet" href="/static/role-badge.css">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-page"
+     data-is-admin="{{ '1' if user.is_admin else '0' }}"
+     data-is-coder="{{ '1' if user.is_coder else '0' }}"
+     data-is-moderator="{{ '1' if user.is_moderator else '0' }}"
+     data-role="{{ user.role or 'guest' }}"
+     data-display-name="{{ user.display_name }}">
+
+    {# ============ ШАПКА КАБИНЕТА ============ #}
+    <div class="dashboard-header">
+
+        {# ===== АВАТАРКА ===== #}
+        <div class="dashboard-avatar-wrap">
+            <div class="dashboard-avatar-aura"></div>
+
+            {% if user.discord_avatar %}
+                <img src="{{ user.discord_avatar }}" alt="avatar" class="dashboard-avatar">
+            {% else %}
+                <div class="dashboard-avatar-placeholder">👤</div>
+            {% endif %}
+
+            {# Индикаторы привязок #}
+            <div class="dashboard-avatar-badges">
+                {% if user.discord_id %}
+                    <span class="avatar-badge badge-discord" title="Discord привязан">💬</span>
+                {% endif %}
+                {% if user.telegram_id %}
+                    <span class="avatar-badge badge-telegram" title="Telegram привязан">✈️</span>
+                {% endif %}
+            </div>
+        </div>
+
+        {# ===== ИНФО ===== #}
+        <div class="dashboard-info">
+            <h1 class="dashboard-name">{{ user.display_name }}</h1>
+
+            <div class="dashboard-meta">
+                <span class="dashboard-username">@{{ user.username }}</span>
+                {% if user.email %}
+                    <span class="dashboard-dot">•</span>
+                    <span class="dashboard-email">{{ user.email }}</span>
+                {% endif %}
+            </div>
+
+            <div class="dashboard-since">
+                🌑 В клане с
+                {{ user.created_at[:10].replace("-", ".") if user.created_at else "—" }}
+            </div>
+
+            {# ===== SVG-БЕЙДЖИ РОЛЕЙ (единственное место) ===== #}
+            <div class="profile-role-badges" style="margin-top: 12px;">
+                {% if user.role %}
+                    <img src="/static/img/svg/roles/{{ user.role }}.svg"
+                         class="profile-role-svg"
+                         alt="{{ user.role }}"
+                         title="
+                            {%- if user.role == 'guest' -%}Гость
+                            {%- elif user.role == 'ghost' -%}Призрак
+                            {%- endif -%}">
+                {% endif %}
+                {% if user.is_moderator %}
+                    <img src="/static/img/svg/roles/moderator.svg"
+                         class="profile-role-svg"
+                         alt="Moderator"
+                         title="Модератор">
+                {% endif %}
+                {% if user.is_coder %}
+                    <img src="/static/img/svg/roles/coder.svg"
+                         class="profile-role-svg"
+                         alt="Coder"
+                         title="Coder">
+                {% endif %}
+                {% if user.is_admin %}
+                    <img src="/static/img/svg/roles/admin.svg"
+                         class="profile-role-svg"
+                         alt="Admin"
+                         title="Администратор">
+                {% endif %}
+            </div>
+        </div>
+
+        {# ===== КНОПКИ ===== #}
+        <div class="dashboard-actions">
+            <a href="/settings" class="btn-profile">⚙️ Настройки</a>
+            {% if user.guild_user_id %}
+                <a href="/profile/{{ user.guild_user_id }}" class="btn-profile">👤 Публичный профиль</a>
+            {% endif %}
+            <a href="/logout" class="btn-profile btn-logout">🚪 Выйти</a>
+        </div>
+    </div>
+
+    {# ============ МИНИ-КОНСОЛЬ (только для coder) ============ #}
+    {% if user.is_coder %}
+    <div class="coder-console" id="coderConsole">
+        <div class="coder-console-header">
+            <div class="coder-console-dots">
+                <span class="coder-console-dot" style="background:#ff5f56"></span>
+                <span class="coder-console-dot" style="background:#ffbd2e"></span>
+                <span class="coder-console-dot" style="background:#27c93f"></span>
+            </div>
+            <div class="coder-console-title">
+                nightmare@cluster:~/web$ <span class="coder-console-hint">terminal ready</span>
+            </div>
+            <button class="coder-console-close" id="coderConsoleClose" title="Свернуть">−</button>
+        </div>
+
+        <div class="coder-console-body" id="coderConsoleBody">
+            <div class="coder-console-line coder-console-line-info">
+                <span class="coder-console-prompt">$</span> welcome, <span class="coder-console-user">{{ user.display_name }}</span>
+            </div>
+            <div class="coder-console-line coder-console-line-info">
+                <span class="coder-console-prompt">$</span> nightmare --version
+            </div>
+            <div class="coder-console-line">
+                Nightmare Cluster v2.0.0
+            </div>
+            <div class="coder-console-line coder-console-line-info">
+                <span class="coder-console-prompt">$</span> whoami
+            </div>
+            <div class="coder-console-line">
+                coder
+            </div>
+            <div class="coder-console-line coder-console-line-info">
+                <span class="coder-console-prompt">$</span> status
+            </div>
+            <div class="coder-console-line coder-console-line-ok">
+                ✓ system online
+            </div>
+            <div class="coder-console-line coder-console-line-ok">
+                ✓ database connected
+            </div>
+            <div class="coder-console-line coder-console-line-ok">
+                ✓ bot online (16 cogs)
+            </div>
+            <div class="coder-console-line coder-console-line-info">
+                <span class="coder-console-prompt">$</span> <span class="coder-console-cursor">_</span>
+            </div>
+        </div>
+
+        <div class="coder-console-footer">
+            <input type="text"
+                   class="coder-console-input"
+                   id="coderConsoleInput"
+                   placeholder="введите команду и нажмите Enter..."
+                   autocomplete="off"
+                   spellcheck="false">
+        </div>
+    </div>
+    {% endif %}
+
+    {# ============ БЛОК СВЯЗИ ============ #}
+    <h2 class="section-title">📡 Способы связи</h2>
+    <div class="contacts-grid">
+
+        <div class="contact-card {% if user.discord_id %}connected{% endif %}">
+            <div class="contact-icon contact-icon-discord">💬</div>
+            <div class="contact-body">
+                <div class="contact-label">Discord</div>
+                {% if user.discord_id %}
+                    <div class="contact-value">{{ user.discord_username or user.discord_id }}</div>
+                    <div class="contact-status contact-status-on">✅ Привязан</div>
+                {% else %}
+                    <div class="contact-value muted">Не привязан</div>
+                    <a href="/auth/discord?mode=link" class="contact-link">Привязать →</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="contact-card {% if user.telegram_id %}connected{% endif %}">
+            <div class="contact-icon contact-icon-telegram">✈️</div>
+            <div class="contact-body">
+                <div class="contact-label">Telegram</div>
+                {% if user.telegram_id %}
+                    <div class="contact-value">
+                        {% if user.telegram_username %}
+                            @{{ user.telegram_username }}
+                        {% else %}
+                            ID {{ user.telegram_id }}
+                        {% endif %}
+                    </div>
+                    <div class="contact-status contact-status-on">✅ Привязан</div>
+                {% else %}
+                    <div class="contact-value muted">Не привязан</div>
+                    <a href="/auth/telegram" class="contact-link">Привязать →</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="contact-card {% if user.guild_user_id %}connected{% endif %}">
+            <div class="contact-icon contact-icon-guild">🛡️</div>
+            <div class="contact-body">
+                <div class="contact-label">Guild ID</div>
+                {% if user.guild_user_id %}
+                    <div class="contact-value">{{ user.guild_user_id }}</div>
+                    <div class="contact-status contact-status-on">✅ Синхронизирован</div>
+                {% else %}
+                    <div class="contact-value muted">Не синхронизирован</div>
+                    <div class="contact-hint">
+                        Привяжи Discord, чтобы видеть игровую статистику
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {# ============ ИГРОВАЯ СТАТИСТИКА ============ #}
+    <h2 class="section-title">📊 Игровая статистика</h2>
+
+    {% if bot_stats %}
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">📈</div>
+            <div class="stat-value">{{ bot_stats.level }}</div>
+            <div class="stat-label">Уровень</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">💰</div>
+            <div class="stat-value">{{ "{:,}".format(bot_stats.balance).replace(",", " ") }}</div>
+            <div class="stat-label">Баланс</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">💬</div>
+            <div class="stat-value">{{ "{:,}".format(bot_stats.messages).replace(",", " ") }}</div>
+            <div class="stat-label">Сообщений</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🎙️</div>
+            <div class="stat-value">{{ bot_stats.voice_minutes }}</div>
+            <div class="stat-label">Минут в войсе</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-value">{{ bot_stats.reputation }}</div>
+            <div class="stat-label">Репутация</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🎮</div>
+            <div class="stat-value">{{ game_stats.total }}</div>
+            <div class="stat-label">Игр</div>
+        </div>
+    </div>
+    {% else %}
+    <div class="card alert-card">
+        <p>⚠️ Игровая статистика появится, когда привяжешь Discord.</p>
+        <p style="margin-top: 10px;">
+            <a href="/auth/discord?mode=link" class="btn-profile">💬 Привязать Discord</a>
+        </p>
+    </div>
+    {% endif %}
+
+    {# ============ АКТИВНОСТЬ ============ #}
+    <div class="grid-2">
+        <div class="card">
+            <h2 class="card-title">🏅 Последние достижения</h2>
+            {% if achievements %}
+            <ul class="list">
+                {% for a in achievements[:5] %}
+                <li>
+                    <strong>{{ a.achievement }}</strong>
+                    <span class="muted">{{ a.unlocked_at[:10] }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="muted">Пока нет достижений 🌑</p>
+            {% endif %}
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">💸 Последние транзакции</h2>
+            {% if transactions %}
+            <ul class="list">
+                {% for t in transactions[:5] %}
+                <li>
+                    <strong>
+                        {% if t.type == "transfer" %}
+                            {% if t.from_id == user.guild_user_id %}
+                                📤 → {{ t.to_id }}
+                            {% else %}
+                                📥 ← {{ t.from_id }}
+                            {% endif %}
+                        {% else %}
+                            {{ t.type }}
+                        {% endif %}
+                    </strong>
+                    <span class="muted">{{ "{:,}".format(t.amount).replace(",", " ") }} 💰</span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="muted">Транзакций нет 🌑</p>
+            {% endif %}
+        </div>
+    </div>
+
+    {# ============ БЫСТРЫЕ ДЕЙСТВИЯ ============ #}
+    <div class="card">
+        <h2 class="card-title">⚡ Быстрые действия</h2>
+        <div class="quick-actions">
+            <a href="/shop" class="quick-action">
+                <span class="quick-action-icon">🛒</span>
+                <span class="quick-action-text">Магазин</span>
+            </a>
+            <a href="/tops" class="quick-action">
+                <span class="quick-action-icon">🏆</span>
+                <span class="quick-action-text">Топы</span>
+            </a>
+            <a href="/settings" class="quick-action">
+                <span class="quick-action-icon">⚙️</span>
+                <span class="quick-action-text">Настройки</span>
+            </a>
+            {% if user.guild_user_id %}
+            <a href="/profile/{{ user.guild_user_id }}" class="quick-action">
+                <span class="quick-action-icon">👤</span>
+                <span class="quick-action-text">Профиль</span>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    'use strict';
+
+    const page = document.querySelector('.dashboard-page');
+    if (!page) return;
+
+    const isAdmin = page.dataset.isAdmin === '1';
+    const isCoder = page.dataset.isCoder === '1';
+    const displayName = page.dataset.displayName || 'coder';
+
+    // ============================================
+    // CODER-РЕЖИМ: МИНИ-КОНСОЛЬ
+    // ============================================
+    if (isCoder) {
+        initCoderConsole(displayName);
+    }
+
+    function initCoderConsole(userName) {
+        const consoleEl = document.getElementById('coderConsole');
+        const body = document.getElementById('coderConsoleBody');
+        const input = document.getElementById('coderConsoleInput');
+        const closeBtn = document.getElementById('coderConsoleClose');
+
+        if (!consoleEl || !body || !input) return;
+
+        // Свёртывание
+        let minimized = false;
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                minimized = !minimized;
+                consoleEl.classList.toggle('coder-console-minimized', minimized);
+                closeBtn.textContent = minimized ? '+' : '−';
+            });
+        }
+
+        // ============================================
+        // КОМАНДЫ КОНСОЛИ
+        // ============================================
+        const COMMANDS = {
+            'help': () => [
+                'Доступные команды:',
+                '  help          — эта справка',
+                '  clear         — очистить консоль',
+                '  whoami        — кто ты',
+                '  status        — статус системы',
+                '  bot           — статус бота',
+                '  users         — число участников',
+                '  ping          — задержка',
+                '  version       — версия',
+                '  date          — текущая дата',
+                '  secret        — ... 🤫',
+            ],
+            'clear': () => {
+                body.innerHTML = '';
+                return [];
+            },
+            'whoami': () => [
+                `Ты: ${userName}`,
+                'Роль: Coder',
+                'Доступ: системный',
+            ],
+            'status': () => [
+                '✓ система онлайн',
+                '✓ база данных подключена',
+                '✓ бот активен',
+                '✓ интерфейс синхронизирован',
+            ],
+            'bot': () => [
+                'Бот: Nightmare',
+                'Клан: Nightmare of Whiners',
+                'Модулей: 16',
+                'Команд: 119',
+                'Статус: 🟢 онлайн',
+            ],
+            'users': () => [
+                `Участников на сайте: подключено`,
+                'Discord: синхронизирован',
+            ],
+            'ping': () => [
+                `Задержка: ${Math.floor(Math.random() * 40 + 15)} мс`,
+                'Соединение: стабильное',
+            ],
+            'version': () => [
+                'Nightmare Cluster v2.0.0',
+                'Python 3.13',
+                'FastAPI + discord.py',
+            ],
+            'date': () => [
+                `Сейчас: ${new Date().toLocaleString('ru-RU')}`,
+            ],
+            'secret': () => {
+                // Эффект "красного кода"
+                body.classList.add('coder-console-secret');
+                setTimeout(() => body.classList.remove('coder-console-secret'), 1500);
+                return [
+                    '⚠️ ДОСТУП К СЕКРЕТНОЙ ИНФОРМАЦИИ',
+                    '...',
+                    '...',
+                    'Ты не должен был это видеть. 👁️',
+                ];
+            },
+        };
+
+        // ============================================
+        // ДОБАВЛЕНИЕ СТРОК
+        // ============================================
+        function addLine(text, cls = '') {
+            const line = document.createElement('div');
+            line.className = 'coder-console-line ' + cls;
+            line.textContent = text;
+            body.appendChild(line);
+            body.scrollTop = body.scrollHeight;
+
+            // Максимум 100 строк
+            while (body.children.length > 100) {
+                body.removeChild(body.firstChild);
+            }
+        }
+
+        function addPrompt(text) {
+            const line = document.createElement('div');
+            line.className = 'coder-console-line coder-console-line-info';
+            line.innerHTML = `<span class="coder-console-prompt">$</span> ${text}`;
+            body.appendChild(line);
+            body.scrollTop = body.scrollHeight;
+        }
+
+        function printResult(lines) {
+            if (!lines || lines.length === 0) return;
+            lines.forEach(l => {
+                let cls = '';
+                if (l.startsWith('✓')) cls = 'coder-console-line-ok';
+                else if (l.startsWith('⚠')) cls = 'coder-console-line-warn';
+                else if (l.startsWith('  ')) cls = 'coder-console-line-muted';
+                addLine(l, cls);
+            });
+        }
+
+        // ============================================
+        // ОБРАБОТКА ВВОДА
+        // ============================================
+        const history = [];
+        let historyIdx = -1;
+
+        input.addEventListener('keydown', (e) => {
+            // История команд (стрелки вверх/вниз)
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (history.length === 0) return;
+                historyIdx = Math.min(historyIdx + 1, history.length - 1);
+                input.value = history[historyIdx];
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                historyIdx = Math.max(historyIdx - 1, -1);
+                input.value = historyIdx === -1 ? '' : history[historyIdx];
+            }
+        });
+
+        input.addEventListener('keypress', (e) => {
+            if (e.key !== 'Enter') return;
+
+            const cmd = input.value.trim().toLowerCase();
+            input.value = '';
+
+            if (!cmd) return;
+
+            // В историю
+            history.unshift(cmd);
+            historyIdx = -1;
+
+            // Показываем ввод
+            addPrompt(cmd);
+
+            // Обработка
+            if (COMMANDS[cmd]) {
+                const result = COMMANDS[cmd]();
+                printResult(result);
+            } else {
+                addLine(`command not found: ${cmd}`, 'coder-console-line-error');
+                addLine('введи "help" для списка команд', 'coder-console-line-muted');
+            }
+
+            body.scrollTop = body.scrollHeight;
+        });
+
+        // Фокус при клике
+        consoleEl.addEventListener('click', (e) => {
+            if (e.target.tagName !== 'INPUT' && e.target !== closeBtn) {
+                input.focus();
+            }
+        });
+
+        // Приветствие
+        setTimeout(() => {
+            addLine(`// добро пожаловать, ${userName}`, 'coder-console-line-muted');
+            addLine('// введи "help" для списка команд', 'coder-console-line-muted');
+        }, 500);
+    }
+
+    // ============================================
+    // ADMIN-РЕЖИМ
+    // ============================================
+    if (isAdmin) {
+        document.body.classList.add('admin-mode');
+
+        setInterval(() => {
+            if (Math.random() < 0.5) {
+                const spark = document.createElement('div');
+                spark.className = 'gold-spark';
+                spark.style.left = Math.random() * 100 + 'vw';
+                spark.style.top = Math.random() * 100 + 'vh';
+                spark.style.width = spark.style.height = (3 + Math.random() * 4) + 'px';
+                spark.style.animationDuration = (1.5 + Math.random() * 1.5) + 's';
+                document.body.appendChild(spark);
+                setTimeout(() => spark.remove(), 3500);
+            }
+        }, 2000);
+    }
+
+})();
+</script>
+{% endblock %}

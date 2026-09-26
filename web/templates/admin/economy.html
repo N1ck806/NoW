@@ -1,0 +1,203 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Экономика • Админка{% endblock %}
+
+{% block admin_title %}💰 Экономика{% endblock %}
+{% block admin_subtitle %}Игроков: {{ total }} • Страница {{ page }} из {{ total_pages }}{% endblock %}
+
+{% block admin_content %}
+
+{# ============ ПОИСК ============ #}
+<div class="admin-toolbar">
+    <form method="get" action="/admin/economy" class="admin-search-form">
+        <input type="text"
+               name="q"
+               class="admin-input"
+               placeholder="Поиск по Discord ID..."
+               value="{{ query or '' }}"
+               autocomplete="off">
+        <button type="submit" class="admin-btn admin-btn-primary">🔍 Найти</button>
+        {% if query %}
+            <a href="/admin/economy" class="admin-btn admin-btn-secondary">✕ Сбросить</a>
+        {% endif %}
+    </form>
+
+    <div class="admin-toolbar-info">
+        Найдено: <strong>{{ total }}</strong>
+    </div>
+</div>
+
+{# ============ ТАБЛИЦА ============ #}
+{% if players %}
+<div class="admin-table-wrap">
+    <table class="admin-table admin-table-compact">
+        <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Уровень</th>
+                <th>XP</th>
+                <th>Баланс</th>
+                <th>Сообщений</th>
+                <th>Войс</th>
+                <th>Репутация</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in players %}
+            <tr>
+                <td class="admin-mono">
+                    <a href="/profile/{{ p.user_id }}" class="admin-link" target="_blank">
+                        {{ p.user_id }}
+                    </a>
+                </td>
+                <td><strong>{{ p.level or 0 }}</strong></td>
+                <td class="admin-muted">{{ "{:,}".format(p.xp or 0).replace(",", " ") }}</td>
+                <td class="admin-balance">
+                    {{ currency_emoji }} {{ "{:,}".format(p.balance or 0).replace(",", " ") }}
+                </td>
+                <td class="admin-muted">{{ "{:,}".format(p.messages or 0).replace(",", " ") }}</td>
+                <td class="admin-muted">{{ p.voice_minutes or 0 }} мин</td>
+                <td class="admin-muted">⭐ {{ p.reputation or 0 }}</td>
+                <td>
+                    <button type="button"
+                            class="admin-btn admin-btn-sm admin-btn-primary"
+                            onclick="toggleEditor('editor-{{ p.user_id }}')">
+                        Изменить
+                    </button>
+                </td>
+            </tr>
+
+            {# ===== Скрытая панель редактирования ===== #}
+            <tr class="admin-editor-row" id="editor-{{ p.user_id }}" style="display: none;">
+                <td colspan="8">
+                    <div class="admin-editor">
+
+                        {# Баланс #}
+                        <div class="admin-editor-block">
+                            <h4 class="admin-editor-title">💰 Баланс</h4>
+                            <form method="post"
+                                  action="/admin/economy/{{ p.user_id }}/balance"
+                                  class="admin-form-inline">
+                                <input type="number"
+                                       name="amount"
+                                       class="admin-input admin-input-sm"
+                                       placeholder="Сумма"
+                                       min="0"
+                                       required>
+                                <select name="action" class="admin-select admin-select-sm">
+                                    <option value="add">➕ Начислить</option>
+                                    <option value="remove">➖ Списать</option>
+                                    <option value="set">🎯 Установить</option>
+                                </select>
+                                <button type="submit" class="admin-btn admin-btn-primary admin-btn-sm">
+                                    Применить
+                                </button>
+                            </form>
+                        </div>
+
+                        {# Сброс полей #}
+                        <div class="admin-editor-block">
+                            <h4 class="admin-editor-title">🔄 Сбросить</h4>
+                            <div class="admin-reset-buttons">
+
+                                <form method="post"
+                                      action="/admin/economy/{{ p.user_id }}/reset"
+                                      onsubmit="return confirm('Сбросить уровень и XP?');">
+                                    <input type="hidden" name="field" value="level">
+                                    <button type="submit" class="admin-btn admin-btn-danger admin-btn-sm">
+                                        Уровень
+                                    </button>
+                                </form>
+
+                                <form method="post"
+                                      action="/admin/economy/{{ p.user_id }}/reset"
+                                      onsubmit="return confirm('Сбросить репутацию?');">
+                                    <input type="hidden" name="field" value="reputation">
+                                    <button type="submit" class="admin-btn admin-btn-danger admin-btn-sm">
+                                        Репутация
+                                    </button>
+                                </form>
+
+                                <form method="post"
+                                      action="/admin/economy/{{ p.user_id }}/reset"
+                                      onsubmit="return confirm('Сбросить время в войсе?');">
+                                    <input type="hidden" name="field" value="voice">
+                                    <button type="submit" class="admin-btn admin-btn-danger admin-btn-sm">
+                                        Войс
+                                    </button>
+                                </form>
+
+                                <form method="post"
+                                      action="/admin/economy/{{ p.user_id }}/reset"
+                                      onsubmit="return confirm('Сбросить счётчик сообщений?');">
+                                    <input type="hidden" name="field" value="messages">
+                                    <button type="submit" class="admin-btn admin-btn-danger admin-btn-sm">
+                                        Сообщения
+                                    </button>
+                                </form>
+
+                                <form method="post"
+                                      action="/admin/economy/{{ p.user_id }}/reset"
+                                      onsubmit="return confirm('Удалить ВСЕ предупреждения игрока?');">
+                                    <input type="hidden" name="field" value="warnings">
+                                    <button type="submit" class="admin-btn admin-btn-danger admin-btn-sm">
+                                        Предупреждения
+                                    </button>
+                                </form>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{# ============ ПАГИНАЦИЯ ============ #}
+{% if total_pages > 1 %}
+<div class="admin-pagination">
+    {% if page > 1 %}
+        <a href="/admin/economy?page={{ page - 1 }}{% if query %}&q={{ query }}{% endif %}"
+           class="admin-page-btn">← Назад</a>
+    {% else %}
+        <span class="admin-page-btn disabled">← Назад</span>
+    {% endif %}
+
+    <span class="admin-page-info">Стр. {{ page }} / {{ total_pages }}</span>
+
+    {% if page < total_pages %}
+        <a href="/admin/economy?page={{ page + 1 }}{% if query %}&q={{ query }}{% endif %}"
+           class="admin-page-btn">Вперёд →</a>
+    {% else %}
+        <span class="admin-page-btn disabled">Вперёд →</span>
+    {% endif %}
+</div>
+{% endif %}
+
+{% else %}
+<div class="admin-empty">
+    <div class="admin-empty-icon">💰</div>
+    <div class="admin-empty-text">
+        {% if query %}
+            По запросу «{{ query }}» ничего не найдено
+        {% else %}
+            В таблице users пока нет игроков
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+{# ============ JS: раскрытие редактора ============ #}
+<script>
+function toggleEditor(id) {
+    const row = document.getElementById(id);
+    if (!row) return;
+    row.style.display = row.style.display === 'none' ? 'table-row' : 'none';
+}
+</script>
+
+{% endblock %}

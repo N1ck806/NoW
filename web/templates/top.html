@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+
+{% block title %}Топы • Nightmare{% endblock %}
+
+{% block content %}
+<h1 class="page-title">🏆 Топы клана</h1>
+<p class="page-subtitle">Пять категорий рейтинга — от богатства до игровой удачи</p>
+
+{# ==== Макросы ==== #}
+
+{% macro user_cell(uid, rank=None) %}
+    {% set u = users.get(uid) %}
+    <a href="/profile/{{ uid }}" class="user-link">
+        {% if rank and rank <= 3 %}
+            <span class="rank-medal">
+                {% if rank == 1 %}🥇{% elif rank == 2 %}🥈{% else %}🥉{% endif %}
+            </span>
+        {% endif %}
+        {% if u %}
+            <img src="{{ u.avatar_url }}" class="user-avatar" alt="">
+            <span>{{ u.display_name }}</span>
+        {% else %}
+            <span class="avatar-placeholder-small">👤</span>
+            <span>ID {{ uid }}</span>
+        {% endif %}
+    </a>
+{% endmacro %}
+
+{% macro empty_state(icon, text) %}
+    <div class="tops-empty">
+        <div class="tops-empty-icon">{{ icon }}</div>
+        <div class="tops-empty-text">{{ text }}</div>
+    </div>
+{% endmacro %}
+
+
+{# ============================================================
+   БОЛЬШАЯ СЕТКА — 5 КОЛОНОК
+   ============================================================ #}
+<div class="tops-grid">
+
+    {# ============================================
+       КОЛОНКА 1: БАЛАНС
+       ============================================ #}
+    <div class="tops-column tops-column-balance">
+        <div class="tops-column-header">
+            <div class="tops-column-icon">💰</div>
+            <div class="tops-column-title">Богатство</div>
+            <div class="tops-column-subtitle">Самая большая казна клана</div>
+        </div>
+
+        {% if top_balances %}
+        <div class="tops-list">
+            {% for row in top_balances[:10] %}
+            <div class="tops-item rank-{{ loop.index if loop.index <= 3 else 'other' }}">
+                <div class="tops-rank">
+                    {% if loop.index == 1 %}🥇
+                    {% elif loop.index == 2 %}🥈
+                    {% elif loop.index == 3 %}🥉
+                    {% else %}{{ loop.index }}{% endif %}
+                </div>
+                <div class="tops-user">
+                    {{ user_cell(row.user_id) }}
+                </div>
+                <div class="tops-value">
+                    {{ "{:,}".format(row.balance).replace(",", " ") }} <span class="tops-value-unit">💰</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+            {{ empty_state("💰", "Казна пуста") }}
+        {% endif %}
+    </div>
+
+
+    {# ============================================
+       КОЛОНКА 2: УРОВНИ
+       ============================================ #}
+    <div class="tops-column tops-column-level">
+        <div class="tops-column-header">
+            <div class="tops-column-icon">📈</div>
+            <div class="tops-column-title">Уровень</div>
+            <div class="tops-column-subtitle">Кто прокачался дальше всех</div>
+        </div>
+
+        {% if top_levels %}
+        <div class="tops-list">
+            {% for row in top_levels[:10] %}
+            <div class="tops-item rank-{{ loop.index if loop.index <= 3 else 'other' }}">
+                <div class="tops-rank">
+                    {% if loop.index == 1 %}🥇
+                    {% elif loop.index == 2 %}🥈
+                    {% elif loop.index == 3 %}🥉
+                    {% else %}{{ loop.index }}{% endif %}
+                </div>
+                <div class="tops-user">
+                    {{ user_cell(row.user_id) }}
+                </div>
+                <div class="tops-value">
+                    {{ row.level }} <span class="tops-value-unit">ур.</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+            {{ empty_state("📈", "Никто ещё не прокачался") }}
+        {% endif %}
+    </div>
+
+
+    {# ============================================
+       КОЛОНКА 3: РЕПУТАЦИЯ
+       ============================================ #}
+    <div class="tops-column tops-column-rep">
+        <div class="tops-column-header">
+            <div class="tops-column-icon">⭐</div>
+            <div class="tops-column-title">Репутация</div>
+            <div class="tops-column-subtitle">Уважаемые члены клана</div>
+        </div>
+
+        {% if top_reputation %}
+        <div class="tops-list">
+            {% for row in top_reputation[:10] %}
+            <div class="tops-item rank-{{ loop.index if loop.index <= 3 else 'other' }}">
+                <div class="tops-rank">
+                    {% if loop.index == 1 %}🥇
+                    {% elif loop.index == 2 %}🥈
+                    {% elif loop.index == 3 %}🥉
+                    {% else %}{{ loop.index }}{% endif %}
+                </div>
+                <div class="tops-user">
+                    {{ user_cell(row.user_id) }}
+                </div>
+                <div class="tops-value">
+                    {{ row.reputation }} <span class="tops-value-unit">⭐</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+            {{ empty_state("⭐", "Пока никого не уважают") }}
+        {% endif %}
+    </div>
+
+
+    {# ============================================
+       КОЛОНКА 4: ВОЙС
+       ============================================ #}
+    <div class="tops-column tops-column-voice">
+        <div class="tops-column-header">
+            <div class="tops-column-icon">🎙️</div>
+            <div class="tops-column-title">Войс</div>
+            <div class="tops-column-subtitle">Кто живёт в голосовых</div>
+        </div>
+
+        {% if top_voice %}
+        <div class="tops-list">
+            {% for row in top_voice[:10] %}
+            <div class="tops-item rank-{{ loop.index if loop.index <= 3 else 'other' }}">
+                <div class="tops-rank">
+                    {% if loop.index == 1 %}🥇
+                    {% elif loop.index == 2 %}🥈
+                    {% elif loop.index == 3 %}🥉
+                    {% else %}{{ loop.index }}{% endif %}
+                </div>
+                <div class="tops-user">
+                    {{ user_cell(row.user_id) }}
+                </div>
+                <div class="tops-value">
+                    {{ row.voice_minutes // 60 }}ч {{ row.voice_minutes % 60 }}м
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+            {{ empty_state("🎙️", "В войсе тихо") }}
+        {% endif %}
+    </div>
+
+
+    {# ============================================
+       КОЛОНКА 5: ИГРЫ
+       ============================================ #}
+    <div class="tops-column tops-column-games">
+        <div class="tops-column-header">
+            <div class="tops-column-icon">🎮</div>
+            <div class="tops-column-title">Игроки</div>
+            <div class="tops-column-subtitle">Самые удачливые в ставках</div>
+        </div>
+
+        {% if top_players %}
+        <div class="tops-list">
+            {% for row in top_players[:10] %}
+            <div class="tops-item rank-{{ loop.index if loop.index <= 3 else 'other' }}">
+                <div class="tops-rank">
+                    {% if loop.index == 1 %}🥇
+                    {% elif loop.index == 2 %}🥈
+                    {% elif loop.index == 3 %}🥉
+                    {% else %}{{ loop.index }}{% endif %}
+                </div>
+                <div class="tops-user">
+                    {{ user_cell(row.user_id) }}
+                </div>
+                <div class="tops-value {% if row.total_profit > 0 %}profit-positive{% elif row.total_profit < 0 %}profit-negative{% endif %}">
+                    {{ "{:+,}".format(row.total_profit).replace(",", " ") }} <span class="tops-value-unit">💰</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+            {{ empty_state("🎮", "Ещё никто не играл") }}
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}

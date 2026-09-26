@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 400 800"
+     width="400"
+     height="800"
+     preserveAspectRatio="xMidYMid meet">
+
+  <!-- ==============================================================
+       NIGHTMARE • SPIDER
+       Детализированный паук с 8 глазами, многосуставными лапами,
+       волосками и узором на брюшке. Спускается по паутине.
+       Прозрачный фон.
+       ============================================================== -->
+
+  <defs>
+
+    <!-- ============ ГРАДИЕНТЫ ============ -->
+
+    <!-- Брюшко паука -->
+    <radialGradient id="abdomen" cx="38%" cy="30%" r="75%" fx="33%" fy="25%">
+      <stop offset="0%"   stop-color="#5a3050"/>
+      <stop offset="30%"  stop-color="#2a1533"/>
+      <stop offset="65%"  stop-color="#100410"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+
+    <!-- Головогрудь -->
+    <radialGradient id="cephalothorax" cx="42%" cy="28%" r="72%">
+      <stop offset="0%"   stop-color="#3a1d3a"/>
+      <stop offset="55%"  stop-color="#150615"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+
+    <!-- Лапы (суставы темнее, концы светлее) -->
+    <linearGradient id="legGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#1a0a1a"/>
+      <stop offset="60%"  stop-color="#0a0002"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </linearGradient>
+
+    <linearGradient id="legGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#2a1533"/>
+      <stop offset="50%"  stop-color="#150615"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </linearGradient>
+
+    <!-- Глаза -->
+    <radialGradient id="eye" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#ffffff"/>
+      <stop offset="30%"  stop-color="#ffb3c0"/>
+      <stop offset="70%"  stop-color="#ff0033"/>
+      <stop offset="100%" stop-color="#4a0000"/>
+    </radialGradient>
+
+    <!-- Паутина -->
+    <linearGradient id="silk" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.85"/>
+      <stop offset="50%"  stop-color="#c9b8d4" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#7f5af0" stop-opacity="0.2"/>
+    </linearGradient>
+
+    <!-- Аура -->
+    <radialGradient id="aura" cx="50%" cy="45%" r="55%">
+      <stop offset="0%"   stop-color="#ff0033" stop-opacity="0.35"/>
+      <stop offset="50%"  stop-color="#8b0000" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#2a0004" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Блик -->
+    <radialGradient id="shine" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- ============ ФИЛЬТРЫ ============ -->
+
+    <filter id="glowStrong" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="b1"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b2"/>
+      <feMerge>
+        <feMergeNode in="b2"/>
+        <feMergeNode in="b1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="glowSoft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6"/>
+    </filter>
+
+    <filter id="glowBig" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="14"/>
+    </filter>
+
+    <!-- Клип для лапок на теле (чтобы волоски не выходили) -->
+    <clipPath id="bodyClip">
+      <ellipse cx="200" cy="220" rx="38" ry="48"/>
+    </clipPath>
+
+  </defs>
+
+
+  <!-- ============================================================
+       0. ПАУТИНА (нить + крепления)
+       ============================================================ -->
+  <g>
+    <!-- Основная нить -->
+    <line x1="200" y1="0" x2="200" y2="720"
+          stroke="url(#silk)" stroke-width="1.2">
+      <animate attributeName="opacity" values="0.5;0.9;0.5" dur="4s" repeatCount="indefinite"/>
+    </line>
+
+    <!-- Вторая нить (объём) -->
+    <line x1="201.5" y1="0" x2="201.5" y2="720"
+          stroke="#a894b8" stroke-width="0.4" opacity="0.4"/>
+
+    <!-- Поперечные крепления -->
+    <g stroke="#e8dff0" stroke-width="0.5" opacity="0.35" fill="none">
+      <path d="M 178 80 Q 200 68 222 80"/>
+      <path d="M 184 160 Q 200 150 216 160"/>
+      <path d="M 182 260 Q 200 250 218 260"/>
+      <path d="M 184 380 Q 200 370 216 380"/>
+      <path d="M 182 500 Q 200 490 218 500"/>
+      <path d="M 184 620 Q 200 610 216 620"/>
+    </g>
+
+    <!-- Боковые нити -->
+    <g stroke="#e8dff0" stroke-width="0.4" opacity="0.25" fill="none">
+      <path d="M 50 0 Q 70 120 55 260 Q 45 340 65 420"/>
+      <path d="M 350 0 Q 330 120 345 260 Q 355 340 335 420"/>
+      <path d="M 120 0 Q 130 100 115 200"/>
+      <path d="M 280 0 Q 270 100 285 200"/>
+    </g>
+
+    <!-- Капельки на нитях -->
+    <g fill="#ff4d6d" opacity="0.7" filter="url(#glowStrong)">
+      <circle cx="178" cy="80" r="1.2">
+        <animate attributeName="opacity" values="0.3;0.9;0.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="218" cy="260" r="1.5">
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="4s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="182" cy="500" r="1.6">
+        <animate attributeName="opacity" values="0.3;0.9;0.3" dur="5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="216" cy="620" r="1.3">
+        <animate attributeName="opacity" values="0.5;1;0.5" dur="3.5s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+  </g>
+
+
+  <!-- ============================================================
+       1. ПАУК
+       ============================================================ -->
+  <g>
+
+    <!-- Анимация спуска -->
+    <animateTransform attributeName="transform"
+                      type="translate"
+                      values="0 0; 0 0; 0 420; 0 420; 0 0"
+                      dur="18s" repeatCount="indefinite"
+                      keyTimes="0;0.15;0.5;0.85;1"
+                      calcMode="spline"
+                      keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"/>
+
+    <!-- АУРА -->
+    <ellipse cx="200" cy="210" rx="110" ry="130"
+             fill="url(#aura)" filter="url(#glowBig)" opacity="0.6">
+      <animate attributeName="rx" values="100;120;100" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="ry" values="120;140;120" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.4;0.7;0.4" dur="3s" repeatCount="indefinite"/>
+    </ellipse>
+
+
+    <!-- ============================================================
+         1a. ЛАПЫ (по 3 сустава на каждой — как у настоящих пауков)
+         ============================================================ -->
+
+    <!-- ЛЕВЫЕ ЛАПЫ -->
+    <g stroke-linecap="round" fill="none">
+
+      <!-- Верхняя левая -->
+      <g stroke="url(#legGrad1)" stroke-width="3">
+        <!-- Бедро -->
+        <path d="M 178 178 Q 155 158 138 138"/>
+        <!-- Голень -->
+        <path d="M 138 138 Q 118 118 100 112"/>
+        <!-- Лапка -->
+        <path d="M 100 112 Q 80 108 65 118" stroke-width="2.5"/>
+        <!-- Коготь -->
+        <path d="M 65 118 Q 58 122 55 128" stroke-width="1.5"/>
+
+        <animateTransform attributeName="transform"
+                          type="rotate"
+                          values="-3 178 178; 3 178 178; -3 178 178"
+                          dur="1.5s" repeatCount="indefinite"/>
+      </g>
+
+      <!-- Вторая левая -->
+      <g stroke="url(#legGrad1)" stroke-width="3">
+        <path d="M 178 195 Q 152 182 130 175"/>
+        <path d="M 130 175 Q 108 168 90 172"/>
+        <path d="M 90 172 Q 72 176 60 188" stroke-width="2.5"/>
+        <path d="M 60 188 Q 54 194 52 202" stroke-width="1.5"/>
+
+        <animateTransform attributeName="transform"
+                          type="rotate"
+                          values="3 178 195; -3 178 195; 3 178 195"
+                          dur="1.5s" begin="0.15s" repeatCount="indefinite"/>
+      </g>
+
+      <!-- Третья левая -->
+      <g stroke="url(#legGrad1)" stroke-width="3">
+        <path d="M 178 212 Q 152 218 128 230"/>
+        <path d="M 128 230 Q 105 240 88 234"/>
+        <path d="M 88 234 Q 72 228 62 216" stroke-width="2.5"/>
+        <path d="M 62 216 Q 57 208 56 200" stroke-width="1.5"/>
+
+        <animateTransform attributeName="transform"
+                          type="rotate"
+                          values="-2 178 212; 2 178 212; -2 178 212"
+                          dur="1.5s" begin="0.3s" repeatCount="indefinite"/>
+      </g>
+
+      <!-- Нижняя левая -->
+      <g stroke="url(#legGrad1)" stroke-width="3">
+        <path d="M 178 230 Q 155 250 138 272"/>
+        <path d="M 138 272 Q 118 292 100 298"/>
+        <path d="M 100 298 Q 85 302 72 296" stroke-width="2.5"/>
+        <path d="M 72 296 Q 66 290 62 282" stroke-width="1.5"/>
+
+        <animateTransform attributeName="transform"
+                          type="rotate"
+                          values="2 178 230; -2 178 230; 2 178 230"
+                          dur="1.5s" begin="0.45s" repeatCount="indefinite"/>
+      </g>
+    </g>
+
+
+    <!-- ПРАВЫЕ ЛАПЫ -->
+    <g stroke-linecap="round" fill="none">
+
+      <!-- Верхняя правая -->
+      <g stroke="url(#legGrad2)" stroke-width="3">
+        <path d="M 222 178 Q 245 158 262 138"/>
+        <path d="M 262 138 Q 282 118 300 112"/>
+        <path d="M 300 112 Q 320 108 335 118" stroke-width="2.5"/>
+        <path d="M 335 118 Q 342 122 345 128" stroke-width="1.5"/>
+
+        <animateTransform attributeName="transform"
+                          type="rotate"
+                          values="3 222 178; -3 222 178; 3 222 178"
+                          dur="1.5s" repeatCount="indefinite"/>
+      </g>
+
+      <!-- Вторая правая -->
+      <g stroke="url(#legGrad2)" stroke-width="3">
+        <path d="M 222 195 Q 248 182 270 175"/>
+        <path d="M 270 175 Q 292 168 310 172"/>
+        <path d="M 310 172 Q 328 176 340 188" stroke-width="2.5"/>
+        <path d="M 340 188 Q 346 194 348 202" stroke-width="1.5"/>
+
+        <animateTransform attributeName="transform"
+                          type="rotate"
+                          values="-3 222 195; 3 222 195; -3 222 195"
+                          dur="1.5s" begin="0.15s" repeatCount="indefinite"/>
+      </g>
+
+      <!-- Третья правая -->
+      <g stroke="url(#legGrad2)" stroke-width="3">
+        <path d="M 222 212 Q 248 218 272 230"/>
+        <path d="M 272 230 Q 295 240 312 234"/>
+        <path d="M 312 234 Q 328 228 338 216" stroke-width="2.5"/>
+        <path d="M 338 216 Q 343 208 344 200" stroke-width="1.5"/>
+
+        <animateTransform attributeName="transform"
+                          type="rotate"
+                          values="2 222 212; -2 222 212; 2 222 212"
+                          dur="1.5s" begin="0.3s" repeatCount="indefinite"/>
+      </g>
+
+      <!-- Нижняя правая -->
+      <g stroke="url(#legGrad2)" stroke-width="3">
+        <path d="M 222 230 Q 245 250 262 272"/>
+        <path d="M 262 272 Q 282 292 300 298"/>
+        <path d="M 300 298 Q 315 302 328 296" stroke-width="2.5"/>
+        <path d="M 328 296 Q 334 290 338 282" stroke-width="1.5"/>
+
+        <animateTransform attributeName="transform"
+                          type="rotate"
+                          values="-2 222 230; 2 222 230; -2 222 230"
+                          dur="1.5s" begin="0.45s" repeatCount="indefinite"/>
+      </g>
+    </g>
+
+    <!-- ТОЧКИ-СУСТАВЫ (тёмные кружки в местах сгиба) -->
+    <g fill="#000000">
+      <!-- Левая сторона -->
+      <circle cx="138" cy="138" r="3"/>
+      <circle cx="100" cy="112" r="2.5"/>
+      <circle cx="130" cy="175" r="3"/>
+      <circle cx="90" cy="172" r="2.5"/>
+      <circle cx="128" cy="230" r="3"/>
+      <circle cx="88" cy="234" r="2.5"/>
+      <circle cx="138" cy="272" r="3"/>
+      <circle cx="100" cy="298" r="2.5"/>
+
+      <!-- Правая сторона -->
+      <circle cx="262" cy="138" r="3"/>
+      <circle cx="300" cy="112" r="2.5"/>
+      <circle cx="270" cy="175" r="3"/>
+      <circle cx="310" cy="172" r="2.5"/>
+      <circle cx="272" cy="230" r="3"/>
+      <circle cx="312" cy="234" r="2.5"/>
+      <circle cx="262" cy="272" r="3"/>
+      <circle cx="300" cy="298" r="2.5"/>
+    </g>
+
+    <!-- ВОЛОСКИ НА ЛАПАХ (тонкие линии) -->
+    <g stroke="#2a1533" stroke-width="0.6" opacity="0.8" fill="none">
+      <!-- Левая верхняя -->
+      <line x1="155" y1="155" x2="150" y2="148"/>
+      <line x1="145" y1="145" x2="140" y2="138"/>
+      <line x1="120" y1="122" x2="115" y2="115"/>
+      <line x1="110" y1="114" x2="105" y2="107"/>
+      <line x1="85" y1="112" x2="80" y2="105"/>
+      <line x1="75" y1="115" x2="70" y2="108"/>
+
+      <!-- Левая вторая -->
+      <line x1="150" y1="180" x2="146" y2="172"/>
+      <line x1="120" y1="170" x2="115" y2="162"/>
+      <line x1="100" y1="170" x2="95" y2="162"/>
+      <line x1="75" y1="180" x2="70" y2="172"/>
+
+      <!-- Левая третья -->
+      <line x1="150" y1="220" x2="146" y2="228"/>
+      <line x1="115" y1="235" x2="110" y2="243"/>
+      <line x1="78" y1="232" x2="73" y2="240"/>
+
+      <!-- Левая нижняя -->
+      <line x1="155" y1="248" x2="151" y2="256"/>
+      <line x1="120" y1="280" x2="115" y2="288"/>
+      <line x1="88" y1="298" x2="83" y2="306"/>
+
+      <!-- Правая верхняя -->
+      <line x1="245" y1="155" x2="250" y2="148"/>
+      <line x1="255" y1="145" x2="260" y2="138"/>
+      <line x1="280" y1="122" x2="285" y2="115"/>
+      <line x1="290" y1="114" x2="295" y2="107"/>
+      <line x1="315" y1="112" x2="320" y2="105"/>
+      <line x1="325" y1="115" x2="330" y2="108"/>
+
+      <!-- Правая вторая -->
+      <line x1="250" y1="180" x2="254" y2="172"/>
+      <line x1="280" y1="170" x2="285" y2="162"/>
+      <line x1="300" y1="170" x2="305" y2="162"/>
+      <line x1="325" y1="180" x2="330" y2="172"/>
+
+      <!-- Правая третья -->
+      <line x1="250" y1="220" x2="254" y2="228"/>
+      <line x1="285" y1="235" x2="290" y2="243"/>
+      <line x1="322" y1="232" x2="327" y2="240"/>
+
+      <!-- Правая нижняя -->
+      <line x1="245" y1="248" x2="249" y2="256"/>
+      <line x1="280" y1="280" x2="285" y2="288"/>
+      <line x1="312" y1="298" x2="317" y2="306"/>
+    </g>
+
+
+    <!-- ============================================================
+         1b. БРЮШКО (с узором и волосками)
+         ============================================================ -->
+    <g>
+      <ellipse cx="200" cy="220" rx="38" ry="48" fill="url(#abdomen)"/>
+
+      <!-- Блик сверху -->
+      <ellipse cx="188" cy="198" rx="14" ry="18" fill="url(#shine)"/>
+
+      <!-- Мелкий блик-точка -->
+      <ellipse cx="183" cy="192" rx="4" ry="5" fill="#ffffff" opacity="0.7"/>
+
+      <!-- Волоски по краям брюшка (клип) -->
+      <g clip-path="url(#bodyClip)" stroke="#5a3050" stroke-width="0.5" opacity="0.9" fill="none">
+        <line x1="165" y1="200" x2="162" y2="195"/>
+        <line x1="163" y1="215" x2="160" y2="215"/>
+        <line x1="165" y1="230" x2="162" y2="235"/>
+        <line x1="170" y1="245" x2="167" y2="250"/>
+        <line x1="235" y1="200" x2="238" y2="195"/>
+        <line x1="237" y1="215" x2="240" y2="215"/>
+        <line x1="235" y1="230" x2="238" y2="235"/>
+        <line x1="230" y1="245" x2="233" y2="250"/>
+        <line x1="180" y1="188" x2="178" y2="183"/>
+        <line x1="220" y1="188" x2="222" y2="183"/>
+        <line x1="200" y1="268" x2="200" y2="273"/>
+        <line x1="190" y1="267" x2="188" y2="272"/>
+        <line x1="210" y1="267" x2="212" y2="272"/>
+      </g>
+
+      <!-- Узор-крест на брюшке -->
+      <g>
+        <!-- Центральная точка -->
+        <circle cx="200" cy="220" r="9" fill="#8b0000" opacity="0.7">
+          <animate attributeName="r" values="8;10;8" dur="3s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="200" cy="220" r="4" fill="#ff4d6d" opacity="0.9">
+          <animate attributeName="opacity" values="0.6;1;0.6" dur="3s" repeatCount="indefinite"/>
+        </circle>
+
+        <!-- Лучи -->
+        <line x1="200" y1="198" x2="200" y2="188" stroke="#8b0000" stroke-width="1.5"/>
+        <line x1="200" y1="242" x2="200" y2="252" stroke="#8b0000" stroke-width="1.5"/>
+        <line x1="178" y1="220" x2="168" y2="220" stroke="#8b0000" stroke-width="1.5"/>
+        <line x1="222" y1="220" x2="232" y2="220" stroke="#8b0000" stroke-width="1.5"/>
+
+        <!-- Дополнительные точки -->
+        <circle cx="200" cy="185" r="2" fill="#ff0033" opacity="0.8">
+          <animate attributeName="opacity" values="0.5;1;0.5" dur="2.5s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="200" cy="255" r="2" fill="#ff0033" opacity="0.8">
+          <animate attributeName="opacity" values="0.5;1;0.5" dur="2.5s" begin="0.6s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="165" cy="220" r="2" fill="#ff0033" opacity="0.8">
+          <animate attributeName="opacity" values="0.5;1;0.5" dur="2.5s" begin="1.2s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="235" cy="220" r="2" fill="#ff0033" opacity="0.8">
+          <animate attributeName="opacity" values="0.5;1;0.5" dur="2.5s" begin="1.8s" repeatCount="indefinite"/>
+        </circle>
+
+        <!-- Промежуточные точки -->
+        <circle cx="185" cy="200" r="1.5" fill="#5a3050"/>
+        <circle cx="215" cy="200" r="1.5" fill="#5a3050"/>
+        <circle cx="185" cy="240" r="1.5" fill="#5a3050"/>
+        <circle cx="215" cy="240" r="1.5" fill="#5a3050"/>
+      </g>
+    </g>
+
+
+    <!-- ============================================================
+         1c. ГОЛОВОГРУДЬ
+         ============================================================ -->
+    <g>
+      <ellipse cx="200" cy="170" rx="24" ry="27" fill="url(#cephalothorax)"/>
+
+      <!-- Блик -->
+      <ellipse cx="192" cy="158" rx="9" ry="11" fill="url(#shine)" opacity="0.7"/>
+
+      <!-- Тонкие линии-борозды на головогруди -->
+      <g stroke="#2a1533" stroke-width="0.5" opacity="0.6" fill="none">
+        <path d="M 185 155 Q 195 158 205 155"/>
+        <path d="M 183 162 Q 195 165 207 162"/>
+        <path d="M 185 185 Q 195 188 205 185"/>
+      </g>
+    </g>
+
+
+    <!-- ============================================================
+         1d. ГЛАЗА (8 штук, реалистичная схема)
+         ============================================================ -->
+    <g filter="url(#glowStrong)">
+
+      <!-- Задние боковые (крупные) -->
+      <circle cx="182" cy="172" r="3.5" fill="url(#eye)">
+        <animate attributeName="r" values="3.5;4;3.5" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="218" cy="172" r="3.5" fill="url(#eye)">
+        <animate attributeName="r" values="3.5;4;3.5" dur="2s" begin="0.3s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- Задние средние -->
+      <circle cx="192" cy="165" r="3" fill="url(#eye)">
+        <animate attributeName="r" values="3;3.5;3" dur="2s" begin="0.15s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="208" cy="165" r="3" fill="url(#eye)">
+        <animate attributeName="r" values="3;3.5;3" dur="2s" begin="0.45s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- Передние средние (маленькие) -->
+      <circle cx="196" cy="178" r="1.8" fill="url(#eye)"/>
+      <circle cx="204" cy="178" r="1.8" fill="url(#eye)"/>
+
+      <!-- Передние боковые -->
+      <circle cx="188" cy="158" r="1.5" fill="url(#eye)"/>
+      <circle cx="212" cy="158" r="1.5" fill="url(#eye)"/>
+
+      <!-- Зрачки (тёмные точки) -->
+      <circle cx="182" cy="172" r="1" fill="#1a0004"/>
+      <circle cx="218" cy="172" r="1" fill="#1a0004"/>
+      <circle cx="192" cy="165" r="0.8" fill="#1a0004"/>
+      <circle cx="208" cy="165" r="0.8" fill="#1a0004"/>
+    </g>
+
+    <!-- Ореол вокруг глаз -->
+    <g filter="url(#glowSoft)" opacity="0.5">
+      <ellipse cx="200" cy="170" rx="28" ry="16" fill="#ff0033"/>
+    </g>
+
+
+    <!-- ============================================================
+         1e. ХЕЛИЦЕРЫ (жвалы с клыками)
+         ============================================================ -->
+    <g>
+      <!-- Левая хелицера -->
+      <path d="M 195 190 Q 193 198 191 206 Q 194 208 196 205 Z" fill="#0a0002"/>
+      <!-- Правая хелицера -->
+      <path d="M 205 190 Q 207 198 209 206 Q 206 208 204 205 Z" fill="#0a0002"/>
+
+      <!-- Клыки -->
+      <path d="M 191 206 Q 190 213 192 215 Q 194 212 193 207 Z" fill="#2a1533"/>
+      <path d="M 209 206 Q 210 213 208 215 Q 206 212 207 207 Z" fill="#2a1533"/>
+    </g>
+
+
+    <!-- ============================================================
+         1f. ПЕДИПАЛЬПЫ (маленькие «руки» у рта)
+         ============================================================ -->
+    <g stroke="#1a0a1a" stroke-width="1.5" fill="none" stroke-linecap="round">
+      <path d="M 191 188 Q 186 194 184 202"/>
+      <path d="M 209 188 Q 214 194 216 202"/>
+    </g>
+
+
+    <!-- ============================================================
+         1g. ТЕНЬ ПОД ПАУКОМ (объём)
+         ============================================================ -->
+    <ellipse cx="200" cy="290" rx="55" ry="8"
+             fill="#000000" opacity="0.4"
+             filter="url(#glowSoft)">
+      <animate attributeName="rx" values="50;60;50" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.3;0.5;0.3" dur="4s" repeatCount="indefinite"/>
+    </ellipse>
+
+  </g>
+
+
+  <!-- ============================================================
+       2. АТМОСФЕРНЫЕ ЧАСТИЦЫ
+       ============================================================ -->
+  <g filter="url(#glowSoft)">
+    <circle cx="80" cy="150" r="1" fill="#a78bfa" opacity="0.7">
+      <animate attributeName="cy" values="150;130;150" dur="5s" repeatCount="indefinite"/>
+      <animate attributeName="cx" values="80;90;80" dur="7s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="320" cy="180" r="1.2" fill="#a78bfa" opacity="0.6">
+      <animate attributeName="cy" values="180;160;180" dur="6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="150" cy="400" r="0.8" fill="#e8dff0" opacity="0.5">
+      <animate attributeName="cy" values="400;370;400" dur="7s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="250" cy="500" r="1.2" fill="#e8dff0" opacity="0.6">
+      <animate attributeName="cy" values="500;470;500" dur="5.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="120" cy="600" r="1" fill="#a78bfa" opacity="0.5">
+      <animate attributeName="cy" values="600;570;600" dur="6.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="280" cy="650" r="0.9" fill="#e8dff0" opacity="0.4">
+      <animate attributeName="cy" values="650;620;650" dur="5.5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+
+  <!-- ============================================================
+       3. КАПЛИ, ПАДАЮЩИЕ С ПАУТИНЫ
+       ============================================================ -->
+  <g fill="#c40026" filter="url(#glowStrong)">
+    <ellipse cx="200" cy="500" rx="2" ry="2.5">
+      <animate attributeName="cy" values="500;580;660" dur="5s" repeatCount="indefinite"/>
+      <animate attributeName="ry" values="2.5;4;6" dur="5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.6;0" dur="5s" repeatCount="indefinite"/>
+    </ellipse>
+    <ellipse cx="200" cy="620" rx="1.5" ry="2">
+      <animate attributeName="cy" values="620;690;760" dur="4s" begin="1s" repeatCount="indefinite"/>
+      <animate attributeName="ry" values="2;3;5" dur="4s" begin="1s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.8;0.4;0" dur="4s" begin="1s" repeatCount="indefinite"/>
+    </ellipse>
+  </g>
+
+
+</svg>

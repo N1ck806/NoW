@@ -1,0 +1,665 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 600 700"
+     width="600"
+     height="700"
+     preserveAspectRatio="xMidYMid meet">
+
+  <!-- ==============================================================
+       NIGHTMARE • SKULL
+       Детализированный череп: глазницы с огнём, носовая полость,
+       зубы, трещины на кости, свечение. Прозрачный фон.
+       ============================================================== -->
+
+  <defs>
+
+    <!-- ============ ГРАДИЕНТЫ ============ -->
+
+    <!-- Кость (основной цвет) -->
+    <radialGradient id="bone" cx="42%" cy="30%" r="75%" fx="38%" fy="25%">
+      <stop offset="0%"   stop-color="#f5ecd8"/>
+      <stop offset="30%"  stop-color="#d8c9a8"/>
+      <stop offset="65%"  stop-color="#a89478"/>
+      <stop offset="100%" stop-color="#5a4a38"/>
+    </radialGradient>
+
+    <!-- Кость (тёмная, в тени) -->
+    <radialGradient id="boneDark" cx="50%" cy="50%" r="70%">
+      <stop offset="0%"   stop-color="#8a7a5a"/>
+      <stop offset="60%"  stop-color="#5a4a38"/>
+      <stop offset="100%" stop-color="#2a1f15"/>
+    </radialGradient>
+
+    <!-- Глазницы (глубокая тьма) -->
+    <radialGradient id="socketDark" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#000000"/>
+      <stop offset="60%"  stop-color="#0a0002"/>
+      <stop offset="100%" stop-color="#1a0a08"/>
+    </radialGradient>
+
+    <!-- Огонь в глазницах -->
+    <radialGradient id="eyeFire" cx="50%" cy="60%" r="55%">
+      <stop offset="0%"   stop-color="#ffffff"/>
+      <stop offset="20%"  stop-color="#ffe17a"/>
+      <stop offset="45%"  stop-color="#ff8800"/>
+      <stop offset="70%"  stop-color="#ff0033"/>
+      <stop offset="100%" stop-color="#4a0000" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Носовая полость -->
+    <radialGradient id="noseDark" cx="50%" cy="60%" r="60%">
+      <stop offset="0%"   stop-color="#000000"/>
+      <stop offset="70%"  stop-color="#1a0a08"/>
+      <stop offset="100%" stop-color="#2a1f15"/>
+    </radialGradient>
+
+    <!-- Тени в углублениях черепа -->
+    <radialGradient id="shadow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#000000" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Свечение вокруг черепа -->
+    <radialGradient id="skullAura" cx="50%" cy="40%" r="55%">
+      <stop offset="0%"   stop-color="#ff0033" stop-opacity="0.35"/>
+      <stop offset="50%"  stop-color="#8b0000" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#2a0004" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Трещины (градиент) -->
+    <linearGradient id="crackGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#2a1f15"/>
+      <stop offset="50%"  stop-color="#4a3a28"/>
+      <stop offset="100%" stop-color="#2a1f15"/>
+    </linearGradient>
+
+    <!-- Зубы -->
+    <linearGradient id="toothGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#f5ecd8"/>
+      <stop offset="60%"  stop-color="#d8c9a8"/>
+      <stop offset="100%" stop-color="#8a7a5a"/>
+    </linearGradient>
+
+    <!-- ============ ФИЛЬТРЫ ============ -->
+
+    <filter id="glowStrong" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="b1"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b2"/>
+      <feMerge>
+        <feMergeNode in="b2"/>
+        <feMergeNode in="b1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="glowSoft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6"/>
+    </filter>
+
+    <filter id="glowBig" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="16"/>
+    </filter>
+
+    <filter id="glowFire" x="-200%" y="-200%" width="500%" height="500%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="b1"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="b2"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="16" result="b3"/>
+      <feMerge>
+        <feMergeNode in="b3"/>
+        <feMergeNode in="b2"/>
+        <feMergeNode in="b1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Мягкая тень -->
+    <filter id="dropShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/>
+      <feOffset dx="0" dy="10" result="offset"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.6"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+  </defs>
+
+
+  <!-- ============================================================
+       1. ВНЕШНЯЯ АУРА (свечение вокруг черепа)
+       ============================================================ -->
+  <ellipse cx="300" cy="330" rx="260" ry="280"
+           fill="url(#skullAura)" filter="url(#glowBig)"
+           opacity="0.7">
+    <animate attributeName="rx" values="240;280;240" dur="5s" repeatCount="indefinite"/>
+    <animate attributeName="ry" values="260;300;260" dur="5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.5;0.85;0.5" dur="4s" repeatCount="indefinite"/>
+  </ellipse>
+
+
+  <!-- ============================================================
+       2. ЧЕРЕП (основная форма)
+       ============================================================ -->
+  <g filter="url(#dropShadow)">
+
+    <!-- ЗАТЫЛОЧНАЯ ЧАСТЬ (сзади, для объёма) -->
+    <path d="M 150 300
+             Q 150 200 200 150
+             Q 240 120 300 120
+             Q 360 120 400 150
+             Q 450 200 450 300
+             L 450 400
+             Q 430 450 380 480
+             Q 340 500 300 500
+             Q 260 500 220 480
+             Q 170 450 150 400 Z"
+          fill="url(#boneDark)" opacity="0.9"/>
+
+    <!-- ОСНОВНАЯ ФОРМА ЧЕРЕПА -->
+    <path d="M 140 290
+             Q 140 180 200 130
+             Q 240 100 300 100
+             Q 360 100 400 130
+             Q 460 180 460 290
+             L 460 380
+             Q 455 420 420 445
+             Q 380 470 300 475
+             Q 220 470 180 445
+             Q 145 420 140 380 Z"
+          fill="url(#bone)"/>
+
+    <!-- ВЕРХНЯЯ ЧАСТЬ (лоб + свод) -->
+    <path d="M 175 170
+             Q 220 105 300 105
+             Q 380 105 425 170
+             Q 440 210 440 250
+             Q 400 220 300 220
+             Q 200 220 160 250
+             Q 160 210 175 170 Z"
+          fill="#f0e5d0" opacity="0.6"/>
+
+    <!-- БЛИК сверху (свет) -->
+    <ellipse cx="240" cy="180" rx="60" ry="40"
+             fill="#ffffff" opacity="0.25" filter="url(#glowSoft)"/>
+
+    <!-- ТЕНИ под скулами -->
+    <ellipse cx="200" cy="360" rx="55" ry="30"
+             fill="url(#shadow)" opacity="0.6"/>
+    <ellipse cx="400" cy="360" rx="55" ry="30"
+             fill="url(#shadow)" opacity="0.6"/>
+
+    <!-- ВИСОЧНЫЕ ВПАДИНЫ -->
+    <path d="M 150 250 Q 145 290 155 330 Q 165 320 170 280 Q 170 250 160 240 Z"
+          fill="url(#shadow)" opacity="0.7"/>
+    <path d="M 450 250 Q 455 290 445 330 Q 435 320 430 280 Q 430 250 440 240 Z"
+          fill="url(#shadow)" opacity="0.7"/>
+
+  </g>
+
+
+  <!-- ============================================================
+       3. ШВЫ ЧЕРЕПА (соединительные линии, как у реального черепа)
+       ============================================================ -->
+  <g stroke="#5a4a38" stroke-width="1.5" fill="none" opacity="0.6" stroke-linecap="round">
+
+    <!-- Венечный шов (поперёк лба) -->
+    <path d="M 200 145 Q 240 130 280 128 Q 320 128 360 140 Q 400 155 420 175"/>
+
+    <!-- Сагиттальный шов (по центру) -->
+    <path d="M 300 105 Q 302 130 300 160 Q 298 190 300 220"/>
+
+    <!-- Ламбдовидный шов (затылок) -->
+    <path d="M 180 200 Q 220 210 260 220 Q 300 225 340 220 Q 380 210 420 200"/>
+
+    <!-- Мелкие швы -->
+    <path d="M 240 128 Q 245 145 250 160"/>
+    <path d="M 360 140 Q 355 155 350 170"/>
+  </g>
+
+
+  <!-- ============================================================
+       4. ТРЕЩИНЫ НА КОСТИ
+       ============================================================ -->
+  <g stroke="url(#crackGrad)" stroke-width="1.2" fill="none"
+     stroke-linecap="round" opacity="0.85">
+
+    <!-- Трещина от левой глазницы вверх -->
+    <path d="M 195 250 Q 185 220 175 195 Q 170 180 172 165"/>
+
+    <!-- Трещина от правой глазницы вверх -->
+    <path d="M 405 250 Q 415 220 425 195 Q 430 180 428 165"/>
+
+    <!-- Трещина по центру лба -->
+    <path d="M 300 130 Q 295 155 300 180 Q 305 200 300 215"/>
+
+    <!-- Трещина от левой скулы вниз -->
+    <path d="M 180 350 Q 175 375 170 395 Q 168 410 172 425"/>
+
+    <!-- Трещина от правой скулы вниз -->
+    <path d="M 420 350 Q 425 375 430 395 Q 432 410 428 425"/>
+
+    <!-- Мелкие трещинки -->
+    <path d="M 250 160 Q 255 175 250 190"/>
+    <path d="M 350 160 Q 345 175 350 190"/>
+    <path d="M 220 430 Q 240 425 260 430"/>
+    <path d="M 340 430 Q 360 425 380 430"/>
+
+    <!-- Трещинка под правым глазом -->
+    <path d="M 395 300 Q 405 310 400 325"/>
+
+  </g>
+
+
+  <!-- ============================================================
+       5. ЛЕВАЯ ГЛАЗНИЦА
+       ============================================================ -->
+  <g>
+    <!-- Внешняя тень вокруг глазницы -->
+    <ellipse cx="220" cy="285" rx="60" ry="50"
+             fill="url(#shadow)" opacity="0.5"/>
+
+    <!-- Основная форма глазницы -->
+    <path d="M 175 275
+             Q 175 245 205 235
+             Q 235 230 260 245
+             Q 275 260 270 290
+             Q 265 315 240 325
+             Q 210 330 190 315
+             Q 175 300 175 275 Z"
+          fill="url(#socketDark)"/>
+
+    <!-- Внутренняя тень (глубина) -->
+    <ellipse cx="225" cy="280" rx="38" ry="32"
+             fill="#000000" opacity="0.9"/>
+
+    <!-- ОГОНЬ В ГЛАЗНИЦЕ -->
+    <g filter="url(#glowFire)">
+      <!-- Основание огня -->
+      <ellipse cx="220" cy="290" rx="28" ry="22" fill="url(#eyeFire)" opacity="0.85">
+        <animate attributeName="rx" values="26;32;26" dur="2.5s" repeatCount="indefinite"/>
+        <animate attributeName="ry" values="20;26;20" dur="2.5s" repeatCount="indefinite"/>
+      </ellipse>
+
+      <!-- Языки пламени -->
+      <path d="M 200 300 Q 205 275 210 260 Q 215 275 218 290
+               Q 220 275 225 255 Q 230 275 232 290
+               Q 238 270 245 258 Q 248 280 245 300
+               Q 240 310 225 315 Q 210 312 200 300 Z"
+            fill="#ff8800" opacity="0.7">
+        <animate attributeName="d"
+                 values="
+                   M 200 300 Q 205 275 210 260 Q 215 275 218 290 Q 220 275 225 255 Q 230 275 232 290 Q 238 270 245 258 Q 248 280 245 300 Q 240 310 225 315 Q 210 312 200 300 Z;
+                   M 200 300 Q 205 270 210 255 Q 215 270 218 285 Q 220 270 225 250 Q 230 270 232 285 Q 238 265 245 253 Q 248 275 245 300 Q 240 310 225 315 Q 210 312 200 300 Z;
+                   M 200 300 Q 205 275 210 260 Q 215 275 218 290 Q 220 275 225 255 Q 230 275 232 290 Q 238 270 245 258 Q 248 280 245 300 Q 240 310 225 315 Q 210 312 200 300 Z"
+                 dur="1.8s" repeatCount="indefinite"/>
+      </path>
+
+      <!-- Внутреннее яркое ядро -->
+      <ellipse cx="220" cy="292" rx="12" ry="10" fill="#ffffff" opacity="0.9">
+        <animate attributeName="rx" values="10;14;10" dur="1.2s" repeatCount="indefinite"/>
+        <animate attributeName="ry" values="8;12;8" dur="1.2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.7;1;0.7" dur="1.2s" repeatCount="indefinite"/>
+      </ellipse>
+    </g>
+
+    <!-- Летящие искры от огня -->
+    <g filter="url(#glowStrong)">
+      <circle cx="220" cy="270" r="1.5" fill="#ff8800">
+        <animate attributeName="cy" values="270;230;190" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="cx" values="220;210;225" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="1;0.6;0" dur="3s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="220" cy="270" r="1" fill="#ffcc00">
+        <animate attributeName="cy" values="270;220;180" dur="3.5s" begin="0.5s" repeatCount="indefinite"/>
+        <animate attributeName="cx" values="220;230;215" dur="3.5s" begin="0.5s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="1;0.5;0" dur="3.5s" begin="0.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="220" cy="270" r="1.2" fill="#ff6600">
+        <animate attributeName="cy" values="270;240;200" dur="4s" begin="1s" repeatCount="indefinite"/>
+        <animate attributeName="cx" values="220;200;220" dur="4s" begin="1s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="1;0.4;0" dur="4s" begin="1s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+
+    <!-- Контур глазницы (обводка) -->
+    <path d="M 175 275
+             Q 175 245 205 235
+             Q 235 230 260 245
+             Q 275 260 270 290
+             Q 265 315 240 325
+             Q 210 330 190 315
+             Q 175 300 175 275 Z"
+          fill="none" stroke="#3a2a1a" stroke-width="2" opacity="0.8"/>
+
+  </g>
+
+
+  <!-- ============================================================
+       6. ПРАВАЯ ГЛАЗНИЦА
+       ============================================================ -->
+  <g>
+    <ellipse cx="380" cy="285" rx="60" ry="50"
+             fill="url(#shadow)" opacity="0.5"/>
+
+    <path d="M 425 275
+             Q 425 245 395 235
+             Q 365 230 340 245
+             Q 325 260 330 290
+             Q 335 315 360 325
+             Q 390 330 410 315
+             Q 425 300 425 275 Z"
+          fill="url(#socketDark)"/>
+
+    <ellipse cx="375" cy="280" rx="38" ry="32"
+             fill="#000000" opacity="0.9"/>
+
+    <g filter="url(#glowFire)">
+      <ellipse cx="380" cy="290" rx="28" ry="22" fill="url(#eyeFire)" opacity="0.85">
+        <animate attributeName="rx" values="26;32;26" dur="2.6s" begin="0.3s" repeatCount="indefinite"/>
+        <animate attributeName="ry" values="20;26;20" dur="2.6s" begin="0.3s" repeatCount="indefinite"/>
+      </ellipse>
+
+      <path d="M 400 300 Q 395 275 390 260 Q 385 275 382 290
+               Q 380 275 375 255 Q 370 275 368 290
+               Q 362 270 355 258 Q 352 280 355 300
+               Q 360 310 375 315 Q 390 312 400 300 Z"
+            fill="#ff8800" opacity="0.7">
+        <animate attributeName="d"
+                 values="
+                   M 400 300 Q 395 275 390 260 Q 385 275 382 290 Q 380 275 375 255 Q 370 275 368 290 Q 362 270 355 258 Q 352 280 355 300 Q 360 310 375 315 Q 390 312 400 300 Z;
+                   M 400 300 Q 395 270 390 255 Q 385 270 382 285 Q 380 270 375 250 Q 370 270 368 285 Q 362 265 355 253 Q 352 275 355 300 Q 360 310 375 315 Q 390 312 400 300 Z;
+                   M 400 300 Q 395 275 390 260 Q 385 275 382 290 Q 380 275 375 255 Q 370 275 368 290 Q 362 270 355 258 Q 352 280 355 300 Q 360 310 375 315 Q 390 312 400 300 Z"
+                 dur="1.9s" begin="0.3s" repeatCount="indefinite"/>
+      </path>
+
+      <ellipse cx="380" cy="292" rx="12" ry="10" fill="#ffffff" opacity="0.9">
+        <animate attributeName="rx" values="10;14;10" dur="1.3s" begin="0.3s" repeatCount="indefinite"/>
+        <animate attributeName="ry" values="8;12;8" dur="1.3s" begin="0.3s" repeatCount="indefinite"/>
+      </ellipse>
+    </g>
+
+    <g filter="url(#glowStrong)">
+      <circle cx="380" cy="270" r="1.5" fill="#ff8800">
+        <animate attributeName="cy" values="270;230;190" dur="3.2s" begin="0.4s" repeatCount="indefinite"/>
+        <animate attributeName="cx" values="380;370;385" dur="3.2s" begin="0.4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="1;0.6;0" dur="3.2s" begin="0.4s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="380" cy="270" r="1" fill="#ffcc00">
+        <animate attributeName="cy" values="270;220;180" dur="3.7s" begin="0.9s" repeatCount="indefinite"/>
+        <animate attributeName="cx" values="380;390;375" dur="3.7s" begin="0.9s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="1;0.5;0" dur="3.7s" begin="0.9s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+
+    <path d="M 425 275
+             Q 425 245 395 235
+             Q 365 230 340 245
+             Q 325 260 330 290
+             Q 335 315 360 325
+             Q 390 330 410 315
+             Q 425 300 425 275 Z"
+          fill="none" stroke="#3a2a1a" stroke-width="2" opacity="0.8"/>
+  </g>
+
+
+  <!-- ============================================================
+       7. НОСОВАЯ ПОЛОСТЬ
+       ============================================================ -->
+  <g>
+    <!-- Тень вокруг -->
+    <ellipse cx="300" cy="355" rx="42" ry="38"
+             fill="url(#shadow)" opacity="0.5"/>
+
+    <!-- Основная форма (перевёрнутое сердце) -->
+    <path d="M 300 315
+             Q 285 315 275 335
+             Q 268 355 275 375
+             Q 285 390 300 395
+             Q 315 390 325 375
+             Q 332 355 325 335
+             Q 315 315 300 315 Z"
+          fill="url(#noseDark)"/>
+
+    <!-- Внутренняя тьма -->
+    <ellipse cx="300" cy="355" rx="16" ry="24"
+             fill="#000000" opacity="0.95"/>
+
+    <!-- Перегородка сверху (тонкая косточка) -->
+    <path d="M 300 315 L 300 340"
+          stroke="#5a4a38" stroke-width="2" opacity="0.8"/>
+
+    <!-- Две впадины (ноздри) -->
+    <ellipse cx="288" cy="360" rx="4" ry="6" fill="#000000" opacity="0.9"/>
+    <ellipse cx="312" cy="360" rx="4" ry="6" fill="#000000" opacity="0.9"/>
+
+    <!-- Контур -->
+    <path d="M 300 315
+             Q 285 315 275 335
+             Q 268 355 275 375
+             Q 285 390 300 395
+             Q 315 390 325 375
+             Q 332 355 325 335
+             Q 315 315 300 315 Z"
+          fill="none" stroke="#3a2a1a" stroke-width="1.8" opacity="0.8"/>
+
+    <!-- Лёгкое свечение изнутри -->
+    <ellipse cx="300" cy="360" rx="6" ry="10" fill="#8b0000" opacity="0.4" filter="url(#glowSoft)">
+      <animate attributeName="opacity" values="0.2;0.5;0.2" dur="3s" repeatCount="indefinite"/>
+    </ellipse>
+  </g>
+
+
+  <!-- ============================================================
+       8. СКУЛЫ И ВЕРХНЯЯ ЧЕЛЮСТЬ
+       ============================================================ -->
+
+  <!-- ЛЕВАЯ СКУЛА -->
+  <path d="M 160 360
+           Q 175 370 200 385
+           Q 220 400 240 415
+           Q 230 425 210 425
+           Q 185 420 165 400
+           Q 155 385 160 360 Z"
+        fill="url(#boneDark)" opacity="0.7"/>
+
+  <!-- ПРАВАЯ СКУЛА -->
+  <path d="M 440 360
+           Q 425 370 400 385
+           Q 380 400 360 415
+           Q 370 425 390 425
+           Q 415 420 435 400
+           Q 445 385 440 360 Z"
+        fill="url(#boneDark)" opacity="0.7"/>
+
+
+  <!-- ============================================================
+       9. ВЕРХНИЕ ЗУБЫ
+       ============================================================ -->
+  <g>
+    <!-- Тень над зубами -->
+    <ellipse cx="300" cy="440" rx="100" ry="12"
+             fill="#000000" opacity="0.5"/>
+
+    <!-- Зубы верхней челюсти (10 зубов) -->
+    <g fill="url(#toothGrad)" stroke="#5a4a38" stroke-width="0.8">
+      <!-- 1 (крайний слева) -->
+      <path d="M 220 435 L 232 435 L 234 460 Q 232 465 228 465 Q 224 465 222 460 Z"/>
+      <!-- 2 -->
+      <path d="M 236 433 L 248 433 L 250 465 Q 248 470 244 470 Q 240 470 238 465 Z"/>
+      <!-- 3 -->
+      <path d="M 252 432 L 264 432 L 266 468 Q 264 472 260 472 Q 256 472 254 468 Z"/>
+      <!-- 4 -->
+      <path d="M 268 432 L 280 432 L 282 470 Q 280 474 276 474 Q 272 474 270 470 Z"/>
+      <!-- 5 (центральный левый) -->
+      <path d="M 284 431 L 296 431 L 298 472 Q 296 476 292 476 Q 288 476 286 472 Z"/>
+      <!-- 6 (центральный правый) -->
+      <path d="M 304 431 L 316 431 L 318 472 Q 316 476 312 476 Q 308 476 306 472 Z"/>
+      <!-- 7 -->
+      <path d="M 320 432 L 332 432 L 334 470 Q 332 474 328 474 Q 324 474 322 470 Z"/>
+      <!-- 8 -->
+      <path d="M 336 432 L 348 432 L 350 468 Q 348 472 344 472 Q 340 472 338 468 Z"/>
+      <!-- 9 -->
+      <path d="M 352 433 L 364 433 L 366 465 Q 364 470 360 470 Q 356 470 354 465 Z"/>
+      <!-- 10 (крайний справа) -->
+      <path d="M 368 435 L 380 435 L 382 460 Q 380 465 376 465 Q 372 465 370 460 Z"/>
+    </g>
+
+    <!-- Тени между зубами -->
+    <g stroke="#2a1f15" stroke-width="0.8" opacity="0.7">
+      <line x1="235" y1="433" x2="235" y2="465"/>
+      <line x1="251" y1="432" x2="251" y2="468"/>
+      <line x1="267" y1="432" x2="267" y2="470"/>
+      <line x1="283" y1="431" x2="283" y2="472"/>
+      <line x1="299" y1="431" x2="299" y2="474"/>
+      <line x1="315" y1="431" x2="315" y2="472"/>
+      <line x1="331" y1="432" x2="331" y2="470"/>
+      <line x1="347" y1="432" x2="347" y2="468"/>
+      <line x1="363" y1="433" x2="363" y2="465"/>
+    </g>
+
+    <!-- Блики на зубах -->
+    <g fill="#ffffff" opacity="0.4">
+      <ellipse cx="228" cy="440" rx="2" ry="4"/>
+      <ellipse cx="244" cy="440" rx="2" ry="4"/>
+      <ellipse cx="260" cy="440" rx="2" ry="4"/>
+      <ellipse cx="276" cy="440" rx="2" ry="4"/>
+      <ellipse cx="292" cy="440" rx="2" ry="4"/>
+      <ellipse cx="308" cy="440" rx="2" ry="4"/>
+      <ellipse cx="324" cy="440" rx="2" ry="4"/>
+      <ellipse cx="340" cy="440" rx="2" ry="4"/>
+      <ellipse cx="356" cy="440" rx="2" ry="4"/>
+      <ellipse cx="372" cy="440" rx="2" ry="4"/>
+    </g>
+  </g>
+
+
+  <!-- ============================================================
+       10. НИЖНЯЯ ЧЕЛЮСТЬ (сдвинута вниз, для эффекта открытого рта)
+       ============================================================ -->
+  <g transform="translate(0 30)">
+
+    <!-- Основа челюсти -->
+    <path d="M 220 445
+             Q 260 460 300 460
+             Q 340 460 380 445
+             L 380 465
+             Q 340 480 300 480
+             Q 260 480 220 465 Z"
+          fill="url(#bone)"/>
+
+    <!-- Тень сверху -->
+    <path d="M 220 445 Q 260 460 300 460 Q 340 460 380 445
+             L 380 452 Q 340 468 300 468 Q 260 468 220 452 Z"
+          fill="#5a4a38" opacity="0.6"/>
+
+    <!-- Зубы нижней челюсти (10 зубов) -->
+    <g fill="url(#toothGrad)" stroke="#5a4a38" stroke-width="0.8">
+      <path d="M 226 452 L 238 452 L 236 470 Q 234 472 232 472 Q 230 472 228 470 Z"/>
+      <path d="M 242 453 L 254 453 L 252 473 Q 250 475 248 475 Q 246 475 244 473 Z"/>
+      <path d="M 258 454 L 270 454 L 268 475 Q 266 477 264 477 Q 262 477 260 475 Z"/>
+      <path d="M 274 454 L 286 454 L 284 476 Q 282 478 280 478 Q 278 478 276 476 Z"/>
+      <path d="M 290 455 L 302 455 L 300 477 Q 298 479 296 479 Q 294 479 292 477 Z"/>
+      <path d="M 306 455 L 318 455 L 316 477 Q 314 479 312 479 Q 310 479 308 477 Z"/>
+      <path d="M 322 454 L 334 454 L 332 476 Q 330 478 328 478 Q 326 478 324 476 Z"/>
+      <path d="M 338 454 L 350 454 L 348 475 Q 346 477 344 477 Q 342 477 340 475 Z"/>
+      <path d="M 354 453 L 366 453 L 364 473 Q 362 475 360 475 Q 358 475 356 473 Z"/>
+      <path d="M 370 452 L 382 452 L 380 470 Q 378 472 376 472 Q 374 472 372 470 Z"/>
+    </g>
+
+    <!-- Тени между нижними зубами -->
+    <g stroke="#2a1f15" stroke-width="0.8" opacity="0.7">
+      <line x1="241" y1="453" x2="239" y2="470"/>
+      <line x1="257" y1="454" x2="255" y2="474"/>
+      <line x1="273" y1="454" x2="271" y2="476"/>
+      <line x1="289" y1="455" x2="287" y2="477"/>
+      <line x1="305" y1="455" x2="303" y2="477"/>
+      <line x1="321" y1="454" x2="319" y2="476"/>
+      <line x1="337" y1="454" x2="335" y2="475"/>
+      <line x1="353" y1="453" x2="351" y2="473"/>
+      <line x1="369" y1="452" x2="367" y2="470"/>
+    </g>
+
+  </g>
+
+
+  <!-- ============================================================
+       11. КРОВАВЫЕ ПОТЁКИ (из глазниц и трещин)
+       ============================================================ -->
+  <g fill="#8b0000" opacity="0.8" filter="url(#glowSoft)">
+
+    <!-- Потёк из левой глазницы -->
+    <path d="M 205 320 Q 200 350 205 380 Q 210 410 205 440
+             Q 200 445 195 440 Q 200 410 195 380 Q 190 350 195 320 Z">
+      <animate attributeName="opacity" values="0.6;0.9;0.6" dur="4s" repeatCount="indefinite"/>
+    </path>
+
+    <!-- Потёк из правой глазницы -->
+    <path d="M 395 320 Q 400 350 395 380 Q 390 410 395 440
+             Q 400 445 405 440 Q 400 410 405 380 Q 410 350 405 320 Z">
+      <animate attributeName="opacity" values="0.6;0.9;0.6" dur="4.5s" repeatCount="indefinite"/>
+    </path>
+
+    <!-- Потёк из носа -->
+    <path d="M 300 395 Q 298 410 302 425 Q 305 435 300 440 Q 295 435 298 425 Q 302 410 300 395 Z"
+          opacity="0.7"/>
+
+  </g>
+
+  <!-- Капли, падающие из глазниц -->
+  <g fill="#c40026" filter="url(#glowStrong)">
+    <ellipse cx="200" cy="450" rx="2.5" ry="3">
+      <animate attributeName="cy" values="450;520;600" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="ry" values="3;5;8" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.6;0" dur="3s" repeatCount="indefinite"/>
+    </ellipse>
+    <ellipse cx="400" cy="450" rx="2.5" ry="3">
+      <animate attributeName="cy" values="450;520;600" dur="3.5s" begin="0.8s" repeatCount="indefinite"/>
+      <animate attributeName="ry" values="3;5;8" dur="3.5s" begin="0.8s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.6;0" dur="3.5s" begin="0.8s" repeatCount="indefinite"/>
+    </ellipse>
+  </g>
+
+
+  <!-- ============================================================
+       12. МЕЛКИЕ ЧАСТИЦЫ / ПЫЛЬ ВОКРУГ
+       ============================================================ -->
+  <g filter="url(#glowSoft)" opacity="0.6">
+    <circle cx="120" cy="250" r="1.5" fill="#a89478">
+      <animate attributeName="cy" values="250;220;190" dur="5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.2;0.8;0.2" dur="5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="480" cy="270" r="1.3" fill="#a89478">
+      <animate attributeName="cy" values="270;240;210" dur="6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.3;0.7;0.3" dur="6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="90" cy="450" r="1.5" fill="#8a7a5a">
+      <animate attributeName="cy" values="450;420;390" dur="5.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="5.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="510" cy="470" r="1.3" fill="#8a7a5a">
+      <animate attributeName="cy" values="470;440;410" dur="6.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="150" cy="550" r="1.2" fill="#a89478">
+      <animate attributeName="cy" values="550;520;490" dur="4.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="450" cy="570" r="1.5" fill="#a89478">
+      <animate attributeName="cy" values="570;540;510" dur="5.8s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+
+  <!-- ============================================================
+       13. ОБЩАЯ ПУЛЬСАЦИЯ (финальные вспышки)
+       ============================================================ -->
+  <rect x="0" y="0" width="600" height="700"
+        fill="#ff0033" opacity="0" filter="url(#glowBig)">
+    <animate attributeName="opacity"
+             values="0;0;0;0.06;0;0;0;0.04;0;0"
+             dur="6s" repeatCount="indefinite"/>
+  </rect>
+
+
+</svg>

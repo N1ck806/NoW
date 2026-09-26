@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Админка • {{ bot_name }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="/static/admin.css">
+{% endblock %}
+
+{% block content %}
+<div class="admin-layout">
+
+    {# ============ SIDEBAR ============ #}
+    <aside class="admin-sidebar">
+        <div class="admin-sidebar-header">
+            <div class="admin-sidebar-icon">👑</div>
+            <div class="admin-sidebar-title">
+                <div class="admin-sidebar-name">Админка</div>
+                <div class="admin-sidebar-sub">{{ clan_name }}</div>
+            </div>
+        </div>
+
+        <nav class="admin-nav">
+            <a href="/admin/dashboard"
+               class="admin-nav-link {% if active_tab == 'dashboard' %}active{% endif %}">
+                <span class="admin-nav-icon">📊</span>
+                <span class="admin-nav-label">Сводка</span>
+            </a>
+
+            <a href="/admin/users"
+               class="admin-nav-link {% if active_tab == 'users' %}active{% endif %}">
+                <span class="admin-nav-icon">👥</span>
+                <span class="admin-nav-label">Аккаунты сайта</span>
+            </a>
+
+            <a href="/admin/economy"
+               class="admin-nav-link {% if active_tab == 'economy' %}active{% endif %}">
+                <span class="admin-nav-icon">💰</span>
+                <span class="admin-nav-label">Экономика</span>
+            </a>
+
+            <a href="/admin/shop"
+               class="admin-nav-link {% if active_tab == 'shop' %}active{% endif %}">
+                <span class="admin-nav-icon">🛒</span>
+                <span class="admin-nav-label">Магазин</span>
+            </a>
+
+            <a href="/admin/quests"
+               class="admin-nav-link {% if active_tab == 'quests' %}active{% endif %}">
+                <span class="admin-nav-icon">📜</span>
+                <span class="admin-nav-label">Квесты</span>
+            </a>
+
+            <a href="/admin/telegram"
+               class="admin-nav-link {% if active_tab == 'telegram' %}active{% endif %}">
+                <span class="admin-nav-icon">✈️</span>
+                <span class="admin-nav-label">Telegram</span>
+            </a>
+
+            <a href="/admin/logs"
+               class="admin-nav-link {% if active_tab == 'logs' %}active{% endif %}">
+                <span class="admin-nav-icon">📋</span>
+                <span class="admin-nav-label">Логи</span>
+            </a>
+
+            <a href="/admin/games"
+               class="admin-nav-link {% if active_tab == 'games' %}active{% endif %}">
+                <span class="admin-nav-icon">🎮</span>
+                <span class="admin-nav-label">Игры</span>
+            </a>
+        </nav>
+
+        <div class="admin-sidebar-footer">
+            <a href="/dashboard" class="admin-nav-link">
+                <span class="admin-nav-icon">←</span>
+                <span class="admin-nav-label">В кабинет</span>
+            </a>
+        </div>
+    </aside>
+
+    {# ============ CONTENT ============ #}
+    <main class="admin-main">
+
+        {# ===== Flash-сообщения ===== #}
+        {% set ok = request.query_params.get('ok') %}
+        {% set err = request.query_params.get('error') %}
+        {% set saved = request.query_params.get('saved') %}
+        {% set deleted = request.query_params.get('deleted') %}
+
+        {% if ok or saved or deleted %}
+        <div class="admin-flash admin-flash-ok">
+            {% if saved == 'role' %}✅ Роль обновлена
+            {% elif saved == 'sys' %}✅ Системная роль обновлена
+            {% elif ok == 'balance' %}✅ Баланс изменён
+            {% elif ok == 'reset' %}✅ Поле сброшено
+            {% elif ok == 'added' %}✅ Добавлено
+            {% elif ok == 'updated' %}✅ Обновлено
+            {% elif ok == 'deleted' %}✅ Удалено
+            {% elif ok == 'unlinked' %}✅ Отвязано
+            {% elif deleted %}✅ Удалено
+            {% else %}✅ Готово{% endif %}
+        </div>
+        {% endif %}
+
+        {% if err %}
+        <div class="admin-flash admin-flash-error">
+            {% if err == 'self_delete' %}❌ Нельзя удалить свой аккаунт
+            {% elif err == 'negative' %}❌ Отрицательное значение
+            {% elif err == 'bad_action' %}❌ Неверное действие
+            {% elif err == 'bad_price' %}❌ Неверная цена
+            {% elif err == 'dup_id' %}❌ Такой ID уже есть
+            {% else %}❌ Ошибка: {{ err }}{% endif %}
+        </div>
+        {% endif %}
+
+        {# ===== Заголовок вкладки ===== #}
+        <header class="admin-header">
+            <h1 class="admin-title">
+                {% block admin_title %}Админка{% endblock %}
+            </h1>
+            <p class="admin-subtitle">
+                {% block admin_subtitle %}{% endblock %}
+            </p>
+        </header>
+
+        {# ===== Контент вкладки ===== #}
+        <div class="admin-content">
+            {% block admin_content %}{% endblock %}
+        </div>
+    </main>
+
+</div>
+{% endblock %}

@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 800 500"
+     width="800"
+     height="500"
+     preserveAspectRatio="xMidYMid meet">
+
+  <!-- ==============================================================
+       NIGHTMARE • BAT
+       Летучая мышь с раскрытыми крыльями, летит через экран.
+       Машет крыльями, светящиеся глаза. Прозрачный фон.
+       ============================================================== -->
+
+  <defs>
+
+    <!-- ============ ГРАДИЕНТЫ ============ -->
+
+    <!-- Тело мыши (тёмный мех) -->
+    <radialGradient id="batBody" cx="42%" cy="35%" r="70%" fx="38%" fy="30%">
+      <stop offset="0%"   stop-color="#3a1d3a"/>
+      <stop offset="40%"  stop-color="#1a0a1a"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+
+    <!-- Голова -->
+    <radialGradient id="batHead" cx="45%" cy="35%" r="65%">
+      <stop offset="0%"   stop-color="#2a1533"/>
+      <stop offset="60%"  stop-color="#100410"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+
+    <!-- Крыло (мембрана) -->
+    <radialGradient id="wingMembrane" cx="50%" cy="30%" r="80%" fx="45%" fy="25%">
+      <stop offset="0%"   stop-color="#4a2040"/>
+      <stop offset="35%"  stop-color="#2a1028"/>
+      <stop offset="70%"  stop-color="#150615"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+
+    <!-- Крыло (внутренняя тень) -->
+    <radialGradient id="wingShadow" cx="50%" cy="50%" r="60%">
+      <stop offset="0%"   stop-color="#000000" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Глаза (светящиеся) -->
+    <radialGradient id="batEye" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#ffffff"/>
+      <stop offset="30%"  stop-color="#ffb3c0"/>
+      <stop offset="70%"  stop-color="#ff0033"/>
+      <stop offset="100%" stop-color="#4a0000"/>
+    </radialGradient>
+
+    <!-- Аура вокруг -->
+    <radialGradient id="batAura" cx="50%" cy="50%" r="55%">
+      <stop offset="0%"   stop-color="#ff0033" stop-opacity="0.3"/>
+      <stop offset="50%"  stop-color="#8b0000" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#2a0004" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Блик -->
+    <radialGradient id="shine" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- ============ ФИЛЬТРЫ ============ -->
+
+    <filter id="glowStrong" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="b1"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b2"/>
+      <feMerge>
+        <feMergeNode in="b2"/>
+        <feMergeNode in="b1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="glowSoft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6"/>
+    </filter>
+
+    <filter id="glowBig" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="14"/>
+    </filter>
+
+    <!-- Лёгкая тень под мышью -->
+    <filter id="dropShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="blur"/>
+      <feOffset dx="0" dy="8" result="offset"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.5"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+  </defs>
+
+
+  <!-- ============================================================
+       0. АУРА ВОКРУГ (большое свечение)
+       ============================================================ -->
+  <ellipse cx="400" cy="250" rx="380" ry="200"
+           fill="url(#batAura)" filter="url(#glowBig)"
+           opacity="0.6">
+    <animate attributeName="rx" values="360;400;360" dur="5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.4;0.7;0.4" dur="4s" repeatCount="indefinite"/>
+  </ellipse>
+
+
+  <!-- ============================================================
+       1. ЛЕТУЧАЯ МЫШЬ (вся группа летит через экран)
+       ============================================================ -->
+  <g>
+
+    <!-- Движение по экрану: летит слева направо -->
+    <animateTransform attributeName="transform"
+                      type="translate"
+                      values="-300 0; 800 0"
+                      dur="12s" repeatCount="indefinite"/>
+
+    <!-- Покачивание по вертикали (мышь кружит) -->
+    <g>
+      <animateTransform attributeName="transform"
+                        type="translate"
+                        values="0 0; 0 -40; 0 0; 0 40; 0 0"
+                        dur="6s" repeatCount="indefinite"/>
+
+
+      <!-- ============================================================
+           1a. ЛЕВОЕ КРЫЛО (машет)
+           ============================================================ -->
+      <g>
+        <!-- Взмах крыла: вращение вокруг основания -->
+        <animateTransform attributeName="transform"
+                          type="rotate"
+                          values="-15 400 250; 15 400 250; -15 400 250"
+                          dur="0.5s" repeatCount="indefinite"/>
+
+        <!-- Мембрана крыла -->
+        <g filter="url(#dropShadow)">
+          <path d="M 400 250
+                   Q 340 200 280 170
+                   Q 220 145 160 155
+                   Q 120 165 90 200
+                   Q 130 195 180 200
+                   Q 130 215 100 245
+                   Q 140 230 190 225
+                   Q 140 255 115 290
+                   Q 155 265 205 255
+                   Q 175 285 165 320
+                   Q 200 290 240 275
+                   Q 235 305 240 340
+                   Q 275 300 310 285
+                   Q 330 300 350 315
+                   Q 355 285 370 270 Z"
+                fill="url(#wingMembrane)"/>
+
+          <!-- Внутренняя тень крыла -->
+          <path d="M 400 250
+                   Q 340 200 280 170
+                   Q 220 145 160 155
+                   Q 120 165 90 200
+                   Q 130 195 180 200
+                   Q 130 215 100 245
+                   Q 140 230 190 225
+                   Q 140 255 115 290
+                   Q 155 265 205 255
+                   Q 175 285 165 320
+                   Q 200 290 240 275
+                   Q 235 305 240 340
+                   Q 275 300 310 285
+                   Q 330 300 350 315
+                   Q 355 285 370 270 Z"
+                fill="url(#wingShadow)" opacity="0.6"/>
+
+          <!-- Прожилки на крыле (косточки) -->
+          <g stroke="#4a2040" stroke-width="1.2" fill="none" opacity="0.8">
+            <path d="M 400 250 Q 320 220 240 190"/>
+            <path d="M 400 250 Q 320 240 220 230"/>
+            <path d="M 400 250 Q 320 260 240 270"/>
+            <path d="M 400 250 Q 340 285 250 310"/>
+            <path d="M 400 250 Q 360 300 320 330"/>
+
+            <!-- Поперечные тонкие -->
+            <path d="M 320 215 Q 300 230 290 245" stroke-width="0.6"/>
+            <path d="M 280 195 Q 270 215 265 235" stroke-width="0.6"/>
+            <path d="M 200 220 Q 190 240 185 260" stroke-width="0.6"/>
+            <path d="M 180 260 Q 175 280 175 300" stroke-width="0.6"/>
+          </g>
+
+          <!-- Край крыла (светлая линия) -->
+          <path d="M 400 250
+                   Q 340 200 280 170
+                   Q 220 145 160 155
+                   Q 120 165 90 200
+                   Q 130 195 180 200
+                   Q 130 215 100 245
+                   Q 140 230 190 225
+                   Q 140 255 115 290
+                   Q 155 265 205 255
+                   Q 175 285 165 320
+                   Q 200 290 240 275
+                   Q 235 305 240 340
+                   Q 275 300 310 285
+                   Q 330 300 350 315
+                   Q 355 285 370 270 Z"
+                fill="none" stroke="#5a3050" stroke-width="1.5" opacity="0.7"/>
+        </g>
+      </g>
+
+
+      <!-- ============================================================
+           1b. ПРАВОЕ КРЫЛО (машет в противофазе)
+           ============================================================ -->
+      <g>
+        <animateTransform attributeName="transform"
+                          type="rotate"
+                          values="15 400 250; -15 400 250; 15 400 250"
+                          dur="0.5s" repeatCount="indefinite"/>
+
+        <g filter="url(#dropShadow)">
+          <path d="M 400 250
+                   Q 460 200 520 170
+                   Q 580 145 640 155
+                   Q 680 165 710 200
+                   Q 670 195 620 200
+                   Q 670 215 700 245
+                   Q 660 230 610 225
+                   Q 660 255 685 290
+                   Q 645 265 595 255
+                   Q 625 285 635 320
+                   Q 600 290 560 275
+                   Q 565 305 560 340
+                   Q 525 300 490 285
+                   Q 470 300 450 315
+                   Q 445 285 430 270 Z"
+                fill="url(#wingMembrane)"/>
+
+          <path d="M 400 250
+                   Q 460 200 520 170
+                   Q 580 145 640 155
+                   Q 680 165 710 200
+                   Q 670 195 620 200
+                   Q 670 215 700 245
+                   Q 660 230 610 225
+                   Q 660 255 685 290
+                   Q 645 265 595 255
+                   Q 625 285 635 320
+                   Q 600 290 560 275
+                   Q 565 305 560 340
+                   Q 525 300 490 285
+                   Q 470 300 450 315
+                   Q 445 285 430 270 Z"
+                fill="url(#wingShadow)" opacity="0.6"/>
+
+          <g stroke="#4a2040" stroke-width="1.2" fill="none" opacity="0.8">
+            <path d="M 400 250 Q 480 220 560 190"/>
+            <path d="M 400 250 Q 480 240 580 230"/>
+            <path d="M 400 250 Q 480 260 560 270"/>
+            <path d="M 400 250 Q 460 285 550 310"/>
+            <path d="M 400 250 Q 440 300 480 330"/>
+
+            <path d="M 480 215 Q 500 230 510 245" stroke-width="0.6"/>
+            <path d="M 520 195 Q 530 215 535 235" stroke-width="0.6"/>
+            <path d="M 600 220 Q 610 240 615 260" stroke-width="0.6"/>
+            <path d="M 620 260 Q 625 280 625 300" stroke-width="0.6"/>
+          </g>
+
+          <path d="M 400 250
+                   Q 460 200 520 170
+                   Q 580 145 640 155
+                   Q 680 165 710 200
+                   Q 670 195 620 200
+                   Q 670 215 700 245
+                   Q 660 230 610 225
+                   Q 660 255 685 290
+                   Q 645 265 595 255
+                   Q 625 285 635 320
+                   Q 600 290 560 275
+                   Q 565 305 560 340
+                   Q 525 300 490 285
+                   Q 470 300 450 315
+                   Q 445 285 430 270 Z"
+                fill="none" stroke="#5a3050" stroke-width="1.5" opacity="0.7"/>
+        </g>
+      </g>
+
+
+      <!-- ============================================================
+           1c. ТЕЛО (туловище)
+           ============================================================ -->
+      <g filter="url(#dropShadow)">
+        <!-- Основное тело -->
+        <ellipse cx="400" cy="260" rx="30" ry="50" fill="url(#batBody)"/>
+
+        <!-- Блик на теле -->
+        <ellipse cx="392" cy="245" rx="12" ry="18" fill="url(#shine)" opacity="0.5"/>
+
+        <!-- Мех на теле (мелкие штрихи) -->
+        <g stroke="#4a2040" stroke-width="0.6" opacity="0.8" fill="none">
+          <line x1="380" y1="235" x2="376" y2="230"/>
+          <line x1="385" y1="245" x2="380" y2="240"/>
+          <line x1="378" y1="255" x2="374" y2="252"/>
+          <line x1="420" y1="235" x2="424" y2="230"/>
+          <line x1="415" y1="245" x2="420" y2="240"/>
+          <line x1="422" y1="255" x2="426" y2="252"/>
+          <line x1="382" y1="270" x2="378" y2="275"/>
+          <line x1="418" y1="270" x2="422" y2="275"/>
+        </g>
+
+        <!-- Нижние лапки -->
+        <path d="M 390 300 Q 385 320 380 330" stroke="#1a0a1a" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M 410 300 Q 415 320 420 330" stroke="#1a0a1a" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+        <!-- Коготки -->
+        <path d="M 380 330 L 377 335" stroke="#000000" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M 420 330 L 423 335" stroke="#000000" stroke-width="1.5" stroke-linecap="round"/>
+      </g>
+
+
+      <!-- ============================================================
+           1d. ГОЛОВА
+           ============================================================ -->
+      <g filter="url(#dropShadow)">
+        <!-- Голова -->
+        <ellipse cx="400" cy="215" rx="28" ry="25" fill="url(#batHead)"/>
+
+        <!-- Блик -->
+        <ellipse cx="392" cy="205" rx="8" ry="10" fill="url(#shine)" opacity="0.4"/>
+
+        <!-- УШИ (характерные для летучей мыши) -->
+        <!-- Левое ухо -->
+        <path d="M 382 198 Q 372 175 368 155 Q 372 145 380 150 Q 388 165 388 195 Z"
+              fill="url(#batHead)"/>
+        <path d="M 382 198 Q 375 178 371 158 Q 375 152 380 158 Q 385 175 385 195 Z"
+              fill="#3a1d3a" opacity="0.6"/>
+
+        <!-- Правое ухо -->
+        <path d="M 418 198 Q 428 175 432 155 Q 428 145 420 150 Q 412 165 412 195 Z"
+              fill="url(#batHead)"/>
+        <path d="M 418 198 Q 425 178 429 158 Q 425 152 420 158 Q 415 175 415 195 Z"
+              fill="#3a1d3a" opacity="0.6"/>
+      </g>
+
+
+      <!-- ============================================================
+           1e. ГЛАЗА (светящиеся)
+           ============================================================ -->
+      <g filter="url(#glowStrong)">
+        <!-- Левый глаз -->
+        <ellipse cx="390" cy="213" rx="4.5" ry="5" fill="url(#batEye)">
+          <animate attributeName="ry" values="5;5;5;5;5;1;5;5;5" dur="4s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="1;1;1;1;1;0.5;1;1;1" dur="4s" repeatCount="indefinite"/>
+        </ellipse>
+        <circle cx="390" cy="213" r="1.5" fill="#1a0004"/>
+
+        <!-- Правый глаз -->
+        <ellipse cx="410" cy="213" rx="4.5" ry="5" fill="url(#batEye)">
+          <animate attributeName="ry" values="5;5;5;5;5;1;5;5;5" dur="4s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="1;1;1;1;1;0.5;1;1;1" dur="4s" repeatCount="indefinite"/>
+        </ellipse>
+        <circle cx="410" cy="213" r="1.5" fill="#1a0004"/>
+      </g>
+
+      <!-- Свечение вокруг глаз -->
+      <g filter="url(#glowSoft)" opacity="0.6">
+        <circle cx="390" cy="213" r="10" fill="#ff0033">
+          <animate attributeName="r" values="8;12;8" dur="2s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.4;0.7;0.4" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="410" cy="213" r="10" fill="#ff0033">
+          <animate attributeName="r" values="8;12;8" dur="2s" begin="0.3s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.4;0.7;0.4" dur="2s" begin="0.3s" repeatCount="indefinite"/>
+        </circle>
+      </g>
+
+
+      <!-- ============================================================
+           1f. МОРДА (нос и клыки)
+           ============================================================ -->
+      <g>
+        <!-- Носик -->
+        <path d="M 396 225 Q 400 222 404 225 Q 402 229 400 229 Q 398 229 396 225 Z"
+              fill="#3a1d3a"/>
+
+        <!-- Клыки (маленькие) -->
+        <path d="M 393 232 L 392 240 L 394 240 Z" fill="#ffffff"/>
+        <path d="M 407 232 L 408 240 L 406 240 Z" fill="#ffffff"/>
+
+        <!-- Усы (тонкие линии) -->
+        <g stroke="#5a3050" stroke-width="0.6" fill="none" opacity="0.7">
+          <path d="M 385 227 Q 375 226 368 224"/>
+          <path d="M 385 230 Q 375 230 368 230"/>
+          <path d="M 385 233 Q 375 234 368 236"/>
+          <path d="M 415 227 Q 425 226 432 224"/>
+          <path d="M 415 230 Q 425 230 432 230"/>
+          <path d="M 415 233 Q 425 234 432 236"/>
+        </g>
+      </g>
+
+
+    </g>
+  </g>
+
+
+  <!-- ============================================================
+       2. ЧАСТИЦЫ ВОЗЛЕ МЫШИ (пыль, искры)
+       ============================================================ -->
+  <g filter="url(#glowSoft)" opacity="0.7">
+    <circle cx="200" cy="200" r="1.2" fill="#a78bfa">
+      <animate attributeName="cx" values="200;250;300" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="200;180;160" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.8;0" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="600" cy="300" r="1.5" fill="#a78bfa">
+      <animate attributeName="cx" values="600;550;500" dur="5s" repeatCount="indefinite"/>
+      <animate attributeName="cy" values="300;280;260" dur="5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.7;0" dur="5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="300" cy="350" r="1" fill="#e8dff0">
+      <animate attributeName="cx" values="300;350;400" dur="6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.2;0.8;0.2" dur="6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="500" cy="150" r="1.3" fill="#e8dff0">
+      <animate attributeName="cx" values="500;450;400" dur="4.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.9;0" dur="4.5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+
+  <!-- ============================================================
+       3. ВСПЫШКИ СВЕТА (пролёт мимо)
+       ============================================================ -->
+  <rect x="0" y="0" width="800" height="500"
+        fill="#ff0033" opacity="0" filter="url(#glowBig)">
+    <animate attributeName="opacity"
+             values="0;0;0;0.05;0;0;0;0.03;0"
+             dur="6s" repeatCount="indefinite"/>
+  </rect>
+
+
+</svg>

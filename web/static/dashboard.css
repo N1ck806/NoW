@@ -1,0 +1,840 @@
+/* ============================================
+   NIGHTMARE • DASHBOARD STYLES (v2)
+   Личный кабинет
+   + Мини-консоль для Coder
+   ============================================ */
+
+.dashboard-page {
+    position: relative;
+    isolation: isolate;
+}
+
+/* ============================================
+   01. ШАПКА КАБИНЕТА
+   ============================================ */
+
+.dashboard-header {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding: 35px 30px;
+    margin-bottom: 30px;
+    background:
+        radial-gradient(ellipse at 20% 0%, rgba(255, 0, 51, 0.12), transparent 60%),
+        radial-gradient(ellipse at 80% 100%, rgba(127, 90, 240, 0.12), transparent 60%),
+        linear-gradient(135deg, rgba(20, 9, 28, 0.95) 0%, rgba(10, 6, 16, 0.95) 100%);
+    border: 1px solid var(--border-blood);
+    border-radius: var(--radius-lg);
+    position: relative;
+    overflow: visible;
+}
+
+.dashboard-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--violet), var(--blood), var(--violet));
+    background-size: 200% 100%;
+    animation: authBarShift 4s linear infinite;
+    box-shadow: 0 0 20px var(--blood-glow);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+/* ============================================
+   02. АВАТАРКА
+   ============================================ */
+
+.dashboard-avatar-wrap {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    flex-shrink: 0;
+    z-index: 2;
+}
+
+.dashboard-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--blood);
+    position: relative;
+    z-index: 2;
+    box-shadow:
+        0 0 25px var(--blood-glow),
+        0 0 50px rgba(127, 90, 240, 0.3);
+    animation: avatarPulse 4s ease-in-out infinite;
+}
+
+.dashboard-avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 56px;
+    background: var(--bg-hover);
+    border: 3px solid var(--blood);
+    border-radius: 50%;
+    position: relative;
+    z-index: 2;
+    box-shadow:
+        0 0 25px var(--blood-glow),
+        0 0 50px rgba(127, 90, 240, 0.3);
+    animation: avatarPulse 4s ease-in-out infinite;
+}
+
+.dashboard-avatar-aura {
+    position: absolute;
+    inset: -25px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--blood-glow), transparent 70%);
+    z-index: 1;
+    opacity: 0.5;
+    animation: auraPulse 3s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes avatarPulse {
+    0%, 100% {
+        box-shadow:
+            0 0 25px var(--blood-glow),
+            0 0 50px rgba(127, 90, 240, 0.3);
+    }
+    50% {
+        box-shadow:
+            0 0 40px var(--blood-glow),
+            0 0 70px rgba(127, 90, 240, 0.5);
+    }
+}
+
+@keyframes auraPulse {
+    0%, 100% { transform: scale(1); opacity: 0.4; }
+    50%      { transform: scale(1.15); opacity: 0.8; }
+}
+
+/* ============================================
+   03. ИНДИКАТОРЫ ПРИВЯЗОК ПОВЕРХ АВАТАРКИ
+   (убрано дублирование с .profile-role-badges)
+   ============================================ */
+
+/* ============================================
+   04. ИНФО
+   ============================================ */
+
+.dashboard-info {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    z-index: 2;
+    padding-left: 15px;
+}
+
+.dashboard-name {
+    font-family: var(--font-horror);
+    font-size: 42px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    line-height: 1.1;
+    color: var(--text);
+    text-shadow:
+        0 0 20px rgba(255, 0, 51, 0.5),
+        0 0 40px rgba(255, 0, 51, 0.2);
+}
+
+.dashboard-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.dashboard-username {
+    color: var(--violet);
+    text-shadow: 0 0 10px rgba(127, 90, 240, 0.5);
+    font-weight: 600;
+}
+
+.dashboard-dot {
+    color: var(--text-ghost);
+}
+
+.dashboard-email {
+    color: var(--text-muted);
+}
+
+.dashboard-since {
+    font-size: 13px;
+    color: var(--text-ghost);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+/* ============================================
+   05. КНОПКИ В ШАПКЕ
+   ============================================ */
+
+.dashboard-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+}
+
+.btn-logout {
+    border-color: rgba(255, 0, 51, 0.4);
+    color: #ff8099;
+}
+
+.btn-logout:hover {
+    background: var(--blood);
+    color: white;
+    border-color: var(--blood);
+}
+
+/* ============================================
+   06. ЗАГОЛОВКИ СЕКЦИЙ
+   ============================================ */
+
+.section-title {
+    font-family: var(--font-horror);
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text);
+    margin: 30px 0 15px;
+    padding-bottom: 8px;
+    position: relative;
+    text-shadow: 0 0 15px rgba(255, 0, 51, 0.3);
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 80px;
+    height: 2px;
+    background: var(--blood);
+    box-shadow: 0 0 12px var(--blood);
+}
+
+/* ============================================
+   07. БЛОК СВЯЗИ (contacts)
+   ============================================ */
+
+.contacts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.contact-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(20, 9, 28, 0.7) 0%, rgba(30, 15, 40, 0.5) 100%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.contact-card.connected {
+    border-color: var(--border-blood);
+    background: linear-gradient(135deg, rgba(255, 0, 51, 0.05) 0%, rgba(20, 9, 28, 0.7) 100%);
+    box-shadow: 0 0 25px rgba(255, 0, 51, 0.08);
+}
+
+.contact-card:hover {
+    border-color: var(--blood);
+    transform: translateY(-3px);
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.4),
+        0 0 25px rgba(255, 0, 51, 0.2);
+}
+
+.contact-icon {
+    width: 54px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    border-radius: var(--radius-md);
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+    transition: all 0.3s;
+}
+
+.contact-icon-discord {
+    color: #a8b1ff;
+    text-shadow: 0 0 15px rgba(88, 101, 242, 0.7);
+    border-color: rgba(88, 101, 242, 0.3);
+}
+
+.contact-icon-telegram {
+    color: #7ecfff;
+    text-shadow: 0 0 15px rgba(42, 171, 238, 0.7);
+    border-color: rgba(42, 171, 238, 0.3);
+}
+
+.contact-icon-guild {
+    color: #ff8099;
+    text-shadow: 0 0 15px rgba(255, 0, 51, 0.7);
+    border-color: rgba(255, 0, 51, 0.3);
+}
+
+.contact-card.connected:hover .contact-icon {
+    transform: scale(1.08) rotate(-4deg);
+}
+
+.contact-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.contact-label {
+    font-family: var(--font-horror);
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+}
+
+.contact-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    word-break: break-word;
+    margin-bottom: 4px;
+}
+
+.contact-status {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.contact-status-on {
+    color: var(--success);
+    text-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
+}
+
+.contact-hint {
+    font-size: 11px;
+    color: var(--text-ghost);
+    margin-top: 4px;
+    line-height: 1.4;
+}
+
+.contact-link {
+    display: inline-block;
+    margin-top: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--blood);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 0 8px var(--blood-glow);
+    transition: all 0.2s;
+}
+
+.contact-link:hover {
+    color: #ff4d6d;
+    text-shadow: 0 0 15px var(--blood-glow);
+}
+
+/* ============================================
+   08. БЫСТРЫЕ ДЕЙСТВИЯ
+   ============================================ */
+
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 12px;
+}
+
+.quick-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 20px 12px;
+    background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-hover) 100%);
+    border: 1px solid var(--border-blood);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.quick-action::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(255, 0, 51, 0.12), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.quick-action:hover {
+    border-color: var(--blood);
+    transform: translateY(-4px);
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.4),
+        0 0 25px rgba(255, 0, 51, 0.25);
+    text-decoration: none;
+    color: var(--text);
+}
+
+.quick-action:hover::before {
+    opacity: 1;
+}
+
+.quick-action-icon {
+    font-size: 32px;
+    filter: drop-shadow(0 0 10px rgba(255, 0, 51, 0.5));
+    transition: transform 0.3s;
+}
+
+.quick-action:hover .quick-action-icon {
+    transform: scale(1.15);
+}
+
+.quick-action-text {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: color 0.3s;
+}
+
+.quick-action:hover .quick-action-text {
+    color: var(--blood);
+    text-shadow: 0 0 10px var(--blood-glow);
+}
+
+/* ============================================
+   09. SVG-БЕЙДЖИ РОЛЕЙ В КАБИНЕТЕ
+   ============================================ */
+
+.profile-role-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 14px;
+    align-items: center;
+}
+
+.profile-role-svg {
+    height: 46px;
+    width: auto;
+    pointer-events: none;
+    user-select: none;
+    filter:
+        drop-shadow(0 0 6px rgba(0, 0, 0, 0.9))
+        drop-shadow(0 0 14px rgba(255, 0, 51, 0.35));
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: roleBadgeFloat 4s ease-in-out infinite;
+}
+
+.profile-role-svg:nth-child(1) { animation-delay: 0s; }
+.profile-role-svg:nth-child(2) { animation-delay: 0.5s; }
+.profile-role-svg:nth-child(3) { animation-delay: 1s; }
+.profile-role-svg:nth-child(4) { animation-delay: 1.5s; }
+
+@keyframes roleBadgeFloat {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50%      { transform: translateY(-4px) scale(1.03); }
+}
+
+.profile-role-svg:hover {
+    transform: scale(1.15) translateY(-3px);
+    filter:
+        drop-shadow(0 0 14px rgba(255, 0, 51, 0.7))
+        drop-shadow(0 0 28px rgba(255, 0, 51, 0.4));
+    animation: none;
+}
+
+/* ============================================
+   10. MINI CONSOLE (для Coder)
+   ============================================ */
+
+.coder-console {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 480px;
+    max-width: calc(100vw - 40px);
+    background: rgba(5, 8, 12, 0.95);
+    border: 1px solid #00ff9d;
+    border-radius: 10px;
+    z-index: 9990;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 12px;
+    box-shadow:
+        0 0 30px rgba(0, 255, 157, 0.3),
+        0 0 60px rgba(0, 255, 157, 0.1),
+        inset 0 0 20px rgba(0, 255, 157, 0.05);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    animation: consoleFlicker 8s infinite;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes consoleFlicker {
+    0%, 95%, 100% { opacity: 1; }
+    96% { opacity: 0.92; }
+    97% { opacity: 1; }
+    98% { opacity: 0.95; }
+}
+
+.coder-console-minimized {
+    transform: translateY(calc(100% - 42px));
+}
+
+/* --- Шапка консоли --- */
+.coder-console-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: rgba(0, 255, 157, 0.08);
+    border-bottom: 1px solid rgba(0, 255, 157, 0.3);
+}
+
+.coder-console-dots {
+    display: flex;
+    gap: 5px;
+}
+
+.coder-console-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.coder-console-title {
+    flex: 1;
+    color: #00ff9d;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    margin-left: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.coder-console-hint {
+    color: rgba(0, 255, 157, 0.4);
+    font-style: italic;
+    font-size: 10px;
+}
+
+.coder-console-close {
+    background: transparent;
+    border: 1px solid rgba(0, 255, 157, 0.4);
+    color: #00ff9d;
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    font-family: 'Consolas', monospace;
+}
+
+.coder-console-close:hover {
+    background: rgba(0, 255, 157, 0.2);
+    box-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+}
+
+/* --- Тело консоли --- */
+.coder-console-body {
+    padding: 10px 12px;
+    max-height: 240px;
+    min-height: 180px;
+    overflow-y: auto;
+    line-height: 1.5;
+    background:
+        linear-gradient(rgba(0, 255, 157, 0.02) 1px, transparent 1px);
+    background-size: 100% 20px;
+    transition: background 0.3s;
+}
+
+.coder-console-secret {
+    background: rgba(255, 0, 51, 0.1) !important;
+    animation: secretFlash 0.3s ease-in-out 5;
+}
+
+@keyframes secretFlash {
+    0%, 100% { background: rgba(255, 0, 51, 0.1); }
+    50%      { background: rgba(255, 0, 51, 0.3); }
+}
+
+.coder-console-line {
+    color: #00ff9d;
+    font-family: 'Consolas', monospace;
+    font-size: 11.5px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    animation: consoleLineIn 0.15s ease-out;
+}
+
+@keyframes consoleLineIn {
+    from { opacity: 0; transform: translateX(-5px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+.coder-console-prompt {
+    color: #00e5ff;
+    font-weight: bold;
+    margin-right: 6px;
+}
+
+.coder-console-line-info  { color: #00e5ff; }
+
+.coder-console-line-ok {
+    color: #00ff9d;
+    text-shadow: 0 0 8px rgba(0, 255, 157, 0.5);
+}
+
+.coder-console-line-warn {
+    color: #ffbd2e;
+    text-shadow: 0 0 8px rgba(255, 189, 46, 0.5);
+}
+
+.coder-console-line-error {
+    color: #ff5f56;
+    text-shadow: 0 0 8px rgba(255, 95, 86, 0.5);
+}
+
+.coder-console-line-muted {
+    color: rgba(0, 255, 157, 0.5);
+    font-style: italic;
+}
+
+.coder-console-user {
+    color: #fff;
+    text-shadow: 0 0 10px #00ff9d;
+}
+
+.coder-console-cursor {
+    display: inline-block;
+    animation: consoleCursorBlink 1s steps(2) infinite;
+}
+
+@keyframes consoleCursorBlink {
+    0%, 50%   { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+/* --- Футер консоли (ввод) --- */
+.coder-console-footer {
+    display: flex;
+    align-items: center;
+    padding: 6px 12px 10px;
+    border-top: 1px solid rgba(0, 255, 157, 0.2);
+    background: rgba(0, 255, 157, 0.03);
+}
+
+.coder-console-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #00ff9d;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 12px;
+    padding: 6px 0;
+    caret-color: #00ff9d;
+    letter-spacing: 0.3px;
+}
+
+.coder-console-input::placeholder {
+    color: rgba(0, 255, 157, 0.35);
+    font-style: italic;
+}
+
+/* --- Скроллбар консоли --- */
+.coder-console-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.coder-console-body::-webkit-scrollbar-track {
+    background: rgba(0, 255, 157, 0.05);
+}
+
+.coder-console-body::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 157, 0.3);
+    border-radius: 3px;
+}
+
+.coder-console-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 255, 157, 0.5);
+}
+
+/* ============================================
+   11. МОБИЛЬНАЯ АДАПТАЦИЯ
+   ============================================ */
+
+@media (max-width: 900px) {
+    .dashboard-header {
+        flex-wrap: wrap;
+        padding: 25px 20px;
+        gap: 20px;
+    }
+
+    .dashboard-info {
+        flex: 1 1 calc(100% - 180px);
+        padding-left: 0;
+    }
+
+    .dashboard-name {
+        font-size: 32px;
+        letter-spacing: 2px;
+    }
+
+    .dashboard-actions {
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .dashboard-actions .btn-profile {
+        flex: 1 1 auto;
+        justify-content: center;
+    }
+
+    .profile-role-svg {
+        height: 38px;
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-role-svg { height: 34px; }
+    .profile-role-badges { justify-content: center; gap: 8px; }
+
+    /* Coder-консоль на планшете */
+    .coder-console {
+        width: calc(100vw - 40px);
+        right: 20px;
+        bottom: 20px;
+    }
+
+    .coder-console-body {
+        max-height: 180px;
+        min-height: 140px;
+    }
+}
+
+@media (max-width: 600px) {
+    .dashboard-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .dashboard-avatar-wrap {
+        width: 110px;
+        height: 110px;
+    }
+
+    .dashboard-avatar-placeholder {
+        font-size: 48px;
+    }
+
+    .dashboard-name {
+        font-size: 26px;
+        letter-spacing: 1px;
+    }
+
+    .dashboard-meta {
+        justify-content: center;
+    }
+
+    .dashboard-actions {
+        width: 100%;
+    }
+
+    .dashboard-actions .btn-profile {
+        width: 100%;
+    }
+
+    .section-title {
+        font-size: 16px;
+    }
+
+    .contacts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .quick-actions {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Coder-консоль на телефоне */
+    .coder-console {
+        width: calc(100vw - 20px);
+        right: 10px;
+        bottom: 10px;
+        border-radius: 8px;
+    }
+
+    .coder-console-title {
+        font-size: 10px;
+    }
+
+    .coder-console-body {
+        max-height: 140px;
+        min-height: 110px;
+        font-size: 10.5px;
+    }
+
+    .coder-console-line {
+        font-size: 10.5px;
+    }
+
+    .coder-console-input {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-role-svg { height: 28px; }
+
+    .coder-console {
+        width: calc(100vw - 20px);
+        right: 10px;
+        bottom: 10px;
+    }
+}
+
+@media (max-width: 380px) {
+    .quick-actions {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,496 @@
+/* ============================================================
+   NIGHTMARE • ROLE BADGES (v2)
+   Стили для отображения ролей в навбаре и профилях.
+   + SVG-бейджи ролей
+   + Корона админа
+   ============================================================ */
+
+/* ============================================================
+   01. NAV-USER (правая часть навбара)
+   ============================================================ */
+
+.nav-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 12px 6px 6px;
+    border-radius: 999px;
+    background: rgba(20, 9, 28, 0.6);
+    border: 1px solid var(--border-blood);
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.nav-user:hover {
+    background: rgba(30, 15, 40, 0.9);
+    border-color: var(--blood);
+    box-shadow: 0 0 25px rgba(255, 0, 51, 0.25);
+    text-decoration: none;
+    color: var(--text);
+    transform: translateY(-1px);
+}
+
+/* ============================================================
+   02. АВАТАРКА В НАВБАРЕ + ТОЧКА РОЛИ
+   ============================================================ */
+
+.nav-user-avatar {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+}
+
+.nav-user-avatar .nav-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--blood);
+    box-shadow: 0 0 10px var(--blood-glow);
+    display: block;
+}
+
+.nav-user-avatar .nav-avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-hover);
+    border: 2px solid var(--blood);
+    box-shadow: 0 0 10px var(--blood-glow);
+    font-size: 14px;
+}
+
+.nav-role-dot {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid var(--bg-card);
+    box-shadow: 0 0 8px currentColor;
+    background: currentColor;
+    z-index: 2;
+    animation: navDotPulse 2.5s ease-in-out infinite;
+}
+
+.nav-role-dot-guest {
+    color: #8a92a6;
+}
+
+.nav-role-dot-ghost {
+    color: #7f5af0;
+    box-shadow: 0 0 12px #7f5af0, 0 0 20px rgba(127, 90, 240, 0.5);
+}
+
+@keyframes navDotPulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.2); }
+}
+
+/* ============================================================
+   03. ИНФО В НАВБАРЕ
+   ============================================================ */
+
+.nav-user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+    max-width: 140px;
+}
+
+.nav-username {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+}
+
+.nav-badges {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* ============================================================
+   04. МИНИ-БЕЙДЖИ РОЛЕЙ (эмодзи, для навбара)
+   ============================================================ */
+
+.mini-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    font-size: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid currentColor;
+    box-shadow: 0 0 6px currentColor;
+    transition: all 0.2s;
+    cursor: help;
+    line-height: 1;
+}
+
+.mini-badge:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 12px currentColor;
+}
+
+.mini-badge-guest {
+    color: #8a92a6;
+}
+
+.mini-badge-ghost {
+    color: #7f5af0;
+    animation: badgeGhostPulse 3s ease-in-out infinite;
+}
+
+@keyframes badgeGhostPulse {
+    0%, 100% { box-shadow: 0 0 6px currentColor; }
+    50%      { box-shadow: 0 0 12px currentColor, 0 0 20px currentColor; }
+}
+
+.mini-badge-is_moderator {
+    color: #fbbf24;
+}
+
+.mini-badge-is_coder {
+    color: #00e5ff;
+}
+
+.mini-badge-is_admin {
+    color: #ff0033;
+    animation: badgeAdminPulse 2s ease-in-out infinite;
+}
+
+@keyframes badgeAdminPulse {
+    0%, 100% { box-shadow: 0 0 6px currentColor; }
+    50%      { box-shadow: 0 0 15px currentColor, 0 0 25px currentColor; }
+}
+
+/* ============================================================
+   05. ССЫЛКА НА АДМИНКУ
+   ============================================================ */
+
+.nav-link-admin {
+    color: #ff4d6d !important;
+    font-weight: 700;
+    position: relative;
+}
+
+.nav-link-admin::after {
+    content: '';
+    position: absolute;
+    inset: -2px -6px;
+    border-radius: 6px;
+    background: radial-gradient(circle, rgba(255, 0, 51, 0.15), transparent 70%);
+    animation: adminLinkGlow 3s ease-in-out infinite;
+    z-index: -1;
+    pointer-events: none;
+}
+
+@keyframes adminLinkGlow {
+    0%, 100% { opacity: 0.4; }
+    50%      { opacity: 1; }
+}
+
+/* ============================================================
+   06. БОЛЬШОЙ БЕЙДЖ РОЛИ (HTML, для совместимости)
+   ============================================================ */
+
+.role-badge-lg {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid currentColor;
+    box-shadow: 0 0 20px currentColor;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.role-badge-lg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: currentColor;
+    opacity: 0.08;
+    pointer-events: none;
+}
+
+.role-badge-lg:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px currentColor;
+}
+
+.role-badge-lg .role-badge-icon {
+    font-size: 18px;
+    filter: drop-shadow(0 0 8px currentColor);
+    position: relative;
+    z-index: 1;
+}
+
+.role-badge-lg .role-badge-name {
+    position: relative;
+    z-index: 1;
+}
+
+.role-badge-lg.role-guest  { color: #8a92a6; }
+.role-badge-lg.role-ghost  { color: #7f5af0; }
+
+.role-badge-lg.role-is_moderator { color: #fbbf24; }
+.role-badge-lg.role-is_coder     { color: #00e5ff; }
+.role-badge-lg.role-is_admin     { color: #ff0033; }
+
+/* ============================================================
+   07. SVG-БЕЙДЖИ РОЛЕЙ (в профиле/кабинете)
+   ============================================================ */
+
+.profile-role-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 18px;
+    align-items: center;
+}
+
+.profile-role-svg {
+    height: 46px;
+    width: auto;
+    pointer-events: none;
+    user-select: none;
+    filter:
+        drop-shadow(0 0 6px rgba(0, 0, 0, 0.9))
+        drop-shadow(0 0 14px rgba(255, 0, 51, 0.35));
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: roleBadgeFloat 4s ease-in-out infinite;
+}
+
+.profile-role-svg:nth-child(1) { animation-delay: 0s; }
+.profile-role-svg:nth-child(2) { animation-delay: 0.5s; }
+.profile-role-svg:nth-child(3) { animation-delay: 1s; }
+.profile-role-svg:nth-child(4) { animation-delay: 1.5s; }
+
+@keyframes roleBadgeFloat {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50%      { transform: translateY(-4px) scale(1.03); }
+}
+
+.profile-role-svg:hover {
+    transform: scale(1.15) translateY(-3px);
+    filter:
+        drop-shadow(0 0 14px rgba(255, 0, 51, 0.7))
+        drop-shadow(0 0 28px rgba(255, 0, 51, 0.4));
+    animation: none;
+}
+
+/* ============================================================
+   08. SVG-БЕЙДЖ ОСНОВНОЙ РОЛИ (на аватарке, снизу)
+   ============================================================ */
+
+.avatar-role-badge {
+    position: absolute;
+    bottom: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140px;
+    height: 42px;
+    pointer-events: none;
+    z-index: 6;
+    filter:
+        drop-shadow(0 0 10px rgba(0, 0, 0, 0.9))
+        drop-shadow(0 0 15px rgba(127, 90, 240, 0.5));
+    transition: all 0.3s ease;
+    animation: roleBadgePulse 3s ease-in-out infinite;
+}
+
+@keyframes roleBadgePulse {
+    0%, 100% {
+        transform: translateX(-50%) translateY(0) scale(1);
+    }
+    50% {
+        transform: translateX(-50%) translateY(-3px) scale(1.03);
+    }
+}
+
+.profile-avatar-wrap:hover .avatar-role-badge {
+    filter:
+        drop-shadow(0 0 15px var(--blood-glow))
+        drop-shadow(0 0 25px rgba(127, 90, 240, 0.8));
+    animation-duration: 1.5s;
+}
+
+.avatar-role-guest {
+    filter:
+        drop-shadow(0 0 10px rgba(138, 146, 166, 0.8))
+        drop-shadow(0 0 18px rgba(138, 146, 166, 0.4));
+}
+
+.avatar-role-ghost {
+    filter:
+        drop-shadow(0 0 12px rgba(127, 90, 240, 0.9))
+        drop-shadow(0 0 22px rgba(127, 90, 240, 0.6));
+}
+
+/* ============================================================
+   09. СИСТЕМНЫЕ SVG-БЕЙДЖИ (справа на аватарке)
+   ============================================================ */
+
+.avatar-system-badges {
+    position: absolute;
+    top: -14px;
+    right: -65px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 5;
+    pointer-events: none;
+}
+
+.avatar-system-badge {
+    width: 70px;
+    height: auto;
+    filter:
+        drop-shadow(0 0 10px rgba(0, 0, 0, 0.9))
+        drop-shadow(0 0 12px rgba(255, 0, 51, 0.4));
+    animation: badgeFloat 3s ease-in-out infinite;
+    transition: all 0.3s ease;
+}
+
+.avatar-system-badge:nth-child(2) { animation-delay: 0.5s; }
+.avatar-system-badge:nth-child(3) { animation-delay: 1s; }
+
+@keyframes badgeFloat {
+    0%, 100% { transform: translateX(0); }
+    50%      { transform: translateX(5px); }
+}
+
+/* ============================================================
+   10. КОРОНА АДМИНА (сверху справа)
+   ============================================================ */
+
+.admin-crown {
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 160px;
+    height: auto;
+    pointer-events: none;
+    z-index: 7;
+    filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.8));
+    animation: crownHover 4s ease-in-out infinite;
+}
+
+@keyframes crownHover {
+    0%, 100% {
+        filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.7));
+        transform: translateY(0) rotate(-2deg);
+    }
+    50% {
+        filter: drop-shadow(0 0 40px rgba(255, 215, 0, 1));
+        transform: translateY(-8px) rotate(2deg);
+    }
+}
+
+/* ============================================================
+   11. МОБИЛЬНАЯ АДАПТАЦИЯ
+   ============================================================ */
+
+@media (max-width: 900px) {
+    .nav-user-info { max-width: 100px; }
+    .nav-username { font-size: 12px; }
+
+    .profile-role-svg { height: 38px; }
+    .avatar-role-badge {
+        width: 110px;
+        height: 34px;
+        bottom: -14px;
+    }
+    .avatar-system-badges { right: -55px; }
+    .avatar-system-badge { width: 55px; }
+    .admin-crown {
+        width: 130px;
+        top: -50px;
+        right: -50px;
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-role-badges {
+        gap: 8px;
+        justify-content: center;
+    }
+    .profile-role-svg { height: 34px; }
+
+    .avatar-role-badge {
+        width: 100px;
+        height: 30px;
+        bottom: -12px;
+    }
+    .avatar-system-badges {
+        right: -45px;
+        top: -10px;
+        gap: 6px;
+    }
+    .avatar-system-badge { width: 45px; }
+    .admin-crown {
+        width: 110px;
+        top: -42px;
+        right: -42px;
+    }
+}
+
+@media (max-width: 700px) {
+    .nav-user-info { display: none; }
+    .nav-user {
+        padding: 4px;
+        border-radius: 50%;
+        gap: 0;
+    }
+    .nav-user-avatar {
+        width: 36px;
+        height: 36px;
+    }
+}
+
+@media (max-width: 500px) {
+    .nav-link-admin { display: none; }
+
+    .profile-role-svg { height: 28px; }
+    .avatar-role-badge {
+        width: 85px;
+        height: 26px;
+        bottom: -10px;
+    }
+    .avatar-system-badges {
+        right: -38px;
+        top: -8px;
+        gap: 4px;
+    }
+    .avatar-system-badge { width: 38px; }
+    .admin-crown {
+        width: 90px;
+        top: -34px;
+        right: -34px;
+    }
+}

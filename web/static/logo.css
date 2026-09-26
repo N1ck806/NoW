@@ -1,0 +1,109 @@
+/* ============================================================
+   NIGHTMARE • BRAND (логотип в шапке)
+   ============================================================ */
+
+/* ===== Контейнер бренда ===== */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    position: relative;
+}
+
+.brand:hover {
+    transform: scale(1.02);
+    text-decoration: none;
+}
+
+/* ===== Иконка ===== */
+.brand-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: drop-shadow(0 0 8px rgba(127, 90, 240, 0.5));
+    position: relative;
+}
+
+.brand-icon img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transition: filter 0.4s ease;
+}
+
+/* Пульсация свечения иконки */
+.brand-icon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    box-shadow: inset 0 0 15px rgba(255, 0, 51, 0.3);
+    animation: brandPulse 3s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 2;
+}
+
+@keyframes brandPulse {
+    0%, 100% { box-shadow: inset 0 0 15px rgba(255, 0, 51, 0.3); }
+    50%      { box-shadow: inset 0 0 25px rgba(255, 0, 51, 0.6); }
+}
+
+.brand:hover .brand-icon {
+    transform: rotate(-5deg) scale(1.1);
+    filter: drop-shadow(0 0 16px rgba(255, 46, 151, 0.8));
+}
+
+.brand:hover .brand-icon img {
+    filter: contrast(1.2) saturate(1.3) brightness(1.05);
+}
+
+/* ===== Текст ===== */
+.brand-text {
+    height: 55px;
+    flex-shrink: 0;
+    transition: all 0.4s ease;
+    filter: drop-shadow(0 0 6px rgba(139, 0, 0, 0.6));
+    position: relative;
+}
+
+.brand-text img {
+    height: 100%;
+    width: auto;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.brand:hover .brand-text {
+    filter:
+        drop-shadow(0 0 10px rgba(255, 0, 51, 0.9))
+        drop-shadow(0 0 20px rgba(139, 0, 0, 0.6));
+    transform: translateY(-2px);
+}
+
+/* ===== Мобильная адаптация ===== */
+@media (max-width: 900px) {
+    .brand-icon {
+        width: 44px;
+        height: 44px;
+    }
+    .brand-text {
+        height: 42px;
+    }
+}
+
+@media (max-width: 600px) {
+    .brand-text {
+        display: none;
+    }
+    .brand-icon {
+        width: 40px;
+        height: 40px;
+    }
+}

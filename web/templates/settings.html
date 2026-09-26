@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+
+{% block title %}Настройки • Nightmare{% endblock %}
+
+{% block content %}
+<h1 class="page-title">⚙️ Настройки аккаунта</h1>
+
+{# ============ СООБЩЕНИЯ ОБ УСПЕХЕ ============ #}
+{% if request.query_params.get('saved') %}
+<div class="auth-success">
+    {% set s = request.query_params.get('saved') %}
+    {% if s == 'profile' %}✅ Профиль сохранён
+    {% elif s == 'password' %}✅ Пароль изменён
+    {% else %}✅ Сохранено{% endif %}
+</div>
+{% endif %}
+
+{% if request.query_params.get('linked') %}
+<div class="auth-success">
+    {% set l = request.query_params.get('linked') %}
+    {% if l == 'discord' %}✅ Discord успешно привязан
+    {% elif l == 'telegram' %}✅ Telegram успешно привязан
+    {% else %}✅ Привязано{% endif %}
+</div>
+{% endif %}
+
+{% if request.query_params.get('unlinked') %}
+<div class="auth-success">
+    {% set u = request.query_params.get('unlinked') %}
+    {% if u == 'discord' %}🗑 Discord отвязан
+    {% elif u == 'telegram' %}🗑 Telegram отвязан
+    {% else %}🗑 Отвязано{% endif %}
+</div>
+{% endif %}
+
+{# ============ СООБЩЕНИЯ ОБ ОШИБКАХ ============ #}
+{% if request.query_params.get('error') == 'wrong_old' %}
+<div class="auth-error">❌ Старый пароль неверный</div>
+{% endif %}
+{% if request.query_params.get('error') == 'mismatch' %}
+<div class="auth-error">❌ Пароли не совпадают</div>
+{% endif %}
+{% if request.query_params.get('error') == 'short' %}
+<div class="auth-error">❌ Пароль слишком короткий (минимум 6 символов)</div>
+{% endif %}
+{% if request.query_params.get('error') == 'discord_taken' %}
+<div class="auth-error">❌ Этот Discord уже привязан к другому аккаунту</div>
+{% endif %}
+{% if request.query_params.get('error') == 'telegram_taken' %}
+<div class="auth-error">❌ Этот Telegram уже привязан к другому аккаунту</div>
+{% endif %}
+
+{# ============ ПРОФИЛЬ + ПАРОЛЬ ============ #}
+<div class="grid-2">
+    <div class="card">
+        <h2 class="card-title">👤 Профиль</h2>
+        <form method="post" action="/settings/profile" class="auth-form">
+            <div class="form-group">
+                <label>Ник (изменить нельзя)</label>
+                <input type="text" value="{{ user.username }}" disabled>
+            </div>
+            <div class="form-group">
+                <label>Отображаемое имя</label>
+                <input type="text" name="display_name" value="{{ user.display_name }}" required maxlength="64">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" value="{{ user.email or '' }}" placeholder="необязательно">
+            </div>
+            <button class="btn-primary">💾 Сохранить</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2 class="card-title">🔒 Пароль</h2>
+        <form method="post" action="/settings/password" class="auth-form">
+            <div class="form-group">
+                <label>Старый пароль</label>
+                <input type="password" name="old_password" required autocomplete="current-password">
+            </div>
+            <div class="form-group">
+                <label>Новый пароль</label>
+                <input type="password" name="new_password" required minlength="6" autocomplete="new-password">
+            </div>
+            <div class="form-group">
+                <label>Повтори новый</label>
+                <input type="password" name="new_password2" required minlength="6" autocomplete="new-password">
+            </div>
+            <button class="btn-primary">🔑 Изменить пароль</button>
+        </form>
+    </div>
+</div>
+
+{# ============ ПРИВЯЗКИ ============ #}
+<div class="card">
+    <h2 class="card-title">🔗 Привязанные аккаунты</h2>
+
+    <div class="links-grid">
+        {# ---- DISCORD ---- #}
+        <div class="link-item {% if user.discord_id %}linked{% endif %}">
+            <div class="link-icon link-icon-discord">💬</div>
+            <div class="link-body">
+                <div class="link-name">Discord</div>
+                {% if user.discord_id %}
+                    <div class="link-status link-status-on">
+                        ✅ {{ user.discord_username or user.discord_id }}
+                    </div>
+                {% else %}
+                    <div class="link-status link-status-off">
+                        Не привязан
+                    </div>
+                {% endif %}
+            </div>
+            <div class="link-action">
+                {% if user.discord_id %}
+                    <form method="post" action="/settings/unlink" style="display:inline">
+                        <input type="hidden" name="service" value="discord">
+                        <button class="btn-small btn-danger">Отвязать</button>
+                    </form>
+                {% else %}
+                    <a href="/auth/discord?mode=link" class="btn-small btn-primary">Привязать</a>
+                {% endif %}
+            </div>
+        </div>
+
+        {# ---- TELEGRAM ---- #}
+        <div class="link-item {% if user.telegram_id %}linked{% endif %}">
+            <div class="link-icon link-icon-telegram">✈️</div>
+            <div class="link-body">
+                <div class="link-name">Telegram</div>
+                {% if user.telegram_id %}
+                    <div class="link-status link-status-on">
+                        ✅ {{ user.telegram_username or user.telegram_id }}
+                    </div>
+                {% else %}
+                    <div class="link-status link-status-off">
+                        Не привязан
+                    </div>
+                {% endif %}
+            </div>
+            <div class="link-action">
+                {% if user.telegram_id %}
+                    <form method="post" action="/settings/unlink" style="display:inline">
+                        <input type="hidden" name="service" value="telegram">
+                        <button class="btn-small btn-danger">Отвязать</button>
+                    </form>
+                {% else %}
+                    <div class="link-action-group">
+                        <a href="/auth/telegram" class="btn-small btn-primary" title="Через виджет Telegram">
+                            Виджет
+                        </a>
+                        <a href="/auth/telegram/bot" class="btn-small btn-secondary" title="Через бота по коду">
+                            Через бота
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {# ===== Подсказка ===== #}
+    {% if not user.telegram_id %}
+    <p class="muted" style="margin-top: 15px; font-size: 13px;">
+        💡 <b>Виджет</b> — если Telegram открыт в браузере. <b>Через бота</b> — если удобнее
+        на телефоне: получишь код и отправишь его боту командой <code>/link КОД</code>.
+    </p>
+    {% endif %}
+</div>
+
+{# ============ ИНФОРМАЦИЯ ОБ АККАУНТЕ ============ #}
+<div class="card">
+    <h2 class="card-title">ℹ️ Информация об аккаунте</h2>
+    <ul class="list">
+        <li>
+            <strong>ID:</strong>
+            <span class="muted">#{{ user.id }}</span>
+        </li>
+        <li>
+            <strong>Создан:</strong>
+            <span class="muted">{{ user.created_at[:16].replace("T", " ") if user.created_at else "—" }}</span>
+        </li>
+        <li>
+            <strong>Последний вход:</strong>
+            <span class="muted">{{ user.last_login[:16].replace("T", " ") if user.last_login else "—" }}</span>
+        </li>
+        <li>
+            <strong>Guild User ID:</strong>
+            <span class="muted">{{ user.guild_user_id or "—" }}</span>
+        </li>
+    </ul>
+</div>
+
+{# ============ ОПАСНАЯ ЗОНА ============ #}
+<div class="card danger-zone">
+    <h2 class="card-title">⚠️ Опасная зона</h2>
+    <p class="muted" style="margin-bottom: 15px;">
+        Действия ниже необратимы. Будь осторожен.
+    </p>
+    <form method="post" action="/settings/delete" onsubmit="return confirm('Точно удалить аккаунт? Это необратимо.');">
+        <button class="btn-primary btn-danger" type="submit">
+            🗑 Удалить аккаунт
+        </button>
+    </form>
+</div>
+
+<style>
+.link-action-group {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.06);
+    color: #eaeaea;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+</style>
+
+{% endblock %}

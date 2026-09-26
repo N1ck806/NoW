@@ -1,0 +1,227 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ target.username }} • Админка{% endblock %}
+
+{% block admin_title %}👤 {{ target.display_name }}{% endblock %}
+{% block admin_subtitle %}@{{ target.username }} • ID #{{ target.id }}{% endblock %}
+
+{% block admin_content %}
+
+{# ============ КНОПКА НАЗАД ============ #}
+<div class="admin-back">
+    <a href="/admin/users" class="admin-btn admin-btn-secondary">← К списку аккаунтов</a>
+</div>
+
+{# ============ КАРТОЧКА: ОСНОВНОЕ ============ #}
+<div class="admin-card">
+    <h2 class="admin-card-title">📋 Основное</h2>
+    <div class="admin-info-grid">
+
+        <div class="admin-info-row">
+            <span class="admin-info-label">ID</span>
+            <span class="admin-info-value admin-mono">#{{ target.id }}</span>
+        </div>
+
+        <div class="admin-info-row">
+            <span class="admin-info-label">Ник</span>
+            <span class="admin-info-value admin-mono">{{ target.username }}</span>
+        </div>
+
+        <div class="admin-info-row">
+            <span class="admin-info-label">Отображаемое имя</span>
+            <span class="admin-info-value">{{ target.display_name }}</span>
+        </div>
+
+        <div class="admin-info-row">
+            <span class="admin-info-label">Email</span>
+            <span class="admin-info-value">
+                {% if target.email %}{{ target.email }}{% else %}<span class="admin-muted">—</span>{% endif %}
+            </span>
+        </div>
+
+        <div class="admin-info-row">
+            <span class="admin-info-label">Роль</span>
+            <span class="admin-info-value">
+                {% if target.role == 'ghost' %}
+                    <span class="admin-badge admin-badge-ghost">👻 Призрак</span>
+                {% else %}
+                    <span class="admin-badge admin-badge-guest">👤 Гость</span>
+                {% endif %}
+            </span>
+        </div>
+
+        <div class="admin-info-row">
+            <span class="admin-info-label">Системные роли</span>
+            <span class="admin-info-value">
+                {% if target.is_admin %}<span class="admin-badge admin-badge-admin">👑 Admin</span>{% endif %}
+                {% if target.is_coder %}<span class="admin-badge admin-badge-coder">💻 Coder</span>{% endif %}
+                {% if target.is_moderator %}<span class="admin-badge admin-badge-mod">🛡️ Moderator</span>{% endif %}
+                {% if not target.is_admin and not target.is_coder and not target.is_moderator %}
+                    <span class="admin-muted">—</span>
+                {% endif %}
+            </span>
+        </div>
+
+        <div class="admin-info-row">
+            <span class="admin-info-label">Создан</span>
+            <span class="admin-info-value">
+                {{ target.created_at[:16].replace("T", " ") if target.created_at else "—" }}
+            </span>
+        </div>
+
+        <div class="admin-info-row">
+            <span class="admin-info-label">Последний вход</span>
+            <span class="admin-info-value">
+                {{ target.last_login[:16].replace("T", " ") if target.last_login else "—" }}
+            </span>
+        </div>
+
+    </div>
+</div>
+
+{# ============ КАРТОЧКА: ПРИВЯЗКИ ============ #}
+<div class="admin-card">
+    <h2 class="admin-card-title">🔗 Привязки</h2>
+    <div class="admin-info-grid">
+
+        <div class="admin-info-row">
+            <span class="admin-info-label">Discord ID</span>
+            <span class="admin-info-value admin-mono">
+                {% if target.discord_id %}{{ target.discord_id }}{% else %}<span class="admin-muted">—</span>{% endif %}
+            </span>
+        </div>
+
+        <div class="admin-info-row">
+            <span class="admin-info-label">Discord username</span>
+            <span class="admin-info-value">
+                {% if target.discord_username %}{{ target.discord_username }}{% else %}<span class="admin-muted">—</span>{% endif %}
+            </span>
+        </div>
+
+        <div class="admin-info-row">
+            <span class="admin-info-label">Telegram ID</span>
+            <span class="admin-info-value admin-mono">
+                {% if target.telegram_id %}{{ target.telegram_id }}{% else %}<span class="admin-muted">—</span>{% endif %}
+            </span>
+        </div>
+
+        <div class="admin-info-row">
+            <span class="admin-info-label">Telegram username</span>
+            <span class="admin-info-value">
+                {% if target.telegram_username %}@{{ target.telegram_username }}{% else %}<span class="admin-muted">—</span>{% endif %}
+            </span>
+        </div>
+
+        <div class="admin-info-row">
+            <span class="admin-info-label">Guild User ID</span>
+            <span class="admin-info-value admin-mono">
+                {% if target.guild_user_id %}
+                    <a href="/profile/{{ target.guild_user_id }}" class="admin-link">{{ target.guild_user_id }}</a>
+                {% else %}
+                    <span class="admin-muted">—</span>
+                {% endif %}
+            </span>
+        </div>
+
+    </div>
+</div>
+
+{# ============ СМЕНА ОБЩЕЙ РОЛИ (только админ) ============ #}
+{% if current_user.is_admin %}
+<div class="admin-card">
+    <h2 class="admin-card-title">🎭 Общая роль</h2>
+    <p class="admin-card-desc">
+        Гость — просто аккаунт на сайте. Призрак — участник клана, полный доступ.
+    </p>
+
+    <form method="post" action="/admin/users/{{ target.id }}/role" class="admin-form-inline">
+        <select name="role" class="admin-select">
+            <option value="guest" {% if target.role == 'guest' %}selected{% endif %}>
+                👤 Гость
+            </option>
+            <option value="ghost" {% if target.role == 'ghost' %}selected{% endif %}>
+                👻 Призрак
+            </option>
+        </select>
+        <button type="submit" class="admin-btn admin-btn-primary">Сохранить</button>
+    </form>
+</div>
+{% endif %}
+
+{# ============ СИСТЕМНЫЕ РОЛИ (только админ) ============ #}
+{% if current_user.is_admin %}
+<div class="admin-card">
+    <h2 class="admin-card-title">⚙️ Системные роли</h2>
+    <p class="admin-card-desc">
+        Флаги доступа к разделам сайта. Можно комбинировать.
+    </p>
+
+    <div class="admin-sys-roles">
+
+        {# ADMIN #}
+        <form method="post" action="/admin/users/{{ target.id }}/system-role" class="admin-sys-role">
+            <input type="hidden" name="role" value="is_admin">
+            <input type="hidden" name="value" value="{% if target.is_admin %}0{% else %}1{% endif %}">
+            <div class="admin-sys-role-info">
+                <div class="admin-sys-role-name">👑 Admin</div>
+                <div class="admin-sys-role-desc">Полный доступ, управление всеми разделами</div>
+            </div>
+            {% if target.is_admin %}
+                <button type="submit" class="admin-btn admin-btn-danger">Выключить</button>
+            {% else %}
+                <button type="submit" class="admin-btn admin-btn-primary">Включить</button>
+            {% endif %}
+        </form>
+
+        {# CODER #}
+        <form method="post" action="/admin/users/{{ target.id }}/system-role" class="admin-sys-role">
+            <input type="hidden" name="role" value="is_coder">
+            <input type="hidden" name="value" value="{% if target.is_coder %}0{% else %}1{% endif %}">
+            <div class="admin-sys-role-info">
+                <div class="admin-sys-role-name">💻 Coder</div>
+                <div class="admin-sys-role-desc">Доступ к админке, технические разделы</div>
+            </div>
+            {% if target.is_coder %}
+                <button type="submit" class="admin-btn admin-btn-danger">Выключить</button>
+            {% else %}
+                <button type="submit" class="admin-btn admin-btn-primary">Включить</button>
+            {% endif %}
+        </form>
+
+        {# MODERATOR #}
+        <form method="post" action="/admin/users/{{ target.id }}/system-role" class="admin-sys-role">
+            <input type="hidden" name="role" value="is_moderator">
+            <input type="hidden" name="value" value="{% if target.is_moderator %}0{% else %}1{% endif %}">
+            <div class="admin-sys-role-info">
+                <div class="admin-sys-role-name">🛡️ Moderator</div>
+                <div class="admin-sys-role-desc">Доступ к логам модерации</div>
+            </div>
+            {% if target.is_moderator %}
+                <button type="submit" class="admin-btn admin-btn-danger">Выключить</button>
+            {% else %}
+                <button type="submit" class="admin-btn admin-btn-primary">Включить</button>
+            {% endif %}
+        </form>
+
+    </div>
+</div>
+{% endif %}
+
+{# ============ ОПАСНАЯ ЗОНА (только админ) ============ #}
+{% if current_user.is_admin and current_user.id != target.id %}
+<div class="admin-card admin-card-danger">
+    <h2 class="admin-card-title">⚠️ Опасная зона</h2>
+    <p class="admin-card-desc">
+        Удаление аккаунта необратимо. Все сессии, коды привязки и связь с Discord/Telegram будут потеряны.
+    </p>
+
+    <form method="post" action="/admin/users/{{ target.id }}/delete"
+          onsubmit="return confirm('Точно удалить аккаунт {{ target.username }}? Это необратимо.');">
+        <button type="submit" class="admin-btn admin-btn-danger">
+            🗑 Удалить аккаунт
+        </button>
+    </form>
+</div>
+{% endif %}
+
+{% endblock %}

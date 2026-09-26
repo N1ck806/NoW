@@ -1,0 +1,265 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Квесты • Админка{% endblock %}
+
+{% block admin_title %}📜 Квесты{% endblock %}
+{% block admin_subtitle %}Всего: {{ quests|length }} • Хранятся в data/quests.json{% endblock %}
+
+{% block admin_content %}
+
+{# ============ ПОДСКАЗКА ============ #}
+<div class="admin-info-banner">
+    💡 Квесты хранятся в <code>data/quests.json</code>. Изменения сохраняются автоматически.
+    Discord-бот подхватит их при следующем вызове <code>!reloadquests</code>.
+</div>
+
+{# ============ ТУЛБАР ============ #}
+<div class="admin-toolbar">
+    <div class="admin-toolbar-info">
+        Всего квестов: <strong>{{ quests|length }}</strong>
+    </div>
+    <div class="admin-toolbar-actions">
+        <button type="button"
+                class="admin-btn admin-btn-primary"
+                onclick="toggleEditor('add-quest-form')">
+            ➕ Добавить квест
+        </button>
+    </div>
+</div>
+
+{# ============ ФОРМА ДОБАВЛЕНИЯ (скрыта) ============ #}
+<div class="admin-card admin-add-form" id="add-quest-form" style="display: none;">
+    <h2 class="admin-card-title">➕ Новый квест</h2>
+
+    <form method="post" action="/admin/quests/add" class="admin-form">
+
+        <div class="admin-form-row">
+            <div class="admin-form-group">
+                <label class="admin-label">ID (латиница, уникальный) *</label>
+                <input type="text"
+                       name="id"
+                       class="admin-input"
+                       placeholder="daily_chat_10"
+                       pattern="[a-zA-Z0-9_]+"
+                       maxlength="32"
+                       required>
+            </div>
+
+            <div class="admin-form-group">
+                <label class="admin-label">Название *</label>
+                <input type="text"
+                       name="name"
+                       class="admin-input"
+                       placeholder="Болтун"
+                       maxlength="64"
+                       required>
+            </div>
+        </div>
+
+        <div class="admin-form-row">
+            <div class="admin-form-group">
+                <label class="admin-label">Тип *</label>
+                <select name="type" class="admin-select" required>
+                    <option value="messages">messages — сообщения</option>
+                    <option value="voice_minutes">voice_minutes — минуты в войсе</option>
+                    <option value="level">level — уровень</option>
+                    <option value="balance">balance — баланс</option>
+                    <option value="games">games — игры</option>
+                    <option value="wins">wins — победы</option>
+                    <option value="daily_streak">daily_streak — стрик daily</option>
+                </select>
+            </div>
+
+            <div class="admin-form-group">
+                <label class="admin-label">Цель (число) *</label>
+                <input type="number"
+                       name="target"
+                       class="admin-input"
+                       placeholder="100"
+                       min="1"
+                       required>
+            </div>
+
+            <div class="admin-form-group">
+                <label class="admin-label">Награда *</label>
+                <input type="number"
+                       name="reward"
+                       class="admin-input"
+                       placeholder="500"
+                       min="1"
+                       required>
+            </div>
+        </div>
+
+        <div class="admin-form-group">
+            <label class="admin-label">Описание</label>
+            <textarea name="description"
+                      class="admin-input admin-textarea"
+                      rows="2"
+                      maxlength="255"
+                      placeholder="Написать 100 сообщений"></textarea>
+        </div>
+
+        <div class="admin-form-actions">
+            <button type="submit" class="admin-btn admin-btn-primary">💾 Сохранить</button>
+            <button type="button"
+                    class="admin-btn admin-btn-secondary"
+                    onclick="toggleEditor('add-quest-form')">
+                Отмена
+            </button>
+        </div>
+    </form>
+</div>
+
+{# ============ СПИСОК КВЕСТОВ ============ #}
+{% if quests %}
+<div class="admin-table-wrap">
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Тип</th>
+                <th>Цель</th>
+                <th>Награда</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for q in quests %}
+            <tr>
+                <td class="admin-mono">{{ q.id }}</td>
+                <td><strong>{{ q.name }}</strong></td>
+                <td class="admin-muted admin-desc-cell">{{ q.description or '—' }}</td>
+                <td>
+                    <span class="admin-badge admin-badge-type">{{ q.type }}</span>
+                </td>
+                <td class="admin-mono">{{ q.target }}</td>
+                <td class="admin-balance">
+                    {{ currency_emoji }} {{ "{:,}".format(q.reward).replace(",", " ") }}
+                </td>
+                <td>
+                    <div class="admin-actions-cell">
+                        <button type="button"
+                                class="admin-btn admin-btn-sm admin-btn-primary"
+                                onclick="toggleEditor('edit-quest-{{ q.id }}')">
+                            ✏️
+                        </button>
+                        <form method="post"
+                              action="/admin/quests/{{ q.id }}/delete"
+                              onsubmit="return confirm('Удалить квест «{{ q.name }}»?');"
+                              style="display:inline">
+                            <button type="submit" class="admin-btn admin-btn-sm admin-btn-danger">
+                                🗑
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+
+            {# ===== Скрытая форма редактирования ===== #}
+            <tr class="admin-editor-row" id="edit-quest-{{ q.id }}" style="display: none;">
+                <td colspan="7">
+                    <div class="admin-editor">
+                        <h4 class="admin-editor-title">✏️ Редактирование: {{ q.id }}</h4>
+
+                        <form method="post"
+                              action="/admin/quests/{{ q.id }}/update"
+                              class="admin-form">
+
+                            <div class="admin-form-row">
+                                <div class="admin-form-group">
+                                    <label class="admin-label">Название *</label>
+                                    <input type="text"
+                                           name="name"
+                                           class="admin-input"
+                                           value="{{ q.name }}"
+                                           maxlength="64"
+                                           required>
+                                </div>
+
+                                <div class="admin-form-group">
+                                    <label class="admin-label">Тип *</label>
+                                    <select name="type" class="admin-select" required>
+                                        <option value="messages" {% if q.type == 'messages' %}selected{% endif %}>messages</option>
+                                        <option value="voice_minutes" {% if q.type == 'voice_minutes' %}selected{% endif %}>voice_minutes</option>
+                                        <option value="level" {% if q.type == 'level' %}selected{% endif %}>level</option>
+                                        <option value="balance" {% if q.type == 'balance' %}selected{% endif %}>balance</option>
+                                        <option value="games" {% if q.type == 'games' %}selected{% endif %}>games</option>
+                                        <option value="wins" {% if q.type == 'wins' %}selected{% endif %}>wins</option>
+                                        <option value="daily_streak" {% if q.type == 'daily_streak' %}selected{% endif %}>daily_streak</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="admin-form-row">
+                                <div class="admin-form-group">
+                                    <label class="admin-label">Цель *</label>
+                                    <input type="number"
+                                           name="target"
+                                           class="admin-input"
+                                           value="{{ q.target }}"
+                                           min="1"
+                                           required>
+                                </div>
+                                <div class="admin-form-group">
+                                    <label class="admin-label">Награда *</label>
+                                    <input type="number"
+                                           name="reward"
+                                           class="admin-input"
+                                           value="{{ q.reward }}"
+                                           min="1"
+                                           required>
+                                </div>
+                            </div>
+
+                            <div class="admin-form-group">
+                                <label class="admin-label">Описание</label>
+                                <textarea name="description"
+                                          class="admin-input admin-textarea"
+                                          rows="2"
+                                          maxlength="255">{{ q.description or '' }}</textarea>
+                            </div>
+
+                            <div class="admin-form-actions">
+                                <button type="submit" class="admin-btn admin-btn-primary">
+                                    💾 Сохранить
+                                </button>
+                                <button type="button"
+                                        class="admin-btn admin-btn-secondary"
+                                        onclick="toggleEditor('edit-quest-{{ q.id }}')">
+                                    Отмена
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% else %}
+<div class="admin-empty">
+    <div class="admin-empty-icon">📜</div>
+    <div class="admin-empty-text">
+        Квестов пока нет. Добавь первый кнопкой выше или создай <code>data/quests.json</code>.
+    </div>
+</div>
+{% endif %}
+
+<script>
+function toggleEditor(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.tagName === 'TR') {
+        el.style.display = el.style.display === 'none' ? 'table-row' : 'none';
+    } else {
+        el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,341 @@
+{% extends "base.html" %}
+
+{% block title %}Главная • Nightmare{% endblock %}
+
+{% block content %}
+
+{# ============================================================
+   ДЛЯ НЕАВТОРИЗОВАННЫХ — только общая информация о клане.
+   ============================================================ #}
+{% if not current_user %}
+
+<div class="public-hero">
+    <div class="public-hero-glow"></div>
+
+    <div class="public-hero-inner">
+
+        <div class="public-hero-icon">🌑</div>
+
+        <h1 class="public-hero-title">
+            Nightmare<br>
+            <span class="public-hero-title-accent">of Whiners</span>
+        </h1>
+
+        <p class="public-hero-subtitle">
+            Место, где жалобы превращаются в тишину.
+        </p>
+
+        <div class="public-hero-divider"></div>
+
+        <div class="public-hero-block">
+            <div class="public-hero-block-label">👑 Владелец клана</div>
+            <div class="public-hero-block-value">Его Ночной Кошмар</div>
+        </div>
+
+        <div class="public-hero-block">
+            <div class="public-hero-block-label">📖 О клане</div>
+            <div class="public-hero-block-text">
+                Мы — не для всех. Мы — для тех, кто устал слушать одно и то же нытьё.
+                Клан <strong>Nightmare of Whiners</strong> — это тихое место, где ценят
+                дела, а не слёзы. Здесь не любят жалобы, не терпят истерик
+                и не отвечают на «а почему мне ничего не дали».
+            </div>
+        </div>
+
+        <div class="public-hero-block">
+            <div class="public-hero-block-text muted">
+                Если ты пришёл ныть — тебе не сюда. Если ты пришёл играть —
+                возможно, мы найдём общий язык.
+            </div>
+        </div>
+
+        <div class="public-hero-plak">
+            Плаки-плаки)) 🍼
+        </div>
+
+        <div class="public-hero-actions">
+            <a href="/register" class="btn-primary hero-btn">Стать тенью клана</a>
+            <a href="/login" class="btn-secondary hero-btn">У меня уже есть вход</a>
+        </div>
+
+        <p class="public-hero-note">
+            Полный доступ — только для участников. Регистрация — первый шаг.
+        </p>
+
+    </div>
+</div>
+
+{# ============================================================
+   ДЛЯ ЗАЛОГИНЕННЫХ — полноценный дашборд
+   ============================================================ #}
+{% else %}
+
+{# ============ HERO-ПРИВЕТСТВИЕ ============ #}
+<div class="welcome-hero">
+    <div class="welcome-hero-bg"></div>
+    <div class="welcome-hero-content">
+
+        <div class="welcome-hero-avatar-wrap">
+            {% if current_user.discord_avatar %}
+                <img src="{{ current_user.discord_avatar }}"
+                     class="welcome-hero-avatar"
+                     alt="{{ current_user.display_name }}">
+            {% else %}
+                <div class="welcome-hero-avatar-placeholder">👤</div>
+            {% endif %}
+
+            {# SVG-точка роли на аватарке #}
+            {% if role_badge and role_badge.key != 'none' %}
+                <img src="/static/img/svg/roles/{{ role_badge.key }}.svg"
+                     class="welcome-hero-role-svg"
+                     alt="{{ role_badge.name }}"
+                     title="{{ role_badge.name }}">
+            {% endif %}
+        </div>
+
+        <div class="welcome-hero-info">
+            <div class="welcome-hero-greeting">🌑 С возвращением,</div>
+            <h1 class="welcome-hero-name">{{ current_user.display_name }}</h1>
+
+            <div class="welcome-hero-badges">
+                {% if role_badge and role_badge.key != 'none' %}
+                    <span class="welcome-badge welcome-badge-{{ role_badge.key }}">
+                        {{ role_badge.icon }} {{ role_badge.name }}
+                    </span>
+                {% endif %}
+                {% for badge in system_badges %}
+                    <span class="welcome-badge welcome-badge-{{ badge.key }}">
+                        {{ badge.icon }} {{ badge.name }}
+                    </span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="welcome-hero-actions">
+            <a href="/dashboard" class="welcome-btn welcome-btn-primary">
+                📊 Кабинет
+            </a>
+            <a href="/settings" class="welcome-btn welcome-btn-secondary">
+                ⚙️ Настройки
+            </a>
+        </div>
+
+    </div>
+</div>
+
+{# ============ ОБЩАЯ СТАТИСТИКА КЛАНА ============ #}
+<h2 class="section-title">📊 Статистика клана</h2>
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-value">{{ overview.total_users }}</div>
+        <div class="stat-label">Участников</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">💰</div>
+        <div class="stat-value">{{ "{:,}".format(overview.total_coins).replace(",", " ") }}</div>
+        <div class="stat-label">Всего монет</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">💬</div>
+        <div class="stat-value">{{ "{:,}".format(overview.total_messages).replace(",", " ") }}</div>
+        <div class="stat-label">Сообщений</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">🎙️</div>
+        <div class="stat-value">{{ overview.total_voice }}</div>
+        <div class="stat-label">Минут в войсе</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">⭐</div>
+        <div class="stat-value">{{ overview.total_rep }}</div>
+        <div class="stat-label">Репутация</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">🎮</div>
+        <div class="stat-value">{{ games.total_games }}</div>
+        <div class="stat-label">Игр сыграно</div>
+    </div>
+</div>
+
+{# ============ ИГРОВАЯ СТАТИСТИКА ЗА НЕДЕЛЮ ============ #}
+<div class="grid-2">
+    <div class="card">
+        <h2 class="card-title">🎲 Игры за неделю</h2>
+        <div class="chart-container">
+            <canvas id="gamesChart"></canvas>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2 class="card-title">📈 Профит игроков</h2>
+        <div class="profit-overview">
+
+            <div class="profit-row">
+                <div class="profit-label">Общий профит</div>
+                <div class="profit-value {% if games.total_profit > 0 %}profit-positive{% elif games.total_profit < 0 %}profit-negative{% endif %}">
+                    {{ "{:+,}".format(games.total_profit).replace(",", " ") }}
+                </div>
+            </div>
+
+            <div class="profit-row">
+                <div class="profit-label">Winrate клана</div>
+                <div class="profit-value">{{ games.winrate }}%</div>
+            </div>
+
+            <div class="profit-row">
+                <div class="profit-label">Побед / Игр</div>
+                <div class="profit-value">{{ games.total_wins }} / {{ games.total_games }}</div>
+            </div>
+
+            <div class="profit-row">
+                <div class="profit-label">Средний баланс</div>
+                <div class="profit-value">{{ "{:,}".format(overview.avg_coins).replace(",", " ") }} 💰</div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{# ============ ТОПЫ КЛАНА ============ #}
+{% macro user_cell(uid) %}
+    {% set u = users.get(uid) %}
+    <a href="/profile/{{ uid }}" class="user-link">
+        {% if u %}
+            <img src="{{ u.avatar_url }}" class="user-avatar" alt="">
+            <span>{{ u.display_name }}</span>
+        {% else %}
+            <span class="avatar-placeholder-small">👤</span>
+            <span>ID {{ uid }}</span>
+        {% endif %}
+    </a>
+{% endmacro %}
+
+<h2 class="section-title">🏆 Топы клана</h2>
+<div class="grid-2">
+    <div class="card">
+        <h2 class="card-title">💰 Топ богачей</h2>
+        <table class="table">
+            <thead>
+                <tr><th>#</th><th>Участник</th><th>Баланс</th></tr>
+            </thead>
+            <tbody>
+                {% for row in top_balances %}
+                <tr class="rank-{{ loop.index if loop.index <= 3 else 'other' }}">
+                    <td class="rank-cell">{{ loop.index }}</td>
+                    <td>{{ user_cell(row.user_id) }}</td>
+                    <td class="value-cell">{{ "{:,}".format(row.balance).replace(",", " ") }} 💰</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="3" class="muted" style="text-align:center; padding: 20px;">Пока нет данных</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="/tops" class="card-footer-link">Все топы →</a>
+    </div>
+
+    <div class="card">
+        <h2 class="card-title">📈 Топ по уровням</h2>
+        <table class="table">
+            <thead>
+                <tr><th>#</th><th>Участник</th><th>Уровень</th></tr>
+            </thead>
+            <tbody>
+                {% for row in top_levels %}
+                <tr class="rank-{{ loop.index if loop.index <= 3 else 'other' }}">
+                    <td class="rank-cell">{{ loop.index }}</td>
+                    <td>{{ user_cell(row.user_id) }}</td>
+                    <td class="value-cell">{{ row.level }} <span class="muted">({{ "{:,}".format(row.xp).replace(",", " ") }} XP)</span></td>
+                </tr>
+                {% else %}
+                <tr><td colspan="3" class="muted" style="text-align:center; padding: 20px;">Пока нет данных</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="/tops" class="card-footer-link">Все топы →</a>
+    </div>
+</div>
+
+{# ============ БЫСТРЫЕ ДЕЙСТВИЯ ============ #}
+<h2 class="section-title">⚡ Быстрые действия</h2>
+<div class="quick-actions-grid">
+
+    <a href="/dashboard" class="quick-action-card">
+        <div class="quick-action-icon">📊</div>
+        <div class="quick-action-body">
+            <div class="quick-action-title">Мой кабинет</div>
+            <div class="quick-action-desc">Личная статистика и профиль</div>
+        </div>
+    </a>
+
+    <a href="/shop" class="quick-action-card">
+        <div class="quick-action-icon">🛒</div>
+        <div class="quick-action-body">
+            <div class="quick-action-title">Магазин</div>
+            <div class="quick-action-desc">Купить роли, товары, привилегии</div>
+        </div>
+    </a>
+
+    <a href="/tops" class="quick-action-card">
+        <div class="quick-action-icon">🏆</div>
+        <div class="quick-action-body">
+            <div class="quick-action-title">Топы</div>
+            <div class="quick-action-desc">Лучшие игроки клана</div>
+        </div>
+    </a>
+
+    <a href="/transactions" class="quick-action-card">
+        <div class="quick-action-icon">💸</div>
+        <div class="quick-action-body">
+            <div class="quick-action-title">Транзакции</div>
+            <div class="quick-action-desc">История переводов и покупок</div>
+        </div>
+    </a>
+
+    {% if current_user.guild_user_id %}
+    <a href="/profile/{{ current_user.guild_user_id }}" class="quick-action-card">
+        <div class="quick-action-icon">👤</div>
+        <div class="quick-action-body">
+            <div class="quick-action-title">Публичный профиль</div>
+            <div class="quick-action-desc">Как тебя видят другие</div>
+        </div>
+    </a>
+    {% endif %}
+
+    <a href="/settings" class="quick-action-card">
+        <div class="quick-action-icon">⚙️</div>
+        <div class="quick-action-body">
+            <div class="quick-action-title">Настройки</div>
+            <div class="quick-action-desc">Профиль, пароль, привязки</div>
+        </div>
+    </a>
+
+</div>
+
+{# ============ ИНФО-ПАНЕЛЬ ============ #}
+<div class="card info-panel">
+    <h2 class="card-title">🌑 О клане</h2>
+    <p class="info-panel-text">
+        <strong>Nightmare of Whiners</strong> — клан для тех, кто устал от нытья и хочет играть.
+        Здесь ценят дела, а не слёзы. Общайся, зарабатывай, играй — статистика всё фиксирует.
+    </p>
+    <p class="info-panel-text muted">
+        Прокачивай уровень, копи монеты, покупай роли в магазине, соревнуйся в топах.
+        Чем активнее ты в Discord — тем выше твоя позиция.
+    </p>
+</div>
+
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+{% if current_user %}
+<script>
+    const chartData = {{ daily_games | tojson }};
+    window.addEventListener('DOMContentLoaded', () => {
+        if (window.renderGamesChart) window.renderGamesChart(chartData);
+    });
+</script>
+{% endif %}
+{% endblock %}

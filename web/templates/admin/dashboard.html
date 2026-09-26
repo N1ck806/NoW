@@ -1,0 +1,182 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Сводка • Админка{% endblock %}
+
+{% block admin_title %}📊 Сводка{% endblock %}
+{% block admin_subtitle %}Общая статистика по сайту, экономике и привязкам{% endblock %}
+
+{% block admin_content %}
+
+{# ============ СТАТИСТИКА ============ #}
+<div class="admin-stats-grid">
+
+    <div class="admin-stat-card">
+        <div class="admin-stat-icon">👥</div>
+        <div class="admin-stat-body">
+            <div class="admin-stat-value">{{ total_web_users }}</div>
+            <div class="admin-stat-label">Аккаунтов сайта</div>
+        </div>
+    </div>
+
+    <div class="admin-stat-card">
+        <div class="admin-stat-icon">✈️</div>
+        <div class="admin-stat-body">
+            <div class="admin-stat-value">{{ telegram_linked }}</div>
+            <div class="admin-stat-label">Telegram привязан</div>
+        </div>
+    </div>
+
+    <div class="admin-stat-card">
+        <div class="admin-stat-icon">💬</div>
+        <div class="admin-stat-body">
+            <div class="admin-stat-value">{{ discord_linked }}</div>
+            <div class="admin-stat-label">Discord привязан</div>
+        </div>
+    </div>
+
+    <div class="admin-stat-card">
+        <div class="admin-stat-icon">🛒</div>
+        <div class="admin-stat-body">
+            <div class="admin-stat-value">{{ shop_count }}</div>
+            <div class="admin-stat-label">Товаров в магазине</div>
+        </div>
+    </div>
+
+</div>
+
+{# ============ ЭКОНОМИКА ============ #}
+<h2 class="admin-section-title">💰 Экономика</h2>
+<div class="admin-stats-grid">
+
+    <div class="admin-stat-card">
+        <div class="admin-stat-icon">👤</div>
+        <div class="admin-stat-body">
+            <div class="admin-stat-value">{{ overview.total_users }}</div>
+            <div class="admin-stat-label">Игроков</div>
+        </div>
+    </div>
+
+    <div class="admin-stat-card">
+        <div class="admin-stat-icon">💰</div>
+        <div class="admin-stat-body">
+            <div class="admin-stat-value">
+                {{ "{:,}".format(overview.total_coins).replace(",", " ") }}
+            </div>
+            <div class="admin-stat-label">Всего монет</div>
+        </div>
+    </div>
+
+    <div class="admin-stat-card">
+        <div class="admin-stat-icon">📊</div>
+        <div class="admin-stat-body">
+            <div class="admin-stat-value">
+                {{ "{:,}".format(overview.avg_coins).replace(",", " ") }}
+            </div>
+            <div class="admin-stat-label">Средний баланс</div>
+        </div>
+    </div>
+
+    <div class="admin-stat-card">
+        <div class="admin-stat-icon">👑</div>
+        <div class="admin-stat-body">
+            <div class="admin-stat-value">
+                {{ "{:,}".format(overview.max_coins).replace(",", " ") }}
+            </div>
+            <div class="admin-stat-label">Максимум</div>
+        </div>
+    </div>
+
+    <div class="admin-stat-card">
+        <div class="admin-stat-icon">💬</div>
+        <div class="admin-stat-body">
+            <div class="admin-stat-value">
+                {{ "{:,}".format(overview.total_messages).replace(",", " ") }}
+            </div>
+            <div class="admin-stat-label">Сообщений</div>
+        </div>
+    </div>
+
+    <div class="admin-stat-card">
+        <div class="admin-stat-icon">🎙️</div>
+        <div class="admin-stat-body">
+            <div class="admin-stat-value">
+                {{ "{:,}".format(overview.total_voice).replace(",", " ") }}
+            </div>
+            <div class="admin-stat-label">Минут в войсе</div>
+        </div>
+    </div>
+
+    <div class="admin-stat-card">
+        <div class="admin-stat-icon">⭐</div>
+        <div class="admin-stat-body">
+            <div class="admin-stat-value">
+                {{ "{:,}".format(overview.total_rep).replace(",", " ") }}
+            </div>
+            <div class="admin-stat-label">Репутация</div>
+        </div>
+    </div>
+
+</div>
+
+{# ============ ИГРЫ ============ #}
+<h2 class="admin-section-title">🎮 Игры</h2>
+<div class="admin-stats-grid">
+
+    <div class="admin-stat-card">
+        <div class="admin-stat-icon">🎲</div>
+        <div class="admin-stat-body">
+            <div class="admin-stat-value">{{ games.total_games }}</div>
+            <div class="admin-stat-label">Сыграно игр</div>
+        </div>
+    </div>
+
+    <div class="admin-stat-card">
+        <div class="admin-stat-icon">🏆</div>
+        <div class="admin-stat-body">
+            <div class="admin-stat-value">{{ games.total_wins }}</div>
+            <div class="admin-stat-label">Побед</div>
+        </div>
+    </div>
+
+    <div class="admin-stat-card">
+        <div class="admin-stat-icon">📈</div>
+        <div class="admin-stat-body">
+            <div class="admin-stat-value">{{ games.winrate }}%</div>
+            <div class="admin-stat-label">Winrate</div>
+        </div>
+    </div>
+
+    <div class="admin-stat-card">
+        <div class="admin-stat-icon">💸</div>
+        <div class="admin-stat-body">
+            <div class="admin-stat-value {% if games.total_profit > 0 %}profit-positive{% elif games.total_profit < 0 %}profit-negative{% endif %}">
+                {{ "{:+,}".format(games.total_profit).replace(",", " ") }}
+            </div>
+            <div class="admin-stat-label">Профит игроков</div>
+        </div>
+    </div>
+
+</div>
+
+{# ============ БЫСТРЫЕ ССЫЛКИ ============ #}
+<h2 class="admin-section-title">⚡ Быстрые действия</h2>
+<div class="admin-quick-links">
+    <a href="/admin/users" class="admin-quick-link">
+        <span class="admin-quick-icon">👥</span>
+        <span>Аккаунты сайта</span>
+    </a>
+    <a href="/admin/economy" class="admin-quick-link">
+        <span class="admin-quick-icon">💰</span>
+        <span>Экономика</span>
+    </a>
+    <a href="/admin/shop" class="admin-quick-link">
+        <span class="admin-quick-icon">🛒</span>
+        <span>Магазин</span>
+    </a>
+    <a href="/admin/logs" class="admin-quick-link">
+        <span class="admin-quick-icon">📋</span>
+        <span>Логи</span>
+    </a>
+</div>
+
+{% endblock %}

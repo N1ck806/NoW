@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 600 600"
+     width="600"
+     height="600"
+     preserveAspectRatio="xMidYMid meet">
+
+  <!-- ==============================================================
+       NIGHTMARE • RITUAL CIRCLE
+       Ритуальный круг с пентаграммой, рунами, свечами по углам.
+       Медленно вращается. Свечение. Прозрачный фон.
+       ============================================================== -->
+
+  <defs>
+
+    <!-- ============ ГРАДИЕНТЫ ============ -->
+
+    <!-- Основной градиент круга (кровавый) -->
+    <linearGradient id="circleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#ff0033"/>
+      <stop offset="30%"  stop-color="#8b0000"/>
+      <stop offset="60%"  stop-color="#4a0000"/>
+      <stop offset="100%" stop-color="#ff0033"/>
+    </linearGradient>
+
+    <!-- Градиент для пентаграммы -->
+    <linearGradient id="pentaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#ff4d6d"/>
+      <stop offset="50%"  stop-color="#ff0033"/>
+      <stop offset="100%" stop-color="#8b0000"/>
+    </linearGradient>
+
+    <!-- Свечение центра -->
+    <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.9"/>
+      <stop offset="15%"  stop-color="#ff8095" stop-opacity="0.7"/>
+      <stop offset="40%"  stop-color="#ff0033" stop-opacity="0.4"/>
+      <stop offset="70%"  stop-color="#8b0000" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#2a0004" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Общая аура круга -->
+    <radialGradient id="auraGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#ff0033" stop-opacity="0.25"/>
+      <stop offset="50%"  stop-color="#8b0000" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#2a0004" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Свеча (пламя) -->
+    <radialGradient id="flameGrad" cx="50%" cy="60%" r="50%">
+      <stop offset="0%"   stop-color="#ffffff"/>
+      <stop offset="25%"  stop-color="#ffee88"/>
+      <stop offset="55%"  stop-color="#ff8800"/>
+      <stop offset="85%"  stop-color="#ff0033"/>
+      <stop offset="100%" stop-color="#4a0000" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Свеча (тело) -->
+    <linearGradient id="candleBody" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#2a1533"/>
+      <stop offset="50%"  stop-color="#4a2a4a"/>
+      <stop offset="100%" stop-color="#1a0a1a"/>
+    </linearGradient>
+
+    <!-- ============ ФИЛЬТРЫ ============ -->
+
+    <filter id="glowStrong" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="b1"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b2"/>
+      <feMerge>
+        <feMergeNode in="b2"/>
+        <feMergeNode in="b1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="glowSoft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6"/>
+    </filter>
+
+    <filter id="glowBig" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="16"/>
+    </filter>
+
+    <filter id="glowFlame" x="-200%" y="-200%" width="500%" height="500%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="b1"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="b2"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="15" result="b3"/>
+      <feMerge>
+        <feMergeNode in="b3"/>
+        <feMergeNode in="b2"/>
+        <feMergeNode in="b1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+  </defs>
+
+
+  <!-- ============================================================
+       1. ВНЕШНЯЯ АУРА (большое свечение вокруг круга)
+       ============================================================ -->
+  <ellipse cx="300" cy="300" rx="280" ry="280"
+           fill="url(#auraGrad)" filter="url(#glowBig)"
+           opacity="0.7">
+    <animate attributeName="rx" values="260;290;260" dur="6s" repeatCount="indefinite"/>
+    <animate attributeName="ry" values="260;290;260" dur="6s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.5;0.85;0.5" dur="4s" repeatCount="indefinite"/>
+  </ellipse>
+
+
+  <!-- ============================================================
+       2. ВРАЩАЮЩИЙСЯ ВНЕШНИЙ КРУГ (с рунами)
+       ============================================================ -->
+  <g transform="translate(300 300)">
+
+    <!-- Внешний круг (пунктирный) -->
+    <circle cx="0" cy="0" r="230" fill="none"
+            stroke="url(#circleGrad)" stroke-width="2"
+            stroke-dasharray="8 6" opacity="0.8">
+      <animateTransform attributeName="transform"
+                        type="rotate"
+                        values="0;360"
+                        dur="40s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Внешний круг (сплошной, чуть внутри) -->
+    <circle cx="0" cy="0" r="215" fill="none"
+            stroke="url(#circleGrad)" stroke-width="1.5"
+            opacity="0.7">
+      <animateTransform attributeName="transform"
+                        type="rotate"
+                        values="360;0"
+                        dur="60s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Кольцо рун (между двумя кругами) -->
+    <g opacity="0.85" fill="#ff0033" filter="url(#glowStrong)">
+      <!-- Каждая руна повёрнута по кругу через 30° -->
+      <g transform="translate(0 -222)">
+        <text x="0" y="4" text-anchor="middle" font-family="serif"
+              font-size="14" font-weight="bold">ᚠ</text>
+      </g>
+      <g transform="rotate(30) translate(0 -222)">
+        <text x="0" y="4" text-anchor="middle" font-family="serif"
+              font-size="14" font-weight="bold">ᚢ</text>
+      </g>
+      <g transform="rotate(60) translate(0 -222)">
+        <text x="0" y="4" text-anchor="middle" font-family="serif"
+              font-size="14" font-weight="bold">ᚦ</text>
+      </g>
+      <g transform="rotate(90) translate(0 -222)">
+        <text x="0" y="4" text-anchor="middle" font-family="serif"
+              font-size="14" font-weight="bold">ᚨ</text>
+      </g>
+      <g transform="rotate(120) translate(0 -222)">
+        <text x="0" y="4" text-anchor="middle" font-family="serif"
+              font-size="14" font-weight="bold">ᚱ</text>
+      </g>
+      <g transform="rotate(150) translate(0 -222)">
+        <text x="0" y="4" text-anchor="middle" font-family="serif"
+              font-size="14" font-weight="bold">ᚲ</text>
+      </g>
+      <g transform="rotate(180) translate(0 -222)">
+        <text x="0" y="4" text-anchor="middle" font-family="serif"
+              font-size="14" font-weight="bold">ᚷ</text>
+      </g>
+      <g transform="rotate(210) translate(0 -222)">
+        <text x="0" y="4" text-anchor="middle" font-family="serif"
+              font-size="14" font-weight="bold">ᚹ</text>
+      </g>
+      <g transform="rotate(240) translate(0 -222)">
+        <text x="0" y="4" text-anchor="middle" font-family="serif"
+              font-size="14" font-weight="bold">ᚺ</text>
+      </g>
+      <g transform="rotate(270) translate(0 -222)">
+        <text x="0" y="4" text-anchor="middle" font-family="serif"
+              font-size="14" font-weight="bold">ᚾ</text>
+      </g>
+      <g transform="rotate(300) translate(0 -222)">
+        <text x="0" y="4" text-anchor="middle" font-family="serif"
+              font-size="14" font-weight="bold">ᛁ</text>
+      </g>
+      <g transform="rotate(330) translate(0 -222)">
+        <text x="0" y="4" text-anchor="middle" font-family="serif"
+              font-size="14" font-weight="bold">ᛃ</text>
+      </g>
+
+      <!-- Вращение всего кольца рун (медленно) -->
+      <animateTransform attributeName="transform"
+                        type="rotate"
+                        values="0;360"
+                        dur="60s" repeatCount="indefinite"/>
+    </g>
+
+    <!-- Второе кольцо рун (внутреннее, вращается в другую сторону) -->
+    <g opacity="0.6" fill="#ff4d6d" filter="url(#glowStrong)">
+      <g transform="translate(0 -195)">
+        <text x="0" y="3" text-anchor="middle" font-family="serif"
+              font-size="9">ᛇ</text>
+      </g>
+      <g transform="rotate(45) translate(0 -195)">
+        <text x="0" y="3" text-anchor="middle" font-family="serif"
+              font-size="9">ᛈ</text>
+      </g>
+      <g transform="rotate(90) translate(0 -195)">
+        <text x="0" y="3" text-anchor="middle" font-family="serif"
+              font-size="9">ᛉ</text>
+      </g>
+      <g transform="rotate(135) translate(0 -195)">
+        <text x="0" y="3" text-anchor="middle" font-family="serif"
+              font-size="9">ᛊ</text>
+      </g>
+      <g transform="rotate(180) translate(0 -195)">
+        <text x="0" y="3" text-anchor="middle" font-family="serif"
+              font-size="9">ᛏ</text>
+      </g>
+      <g transform="rotate(225) translate(0 -195)">
+        <text x="0" y="3" text-anchor="middle" font-family="serif"
+              font-size="9">ᛒ</text>
+      </g>
+      <g transform="rotate(270) translate(0 -195)">
+        <text x="0" y="3" text-anchor="middle" font-family="serif"
+              font-size="9">ᛖ</text>
+      </g>
+      <g transform="rotate(315) translate(0 -195)">
+        <text x="0" y="3" text-anchor="middle" font-family="serif"
+              font-size="9">ᛗ</text>
+      </g>
+
+      <animateTransform attributeName="transform"
+                        type="rotate"
+                        values="360;0"
+                        dur="40s" repeatCount="indefinite"/>
+    </g>
+
+    <!-- Внутреннее кольцо (сплошное) -->
+    <circle cx="0" cy="0" r="170" fill="none"
+            stroke="url(#circleGrad)" stroke-width="2.5"
+            opacity="0.9">
+      <animateTransform attributeName="transform"
+                        type="rotate"
+                        values="0;360"
+                        dur="30s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Точки на круге (по 30°) -->
+    <g fill="#ff0033" filter="url(#glowStrong)">
+      <circle cx="0" cy="-170" r="4">
+        <animate attributeName="r" values="3;5;3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="85" cy="-147.22" r="4">
+        <animate attributeName="r" values="3;5;3" dur="3s" begin="0.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="147.22" cy="-85" r="4">
+        <animate attributeName="r" values="3;5;3" dur="3s" begin="1s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="170" cy="0" r="4">
+        <animate attributeName="r" values="3;5;3" dur="3s" begin="1.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="147.22" cy="85" r="4">
+        <animate attributeName="r" values="3;5;3" dur="3s" begin="2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="85" cy="147.22" r="4">
+        <animate attributeName="r" values="3;5;3" dur="3s" begin="2.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="0" cy="170" r="4">
+        <animate attributeName="r" values="3;5;3" dur="3s" begin="3s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="-85" cy="147.22" r="4">
+        <animate attributeName="r" values="3;5;3" dur="3s" begin="3.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="-147.22" cy="85" r="4">
+        <animate attributeName="r" values="3;5;3" dur="3s" begin="4s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="-170" cy="0" r="4">
+        <animate attributeName="r" values="3;5;3" dur="3s" begin="4.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="-147.22" cy="-85" r="4">
+        <animate attributeName="r" values="3;5;3" dur="3s" begin="5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="-85" cy="-147.22" r="4">
+        <animate attributeName="r" values="3;5;3" dur="3s" begin="5.5s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+
+  </g>
+
+
+  <!-- ============================================================
+       3. ПЕНТАГРАММА (в центре, медленно вращается)
+       ============================================================ -->
+  <g transform="translate(300 300)" filter="url(#glowStrong)">
+
+    <!-- Вращающаяся пентаграмма -->
+    <g opacity="0.9">
+      <animateTransform attributeName="transform"
+                        type="rotate"
+                        values="0;360"
+                        dur="80s" repeatCount="indefinite"/>
+
+      <!-- Соединяем вершины звезды (5 через 2) -->
+      <!-- Вершины: (0, -160), (152, -49), (94, 129), (-94, 129), (-152, -49) -->
+      <polyline points="0,-160 152,-49 94,129 -94,129 -152,-49 0,-160"
+                fill="none"
+                stroke="url(#pentaGrad)"
+                stroke-width="3"
+                stroke-linejoin="round"
+                stroke-linecap="round"/>
+
+      <!-- Внутренняя тонкая пентаграмма (для объёма) -->
+      <polyline points="0,-160 152,-49 94,129 -94,129 -152,-49 0,-160"
+                fill="none"
+                stroke="#ff8095"
+                stroke-width="1"
+                opacity="0.6"/>
+    </g>
+
+    <!-- Вершины пентаграммы (точки со свечением) -->
+    <g fill="#ff0033" filter="url(#glowStrong)">
+      <circle cx="0" cy="-160" r="5">
+        <animate attributeName="r" values="4;6;4" dur="2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="152" cy="-49" r="5">
+        <animate attributeName="r" values="4;6;4" dur="2s" begin="0.4s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="94" cy="129" r="5">
+        <animate attributeName="r" values="4;6;4" dur="2s" begin="0.8s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="-94" cy="129" r="5">
+        <animate attributeName="r" values="4;6;4" dur="2s" begin="1.2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="-152" cy="-49" r="5">
+        <animate attributeName="r" values="4;6;4" dur="2s" begin="1.6s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+
+    <!-- Пульсирующие обводки вершин -->
+    <g fill="none" stroke="#ff4d6d" stroke-width="1.5" opacity="0.5">
+      <circle cx="0" cy="-160" r="10">
+        <animate attributeName="r" values="8;20;8" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.7;0;0.7" dur="3s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="152" cy="-49" r="10">
+        <animate attributeName="r" values="8;20;8" dur="3s" begin="0.6s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.7;0;0.7" dur="3s" begin="0.6s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="94" cy="129" r="10">
+        <animate attributeName="r" values="8;20;8" dur="3s" begin="1.2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.7;0;0.7" dur="3s" begin="1.2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="-94" cy="129" r="10">
+        <animate attributeName="r" values="8;20;8" dur="3s" begin="1.8s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.7;0;0.7" dur="3s" begin="1.8s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="-152" cy="-49" r="10">
+        <animate attributeName="r" values="8;20;8" dur="3s" begin="2.4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.7;0;0.7" dur="3s" begin="2.4s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+
+  </g>
+
+
+  <!-- ============================================================
+       4. ЦЕНТР (светящаяся точка — «сердце ритуала»)
+       ============================================================ -->
+  <g filter="url(#glowStrong)">
+    <!-- Внешнее свечение -->
+    <circle cx="300" cy="300" r="60" fill="url(#centerGlow)" opacity="0.8">
+      <animate attributeName="r" values="50;70;50" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;0.95;0.6" dur="4s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Ядро -->
+    <circle cx="300" cy="300" r="10" fill="#ffffff">
+      <animate attributeName="r" values="8;14;8" dur="2.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.8;1;0.8" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Внутреннее красное ядро -->
+    <circle cx="300" cy="300" r="5" fill="#ff0033">
+      <animate attributeName="r" values="4;8;4" dur="2s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Пульсирующие кольца от центра -->
+    <circle cx="300" cy="300" r="15" fill="none" stroke="#ff0033" stroke-width="2" opacity="0.8">
+      <animate attributeName="r" values="15;120;15" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.9;0;0.9" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-width" values="3;0.5;3" dur="4s" repeatCount="indefinite"/>
+    </circle>
+
+    <circle cx="300" cy="300" r="15" fill="none" stroke="#ff0033" stroke-width="2" opacity="0.8">
+      <animate attributeName="r" values="15;120;15" dur="4s" begin="1.3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.9;0;0.9" dur="4s" begin="1.3s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-width" values="3;0.5;3" dur="4s" begin="1.3s" repeatCount="indefinite"/>
+    </circle>
+
+    <circle cx="300" cy="300" r="15" fill="none" stroke="#ff0033" stroke-width="2" opacity="0.8">
+      <animate attributeName="r" values="15;120;15" dur="4s" begin="2.6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.9;0;0.9" dur="4s" begin="2.6s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-width" values="3;0.5;3" dur="4s" begin="2.6s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+
+  <!-- ============================================================
+       5. СВЕЧИ ПО 4 УГЛАМ (вне круга)
+       ============================================================ -->
+
+  <!-- СВЕЧА 1 (верхний левый) -->
+  <g transform="translate(60 60)">
+    <!-- Тело свечи -->
+    <rect x="-8" y="0" width="16" height="40" rx="2" fill="url(#candleBody)"/>
+    <!-- Огарк сверху -->
+    <ellipse cx="0" cy="0" rx="8" ry="2" fill="#5a3050"/>
+    <!-- Фитиль -->
+    <line x1="0" y1="0" x2="0" y2="-6" stroke="#000000" stroke-width="1"/>
+    <!-- Пламя -->
+    <g filter="url(#glowFlame)">
+      <ellipse cx="0" cy="-10" rx="5" ry="9" fill="url(#flameGrad)">
+        <animate attributeName="rx" values="5;6;5" dur="0.5s" repeatCount="indefinite"/>
+        <animate attributeName="ry" values="9;11;9" dur="0.4s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="0" cy="-9" rx="2.5" ry="5" fill="#ffffff" opacity="0.8">
+        <animate attributeName="ry" values="5;6;5" dur="0.35s" repeatCount="indefinite"/>
+      </ellipse>
+    </g>
+    <!-- Капающий воск -->
+    <path d="M -6 15 Q -8 25 -5 30 Q -3 28 -4 20 Z" fill="#4a2a4a" opacity="0.7"/>
+    <path d="M 5 20 Q 7 30 4 35 Q 2 32 3 25 Z" fill="#4a2a4a" opacity="0.7"/>
+  </g>
+
+  <!-- СВЕЧА 2 (верхний правый) -->
+  <g transform="translate(540 60)">
+    <rect x="-8" y="0" width="16" height="40" rx="2" fill="url(#candleBody)"/>
+    <ellipse cx="0" cy="0" rx="8" ry="2" fill="#5a3050"/>
+    <line x1="0" y1="0" x2="0" y2="-6" stroke="#000000" stroke-width="1"/>
+    <g filter="url(#glowFlame)">
+      <ellipse cx="0" cy="-10" rx="5" ry="9" fill="url(#flameGrad)">
+        <animate attributeName="rx" values="5;6;5" dur="0.55s" begin="0.2s" repeatCount="indefinite"/>
+        <animate attributeName="ry" values="9;11;9" dur="0.45s" begin="0.2s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="0" cy="-9" rx="2.5" ry="5" fill="#ffffff" opacity="0.8"/>
+    </g>
+    <path d="M -6 15 Q -8 25 -5 30 Q -3 28 -4 20 Z" fill="#4a2a4a" opacity="0.7"/>
+  </g>
+
+  <!-- СВЕЧА 3 (нижний левый) -->
+  <g transform="translate(60 540)">
+    <rect x="-8" y="-40" width="16" height="40" rx="2" fill="url(#candleBody)"/>
+    <ellipse cx="0" cy="-40" rx="8" ry="2" fill="#5a3050"/>
+    <line x1="0" y1="-40" x2="0" y2="-46" stroke="#000000" stroke-width="1"/>
+    <g filter="url(#glowFlame)">
+      <ellipse cx="0" cy="-50" rx="5" ry="9" fill="url(#flameGrad)">
+        <animate attributeName="rx" values="5;6;5" dur="0.6s" begin="0.35s" repeatCount="indefinite"/>
+        <animate attributeName="ry" values="9;11;9" dur="0.5s" begin="0.35s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="0" cy="-49" rx="2.5" ry="5" fill="#ffffff" opacity="0.8"/>
+    </g>
+    <path d="M -6 -30 Q -8 -20 -5 -15 Q -3 -17 -4 -25 Z" fill="#4a2a4a" opacity="0.7"/>
+  </g>
+
+  <!-- СВЕЧА 4 (нижний правый) -->
+  <g transform="translate(540 540)">
+    <rect x="-8" y="-40" width="16" height="40" rx="2" fill="url(#candleBody)"/>
+    <ellipse cx="0" cy="-40" rx="8" ry="2" fill="#5a3050"/>
+    <line x1="0" y1="-40" x2="0" y2="-46" stroke="#000000" stroke-width="1"/>
+    <g filter="url(#glowFlame)">
+      <ellipse cx="0" cy="-50" rx="5" ry="9" fill="url(#flameGrad)">
+        <animate attributeName="rx" values="5;6;5" dur="0.52s" begin="0.1s" repeatCount="indefinite"/>
+        <animate attributeName="ry" values="9;11;9" dur="0.42s" begin="0.1s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="0" cy="-49" rx="2.5" ry="5" fill="#ffffff" opacity="0.8"/>
+    </g>
+    <path d="M 5 -25 Q 7 -15 4 -10 Q 2 -12 3 -20 Z" fill="#4a2a4a" opacity="0.7"/>
+  </g>
+
+
+  <!-- ============================================================
+       6. ЛЕТАЮЩИЕ ИСКРЫ (от пламени свечей)
+       ============================================================ -->
+  <g fill="#ff8800" filter="url(#glowStrong)">
+    <!-- От свечи 1 -->
+    <circle cx="60" cy="50" r="1.5">
+      <animate attributeName="cy" values="50;20;-10" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="cx" values="60;70;55" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.5;0" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="60" cy="50" r="1">
+      <animate attributeName="cy" values="50;15;-15" dur="3.5s" begin="0.5s" repeatCount="indefinite"/>
+      <animate attributeName="cx" values="60;50;65" dur="3.5s" begin="0.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.4;0" dur="3.5s" begin="0.5s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- От свечи 2 -->
+    <circle cx="540" cy="50" r="1.5">
+      <animate attributeName="cy" values="50;20;-10" dur="3.2s" begin="0.3s" repeatCount="indefinite"/>
+      <animate attributeName="cx" values="540;530;545" dur="3.2s" begin="0.3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.5;0" dur="3.2s" begin="0.3s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- От свечи 3 -->
+    <circle cx="60" cy="500" r="1.5">
+      <animate attributeName="cy" values="500;470;440" dur="3.3s" begin="0.7s" repeatCount="indefinite"/>
+      <animate attributeName="cx" values="60;70;55" dur="3.3s" begin="0.7s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.5;0" dur="3.3s" begin="0.7s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- От свечи 4 -->
+    <circle cx="540" cy="500" r="1.5">
+      <animate attributeName="cy" values="500;470;440" dur="3.1s" begin="1s" repeatCount="indefinite"/>
+      <animate attributeName="cx" values="540;550;535" dur="3.1s" begin="1s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.5;0" dur="3.1s" begin="1s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+
+  <!-- ============================================================
+       7. ЧАСТИЦЫ ВОКРУГ КРУГА (пыль, пепел)
+       ============================================================ -->
+  <g fill="#ff4d6d" filter="url(#glowSoft)" opacity="0.7">
+    <circle cx="120" cy="200" r="1.5">
+      <animate attributeName="cy" values="200;180;160" dur="5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.2;0.9;0.2" dur="5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="480" cy="220" r="1.2">
+      <animate attributeName="cy" values="220;200;180" dur="6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.3;0.8;0.3" dur="6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="200" cy="450" r="1.3">
+      <animate attributeName="cy" values="450;430;410" dur="5.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.2;0.7;0.2" dur="5.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="400" cy="470" r="1.5">
+      <animate attributeName="cy" values="470;450;430" dur="6.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.3;0.9;0.3" dur="6.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="90" cy="350" r="1">
+      <animate attributeName="cy" values="350;330;310" dur="4.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="510" cy="380" r="1.2">
+      <animate attributeName="cy" values="380;360;340" dur="5.8s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+
+  <!-- ============================================================
+       8. ОБЩАЯ ПУЛЬСАЦИЯ РИТУАЛА (финальная вспышка)
+       ============================================================ -->
+  <rect x="0" y="0" width="600" height="600"
+        fill="#ff0033" opacity="0" filter="url(#glowBig)">
+    <animate attributeName="opacity"
+             values="0;0;0;0.08;0;0;0;0.05;0;0"
+             dur="8s" repeatCount="indefinite"/>
+  </rect>
+
+
+</svg>
